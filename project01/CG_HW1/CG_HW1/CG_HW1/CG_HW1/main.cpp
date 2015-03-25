@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <cmath>
 
 #include <GL/glew.h>
 #include <freeglut/glut.h>
@@ -20,11 +21,11 @@
 GLint iLocPosition;
 GLint iLocColor;
 
-char filename[] = "ColorModels/bunny5KC.obj";
+char filename[] = "ColorModels/lion12KC.obj";
 
 GLMmodel* OBJ;
-static GLfloat *obj_color;
-static GLfloat *obj_vertices;
+GLfloat *obj_color;
+GLfloat *obj_vertices;
 
 
 void colorModel()
@@ -46,10 +47,12 @@ void colorModel()
 	OBJ->position[0];
 	OBJ->position[1];
 	OBJ->position[2];
+
+	printf("%f %f %f\n", OBJ->position[0], OBJ->position[1], OBJ->position[2]);
 	
 	obj_color = new GLfloat[(int)OBJ->numtriangles * 9];
 	obj_vertices = new GLfloat[(int)OBJ->numtriangles * 9];
-
+	GLfloat scale = 10;
 	for(int i=0, j=0; i<(int)OBJ->numtriangles; i++, j += 3)
 	{
 		// the index of each vertex
@@ -64,17 +67,17 @@ void colorModel()
 
 		// vertices
 		GLfloat vx, vy, vz;
-		obj_vertices[j*3+0] = OBJ->vertices[indv1*3+0];
-		obj_vertices[j*3+1]  = OBJ->vertices[indv1*3+1];
-		obj_vertices[j*3+2]  = OBJ->vertices[indv1*3+2];
+		obj_vertices[j*3+0] = OBJ->vertices[indv1*3+0] * scale;
+		obj_vertices[j*3+1]  = OBJ->vertices[indv1*3+1] * scale;
+		obj_vertices[j*3+2]  = OBJ->vertices[indv1*3+2] * scale;
 
-		obj_vertices[(j+1)*3+0] = OBJ->vertices[indv2*3+0];
-		obj_vertices[(j+1)*3+1] = OBJ->vertices[indv2*3+1];
-		obj_vertices[(j+1)*3+2] = OBJ->vertices[indv2*3+2];
+		obj_vertices[(j+1)*3+0] = OBJ->vertices[indv2*3+0] * scale;
+		obj_vertices[(j+1)*3+1] = OBJ->vertices[indv2*3+1] * scale;
+		obj_vertices[(j+1)*3+2] = OBJ->vertices[indv2*3+2] * scale;
 
-		obj_vertices[(j+2)*3+0] = OBJ->vertices[indv3*3+0];
-		obj_vertices[(j+2)*3+1] = OBJ->vertices[indv3*3+1];
-		obj_vertices[(j+2)*3+2] = OBJ->vertices[indv3*3+2];
+		obj_vertices[(j+2)*3+0] = OBJ->vertices[indv3*3+0] * scale;
+		obj_vertices[(j+2)*3+1] = OBJ->vertices[indv3*3+1] * scale;
+		obj_vertices[(j+2)*3+2] = OBJ->vertices[indv3*3+2] * scale;
 
 
 		// colors
@@ -127,23 +130,36 @@ void renderScene(void)
 	static GLfloat triangle_color[] = {
 		1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 1.0f
 	};
 
-	static GLfloat triangle_vertex[] = {
-		 1.0f, -1.0f, 0.0f,
-		 0.0f,  1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f
+	static GLfloat triangle_vertex[]= {
+		 0.5f, -0.5f, 0.0f,
+		 0.0f, -1.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		 0.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f
 	};
-
-	glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, obj_vertices);
-	glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_FALSE, 0, obj_color);
-
-	//glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, triangle_vertex);
-	//glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_FALSE, 0, triangle_color);
-
+	for(int i = 0; i < (int)OBJ->numtriangles; ++i){
+		glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_TRUE, 0, obj_vertices+(i*9));
+		glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_TRUE, 0, obj_color+(i*9));
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
+	/*
+	for(int i = 0; i < 2;++i){
+		glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, &triangle_vertex[i*9]);
+		glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_FALSE, 0, &triangle_color[i*9]);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
+	*/
 	// draw the array we just bound
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	//glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), &triangle_vertex[0], GL_STATIC_DRAW);
+
+	
 
 	glutSwapBuffers();
 }
