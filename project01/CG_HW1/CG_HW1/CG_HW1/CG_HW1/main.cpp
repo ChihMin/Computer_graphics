@@ -21,7 +21,7 @@
 GLint iLocPosition;
 GLint iLocColor;
 
-char filename[] = "ColorModels/sphereC.obj";
+char filename[] = "ColorModels/lion12KC.obj";
 
 GLMmodel* OBJ;
 GLfloat *obj_color;
@@ -141,15 +141,12 @@ void colorModel()
 	x_min *= scale;
 	y_min *= scale;
 
-	if( x_max > 1.0 )		x_move = 1.0 - x_max;
-	else if( x_min < -1.0 )	x_move = x_min + 1.0;
-	
-	if( y_max > 1.0 ) y_move = 1.0 - y_max;
-	else if( y_min < -1.0 )	y_move = y_min + 1.0; 
+	x_move = (x_max + x_min) / 2;
+	y_move = (y_max + y_min) / 2;
 	
 	for(int i = 0; i < (int)OBJ->numtriangles * 9; i = i + 3){
 		obj_vertices[i] -= x_move;
-		obj_vertices[i+1] += y_move;
+		obj_vertices[i+1] -= y_move;
 	}
 	printf("scale = %f\n", scale);
 }
