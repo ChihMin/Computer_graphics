@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cmath>
+#include <vector>
+#include <string>
+#include <cstring>
 
 #include <GL/glew.h>
 #include <freeglut/glut.h>
@@ -21,12 +24,14 @@
 GLint iLocPosition;
 GLint iLocColor;
 
-char filename[] = "ColorModels/lion12KC.obj";
+char filename[100][100];
 
 GLMmodel* OBJ;
 GLfloat *obj_color;
 GLfloat *obj_vertices;
 
+int current_obj;
+bool graphics_mode;
 
 GLfloat min_cmp( GLfloat a,  GLfloat b){
 	if( a > b ) return b;
@@ -58,7 +63,7 @@ void colorModel()
 	OBJ->position[1];
 	OBJ->position[2];
 
-	printf("%f %f %f\n", OBJ->position[0], OBJ->position[1], OBJ->position[2]);
+	//printf("%f %f %f\n", OBJ->position[0], OBJ->position[1], OBJ->position[2]);
 	
 	obj_color = new GLfloat[(int)OBJ->numtriangles * 9];
 	obj_vertices = new GLfloat[(int)OBJ->numtriangles * 9];
@@ -148,14 +153,20 @@ void colorModel()
 		obj_vertices[i] -= x_move;
 		obj_vertices[i+1] -= y_move;
 	}
-	printf("scale = %f\n", scale);
+	//printf("scale = %f\n", scale);
+}
+
+void loadOBJString(){
+	for(int i = 0; i <33; ++i){ 
+		sprintf(filename[i], "ColorModels/model (%d).obj", i+1);
+	}
 }
 
 void loadOBJModel()
 {
 	// read an obj model here
-	OBJ = glmReadOBJ(filename);
-	printf("%s\n", filename);
+	OBJ = glmReadOBJ(filename[current_obj]);
+	//printf("%s\n", filename[current_obj]);
 
 	// traverse the color model
 	colorModel();
@@ -207,8 +218,8 @@ void renderScene(void)
 	// draw the array we just bound
 	//glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), &triangle_vertex[0], GL_STATIC_DRAW);
 
-	
-
+	if( graphics_mode )	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); 
+	else	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ); 
 	glutSwapBuffers();
 }
 
@@ -297,17 +308,44 @@ void processMouse(int who, int state, int x, int y)
 }
 
 void processMouseMotion(int x, int y){  // callback on mouse drag
-	printf("(%d, %d) mouse move\n", x, y);
+	//printf("(%d, %d) mouse move\n", x, y);
 }
 
 void processNormalKeys(unsigned char key, int x, int y) {
-	printf("(%d, %d) ", x, y);
+	//printf("key = %d ", key );
+	if( key < 97 && key != 27 )  key += 32;
+
 	switch(key) {
 		case 27: /* the Esc key */ 
 			exit(0); 
 			break;
+		case 99:
+			graphics_mode = 1 - graphics_mode;
+			loadOBJModel();
+			glutDisplayFunc (renderScene);
+			break;
+		case 'n':
+			current_obj = ( current_obj + 1 ) % 33;
+			loadOBJModel();
+			glutDisplayFunc (renderScene);
+			break;
+		case 'b':
+			current_obj  -= 1;
+			current_obj += (current_obj < 0 )*33;
+			loadOBJModel();
+			glutDisplayFunc (renderScene);
+			break;
+		case 'h':
+			printf("===========THIS IS HELP !!!!!==========\n");
+			printf("Press 'c' to change mode(solid / wireframe)\n\n");
+			printf("Press 'b' to go to last model\n\n");
+			printf("Press 'n' to go to next model\n\n");
+			printf("If you want to exit, please press 'esc'\n");
+			printf("===============================\n");
+			break;
+
+			
 	}
-	printf("\n");
 }
 
 int main(int argc, char **argv) {
@@ -329,11 +367,14 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
+	graphics_mode = 0;
+	loadOBJString();
 	// load obj models through glm
 	loadOBJModel();
-
+	
 	// register glut callback functions
 	glutDisplayFunc (renderScene);
+
 	glutIdleFunc    (idle);
 	glutKeyboardFunc(processNormalKeys);
 	glutMouseFunc   (processMouse);
