@@ -21,12 +21,22 @@
 GLint iLocPosition;
 GLint iLocColor;
 
-char filename[] = "ColorModels/lion12KC.obj";
+char filename[] = "ColorModels/sphereC.obj";
 
 GLMmodel* OBJ;
 GLfloat *obj_color;
 GLfloat *obj_vertices;
 
+
+GLfloat min_cmp( GLfloat a,  GLfloat b){
+	if( a > b ) return b;
+	return a;
+}
+
+GLfloat max_cmp(GLfloat a, GLfloat b){
+	if( a < b ) return b;
+	return a;
+}
 
 void colorModel()
 {
@@ -52,7 +62,15 @@ void colorModel()
 	
 	obj_color = new GLfloat[(int)OBJ->numtriangles * 9];
 	obj_vertices = new GLfloat[(int)OBJ->numtriangles * 9];
-	GLfloat scale = 10;
+	GLfloat scale = 1;
+	
+	GLfloat x_max = -1e9;
+	GLfloat x_min = 1e9;
+	
+	GLfloat y_max = -1e9;
+	GLfloat y_min = 1e9;
+
+
 	for(int i=0, j=0; i<(int)OBJ->numtriangles; i++, j += 3)
 	{
 		// the index of each vertex
@@ -79,6 +97,21 @@ void colorModel()
 		obj_vertices[(j+2)*3+1] = OBJ->vertices[indv3*3+1] * scale;
 		obj_vertices[(j+2)*3+2] = OBJ->vertices[indv3*3+2] * scale;
 
+		x_max = max_cmp( x_max, OBJ->vertices[indv1*3+0] );
+		x_max = max_cmp( x_max, OBJ->vertices[indv2*3+0] );
+		x_max = max_cmp( x_max, OBJ->vertices[indv3*3+0] );
+
+		x_min = min_cmp( x_min, OBJ->vertices[indv1*3+0] );
+		x_min = min_cmp( x_min, OBJ->vertices[indv2*3+0] );
+		x_min = min_cmp( x_min, OBJ->vertices[indv3*3+0] );
+
+		y_max = max_cmp( y_max, OBJ->vertices[indv1*3+1] );
+		y_max = max_cmp( y_max, OBJ->vertices[indv2*3+1] );
+		y_max = max_cmp( y_max, OBJ->vertices[indv3*3+1] );
+
+		y_min = min_cmp( y_min, OBJ->vertices[indv1*3+1] );
+		y_min = min_cmp( y_min, OBJ->vertices[indv2*3+1] );
+		y_min = min_cmp( y_min, OBJ->vertices[indv3*3+1] );
 
 		// colors
 		GLfloat c1, c2, c3;
@@ -94,6 +127,12 @@ void colorModel()
 		obj_color[(j+2)*3+1] = OBJ->colors[indv3*3+1];
 		obj_color[(j+2)*3+2] = OBJ->colors[indv3*3+2];
 	}
+
+	GLfloat max_line = max_cmp( x_max - x_min, y_max - y_min );
+	scale = 2 / max_line;
+
+	for(int i = 0; i < (int)OBJ->numtriangles * 9; ++i)
+		obj_vertices[i] *= scale;
 /*
 	for(int i = 0; i < ( OBJ->numtriangles ) ; ++i){
 		for(int j = 0; j < 3;++j)
