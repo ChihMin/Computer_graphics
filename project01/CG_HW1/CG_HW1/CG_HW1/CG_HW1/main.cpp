@@ -23,10 +23,13 @@ GLint iLocColor;
 char filename[] = "ColorModels/bunny5KC.obj";
 
 GLMmodel* OBJ;
+static GLfloat *obj_color;
+static GLfloat *obj_vertices;
+
 
 void colorModel()
 {
-	int i;
+
 
 	// TODO:
 	//// You should traverse the vertices and the colors of each vertex. 
@@ -43,8 +46,11 @@ void colorModel()
 	OBJ->position[0];
 	OBJ->position[1];
 	OBJ->position[2];
+	
+	obj_color = new GLfloat[(int)OBJ->numtriangles * 9];
+	obj_vertices = new GLfloat[(int)OBJ->numtriangles * 9];
 
-	for(i=0; i<(int)OBJ->numtriangles; i++)
+	for(int i=0, j=0; i<(int)OBJ->numtriangles; i++, j += 3)
 	{
 		// the index of each vertex
 		int indv1 = OBJ->triangles[i].vindices[0];
@@ -58,32 +64,40 @@ void colorModel()
 
 		// vertices
 		GLfloat vx, vy, vz;
-		vx = OBJ->vertices[indv1*3+0];
-		vy = OBJ->vertices[indv1*3+1];
-		vz = OBJ->vertices[indv1*3+2];
+		obj_vertices[j*3+0] = OBJ->vertices[indv1*3+0];
+		obj_vertices[j*3+1]  = OBJ->vertices[indv1*3+1];
+		obj_vertices[j*3+2]  = OBJ->vertices[indv1*3+2];
 
-		vx = OBJ->vertices[indv2*3+0];
-		vy = OBJ->vertices[indv2*3+1];
-		vz = OBJ->vertices[indv2*3+2];
+		obj_vertices[(j+1)*3+0] = OBJ->vertices[indv2*3+0];
+		obj_vertices[(j+1)*3+1] = OBJ->vertices[indv2*3+1];
+		obj_vertices[(j+1)*3+2] = OBJ->vertices[indv2*3+2];
 
-		vx = OBJ->vertices[indv3*3+0];
-		vy = OBJ->vertices[indv3*3+1];
-		vz = OBJ->vertices[indv3*3+2];
+		obj_vertices[(j+2)*3+0] = OBJ->vertices[indv3*3+0];
+		obj_vertices[(j+2)*3+1] = OBJ->vertices[indv3*3+1];
+		obj_vertices[(j+2)*3+2] = OBJ->vertices[indv3*3+2];
+
 
 		// colors
 		GLfloat c1, c2, c3;
-		c1 = OBJ->colors[indv1*3+0];
-		c2 = OBJ->colors[indv1*3+1];
-		c3 = OBJ->colors[indv1*3+2];
+		obj_color[j*3+0] = OBJ->colors[indv1*3+0];
+		obj_color[j*3+1] = OBJ->colors[indv1*3+1];
+		obj_color[j*3+2] = OBJ->colors[indv1*3+2];
 
-		c1 = OBJ->colors[indv2*3+0];
-		c2 = OBJ->colors[indv2*3+1];
-		c3 = OBJ->colors[indv2*3+2];
+		obj_color[(j+1)*3+0] = OBJ->colors[indv2*3+0];
+		obj_color[(j+1)*3+1] = OBJ->colors[indv2*3+1];
+		obj_color[(j+1)*3+2] = OBJ->colors[indv2*3+2];
 
-		c1 = OBJ->colors[indv3*3+0];
-		c2 = OBJ->colors[indv3*3+1];
-		c3 = OBJ->colors[indv3*3+2];
+		obj_color[(j+2)*3+0] = OBJ->colors[indv3*3+0];
+		obj_color[(j+2)*3+1] = OBJ->colors[indv3*3+1];
+		obj_color[(j+2)*3+2] = OBJ->colors[indv3*3+2];
 	}
+/*
+	for(int i = 0; i < ( OBJ->numtriangles ) ; ++i){
+		for(int j = 0; j < 3;++j)
+			printf("%.3f, ", obj_vertices[i*3+j]);
+		printf("\n");
+	}
+*/
 }
 
 void loadOBJModel()
@@ -122,8 +136,11 @@ void renderScene(void)
 		-1.0f, -1.0f, 0.0f
 	};
 
-	glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, triangle_vertex);
-	glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_FALSE, 0, triangle_color);
+	glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, obj_vertices);
+	glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_FALSE, 0, obj_color);
+
+	//glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, triangle_vertex);
+	//glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_FALSE, 0, triangle_color);
 
 	// draw the array we just bound
 	glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -259,6 +276,7 @@ int main(int argc, char **argv) {
 	glutMotionFunc  (processMouseMotion);
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_NORMALIZE);
 
 	// set up shaders here
 	setShaders();
@@ -271,4 +289,3 @@ int main(int argc, char **argv) {
 
 	return 0;
 }
-
