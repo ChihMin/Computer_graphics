@@ -133,13 +133,25 @@ void colorModel()
 
 	for(int i = 0; i < (int)OBJ->numtriangles * 9; ++i)
 		obj_vertices[i] *= scale;
-/*
-	for(int i = 0; i < ( OBJ->numtriangles ) ; ++i){
-		for(int j = 0; j < 3;++j)
-			printf("%.3f, ", obj_vertices[i*3+j]);
-		printf("\n");
+	
+	GLfloat x_move = 0,  y_move = 0;
+
+	x_max *= scale;
+	y_max *= scale;
+	x_min *= scale;
+	y_min *= scale;
+
+	if( x_max > 1.0 )		x_move = 1.0 - x_max;
+	else if( x_min < -1.0 )	x_move = x_min + 1.0;
+	
+	if( y_max > 1.0 ) y_move = 1.0 - y_max;
+	else if( y_min < -1.0 )	y_move = y_min + 1.0; 
+	
+	for(int i = 0; i < (int)OBJ->numtriangles * 9; i = i + 3){
+		obj_vertices[i] -= x_move;
+		obj_vertices[i+1] += y_move;
 	}
-*/
+	printf("scale = %f\n", scale);
 }
 
 void loadOBJModel()
