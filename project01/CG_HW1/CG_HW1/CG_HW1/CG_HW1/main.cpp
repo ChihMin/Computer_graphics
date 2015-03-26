@@ -75,6 +75,9 @@ void colorModel()
 	GLfloat y_max = -1e9;
 	GLfloat y_min = 1e9;
 
+	GLfloat z_max = -1e9;
+	GLfloat z_min = 1e9;
+	
 
 	for(int i=0, j=0; i<(int)OBJ->numtriangles; i++, j += 3)
 	{
@@ -102,22 +105,36 @@ void colorModel()
 		obj_vertices[(j+2)*3+1] = OBJ->vertices[indv3*3+1] * scale;
 		obj_vertices[(j+2)*3+2] = OBJ->vertices[indv3*3+2] * scale;
 
-		x_max = max_cmp( x_max, OBJ->vertices[indv1*3+0] );
-		x_max = max_cmp( x_max, OBJ->vertices[indv2*3+0] );
-		x_max = max_cmp( x_max, OBJ->vertices[indv3*3+0] );
+		if( i == 0 ){
+			x_min = x_max = OBJ->vertices[indv1*3+0];
+			y_min = y_max = OBJ->vertices[indv1*3+1];
+			z_min = z_max = OBJ->vertices[indv1*3+2];
+		}
+		else{
+			x_max = max_cmp( x_max, OBJ->vertices[indv1*3+0] );
+			x_max = max_cmp( x_max, OBJ->vertices[indv2*3+0] );
+			x_max = max_cmp( x_max, OBJ->vertices[indv3*3+0] );
 
-		x_min = min_cmp( x_min, OBJ->vertices[indv1*3+0] );
-		x_min = min_cmp( x_min, OBJ->vertices[indv2*3+0] );
-		x_min = min_cmp( x_min, OBJ->vertices[indv3*3+0] );
+			x_min = min_cmp( x_min, OBJ->vertices[indv1*3+0] );
+			x_min = min_cmp( x_min, OBJ->vertices[indv2*3+0] );
+			x_min = min_cmp( x_min, OBJ->vertices[indv3*3+0] );
+			
+			y_max = max_cmp( y_max, OBJ->vertices[indv1*3+1] );
+			y_max = max_cmp( y_max, OBJ->vertices[indv2*3+1] );
+			y_max = max_cmp( y_max, OBJ->vertices[indv3*3+1] );
 
-		y_max = max_cmp( y_max, OBJ->vertices[indv1*3+1] );
-		y_max = max_cmp( y_max, OBJ->vertices[indv2*3+1] );
-		y_max = max_cmp( y_max, OBJ->vertices[indv3*3+1] );
+			y_min = min_cmp( y_min, OBJ->vertices[indv1*3+1] );
+			y_min = min_cmp( y_min, OBJ->vertices[indv2*3+1] );
+			y_min = min_cmp( y_min, OBJ->vertices[indv3*3+1] );
 
-		y_min = min_cmp( y_min, OBJ->vertices[indv1*3+1] );
-		y_min = min_cmp( y_min, OBJ->vertices[indv2*3+1] );
-		y_min = min_cmp( y_min, OBJ->vertices[indv3*3+1] );
+			z_max = max_cmp( z_max, OBJ->vertices[indv1*3+2] );
+			z_max = max_cmp( z_max, OBJ->vertices[indv2*3+2] );
+			z_max = max_cmp( z_max, OBJ->vertices[indv3*3+2] );
 
+			z_min = min_cmp( z_min, OBJ->vertices[indv1*3+2] );
+			z_min = min_cmp( z_min, OBJ->vertices[indv2*3+2] );
+			z_min = min_cmp( z_min, OBJ->vertices[indv3*3+2] );
+		}
 		// colors
 		GLfloat c1, c2, c3;
 		obj_color[j*3+0] = OBJ->colors[indv1*3+0];
@@ -134,24 +151,31 @@ void colorModel()
 	}
 
 	GLfloat max_line = max_cmp( x_max - x_min, y_max - y_min );
+	max_line = max_cmp( max_line, z_max - z_min);
 	scale = 2 / max_line;
 
 	for(int i = 0; i < (int)OBJ->numtriangles * 9; ++i)
 		obj_vertices[i] *= scale;
 	
-	GLfloat x_move = 0,  y_move = 0;
+	GLfloat x_move = 0,  y_move = 0, z_move = 0;
 
 	x_max *= scale;
 	y_max *= scale;
+	z_max *= scale;
+	
 	x_min *= scale;
 	y_min *= scale;
+	z_min *= scale;
+	
 
 	x_move = (x_max + x_min) / 2;
 	y_move = (y_max + y_min) / 2;
-	
+	z_move = (z_max + z_min) / 2;
+
 	for(int i = 0; i < (int)OBJ->numtriangles * 9; i = i + 3){
 		obj_vertices[i] -= x_move;
 		obj_vertices[i+1] -= y_move;
+		obj_vertices[i+2] -= z_move;
 	}
 	//printf("scale = %f\n", scale);
 }
