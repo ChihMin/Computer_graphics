@@ -25,6 +25,7 @@ char filename[] = "ColorModels/bunny5KC.obj";
 
 GLMmodel* OBJ;
 GLfloat aMVP[16];
+GLfloat cur_scene_x = 0.5;
 
 void colorModel()
 {
@@ -137,9 +138,9 @@ void renderScene(void)
 	};
 
 	// Move example triangle to left by 0.5
-	aMVP[0] = 1;	aMVP[4] = 0;	aMVP[8] = 0;	aMVP[12] = -0.5;
-	aMVP[1] = 0;	aMVP[5] = 1;	aMVP[9] = 0;	aMVP[13] = 0;
-	aMVP[2] = 0;	aMVP[6] = 0;	aMVP[10] = -1;	aMVP[14] = 0;
+	aMVP[0] = cur_scene_x;	aMVP[4] = 0;	aMVP[8] = 0;	aMVP[12] = 0;
+	aMVP[1] = 0;	aMVP[5] = -cur_scene_x;	aMVP[9] = 0;	aMVP[13] = 0;
+	aMVP[2] = 0;	aMVP[6] = 0;	aMVP[10] = cur_scene_x;	aMVP[14] = 0;
 	aMVP[3] = 0;	aMVP[7] = 0;	aMVP[11] = 0;	aMVP[15] = 1;
 	
 
@@ -226,8 +227,16 @@ void processMouse(int who, int state, int x, int y)
 	case GLUT_LEFT_BUTTON:   printf("left button   "); break;
 	case GLUT_MIDDLE_BUTTON: printf("middle button "); break;
 	case GLUT_RIGHT_BUTTON:  printf("right button  "); break; 
-	case GLUT_WHEEL_UP:      printf("wheel up      "); break;
-	case GLUT_WHEEL_DOWN:    printf("wheel down    "); break;
+	case GLUT_WHEEL_UP:      
+		printf("wheel up      "); 
+		cur_scene_x = cur_scene_x + 0.01;
+		//glutDisplayFunc (renderScene);
+		break;
+	case GLUT_WHEEL_DOWN:   
+		printf("wheel down    "); 
+		cur_scene_x = cur_scene_x - 0.01;
+		//glutDisplayFunc (renderScene);
+		break;
 	default:                 printf("%-14d", who);     break;
 	}
 

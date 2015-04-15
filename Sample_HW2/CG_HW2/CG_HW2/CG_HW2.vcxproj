@@ -24,7 +24,7 @@
     <None Include="shader.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7480F627-D15A-408F-AF68-604E9F94C09D}</ProjectGuid>
+    <ProjectGuid>{3E200517-D991-4061-B2D4-53CDC887638C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>CG_HW2</RootNamespace>
     <ProjectName>CG_HW2</ProjectName>

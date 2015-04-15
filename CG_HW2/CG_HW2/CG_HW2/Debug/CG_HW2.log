@@ -1,0 +1,18 @@
+﻿已經開始建置於 2015/4/15 下午 02:07:16。
+     1>節點 2 (build 目標) 上的專案 "C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\CG_HW2\CG_HW2.vcxproj"。
+     1>InitializeBuildStatus:
+         由於指定了 "AlwaysCreate"，因此正在建立 "Debug\CG_HW2.unsuccessfulbuild"。
+       ClCompile:
+         所有輸出都是最新的。
+         所有輸出都是最新的。
+       Link:
+         所有輸出都是最新的。
+         CG_HW2.vcxproj -> C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.exe
+       FinalizeBuildStatus:
+         正在刪除檔案 "Debug\CG_HW2.unsuccessfulbuild"。
+         正在變更時間戳記 "Debug\CG_HW2.lastbuildstate"。
+     1>專案 "C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\CG_HW2\CG_HW2.vcxproj" (build 目標) 建置完成。
+
+建置成功。
+
+經過時間 00:00:00.09
