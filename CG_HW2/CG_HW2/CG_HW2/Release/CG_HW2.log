@@ -1,0 +1,29 @@
+﻿已經開始建置於 2015/4/9 下午 07:56:00。
+     1>節點 2 (build 目標) 上的專案 "D:\course\10320 CS550000 Computer Graphics\HW\CG_HW2\CG_HW2\CG_HW2\CG_HW2.vcxproj"。
+     1>PrepareForBuild:
+         正在建立目錄 "D:\course\10320 CS550000 Computer Graphics\HW\CG_HW2\CG_HW2\Release\"。
+       InitializeBuildStatus:
+         由於指定了 "AlwaysCreate"，因此正在建立 "Release\CG_HW2.unsuccessfulbuild"。
+       ClCompile:
+         F:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\..\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt glm.c
+         glm.c
+         F:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\..\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp textfile.cpp
+         main.cpp
+         textfile.cpp
+       Link:
+         F:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\course\10320 CS550000 Computer Graphics\HW\CG_HW2\CG_HW2\Release\CG_HW2.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:..\..\lib glew32.lib freeglut.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\CG_HW2.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\course\10320 CS550000 Computer Graphics\HW\CG_HW2\CG_HW2\Release\CG_HW2.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\course\10320 CS550000 Computer Graphics\HW\CG_HW2\CG_HW2\Release\CG_HW2.lib" /MACHINE:X86 Release\glm.obj
+         Release\main.obj
+         Release\textfile.obj
+         正在產生程式碼
+         已完成程式碼產生
+         CG_HW2.vcxproj -> D:\course\10320 CS550000 Computer Graphics\HW\CG_HW2\CG_HW2\Release\CG_HW2.exe
+       Manifest:
+         f:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"D:\course\10320 CS550000 Computer Graphics\HW\CG_HW2\CG_HW2\Release\CG_HW2.exe;#1" /manifest Release\CG_HW2.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         正在刪除檔案 "Release\CG_HW2.unsuccessfulbuild"。
+         正在變更時間戳記 "Release\CG_HW2.lastbuildstate"。
+     1>專案 "D:\course\10320 CS550000 Computer Graphics\HW\CG_HW2\CG_HW2\CG_HW2\CG_HW2.vcxproj" (build 目標) 建置完成。
+
+建置成功。
+
+經過時間 00:00:00.82
