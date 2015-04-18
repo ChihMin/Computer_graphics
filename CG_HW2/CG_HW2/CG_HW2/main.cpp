@@ -19,7 +19,7 @@
 # define min_cmp(a,b) (((a)<(b))?(a):(b))
 #endif
 
-#define TRANS_MODE 0
+#define TRANSPORT_MODE 0
 #define SCALE_MODE 1
 
 // Shader attributes
@@ -102,6 +102,16 @@ void scaling(GLfloat x, GLfloat y, GLfloat z){
 	M[1][1] = y;
 	M[2][2] = z;
 	M[3][3] = 1;
+	multiMatrix(M, aMVP);
+}
+
+void transport(GLfloat x, GLfloat y, GLfloat z){
+	GLfloat M[4][4] = {0};
+	for(int i = 0; i < 4; ++i)
+		M[i][i] = 1;
+	M[0][3] = x;
+	M[1][3] = y;
+	M[2][3] = z;
 	multiMatrix(M, aMVP);
 }
 
@@ -406,10 +416,13 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		case 's':
 			mode = SCALE_MODE;
 			break;
+		case 't':
+			mode = TRANSPORT_MODE;
+			break;
 		case 'x':
 			switch(mode){
 				case 0:
-
+					transport(-0.1, 0, 0);
 					break;
 				case 1:
 					scaling(0.9, 1, 1);
@@ -419,7 +432,7 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		case 'X':
 			switch(mode){
 				case 0:
-
+					transport(0.1, 0, 0);
 					break;
 				case 1:
 					scaling(1.1, 1, 1);
@@ -429,7 +442,7 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		case 'y':
 			switch(mode){
 				case 0:
-
+					transport(0, -0.1, 0);
 					break;
 				case 1:
 					scaling(1, 0.9, 1);
@@ -439,7 +452,7 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		case 'Y':
 			switch(mode){
 				case 0:
-
+					transport(0, 0.1, 0);
 					break;
 				case 1:
 					scaling(1, 1.1, 1);
@@ -449,7 +462,7 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		case 'z':
 			switch(mode){
 				case 0:
-
+					transport(0, 0, -0.1);
 					break;
 				case 1:
 					scaling(1, 1, 0.9);
@@ -459,7 +472,7 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		case 'Z':
 			switch(mode){
 				case 0:
-
+					transport(0, 0, 0.1);
 					break;
 				case 1:
 					scaling(1, 1, 1.1);
