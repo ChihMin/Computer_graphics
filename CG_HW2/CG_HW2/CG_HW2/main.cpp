@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <algorithm>
 
 #include <GL/glew.h>
 #include <freeglut/glut.h>
 #include "textfile.h"
 #include "GLM.h"
+
+
 
 #ifndef GLUT_WHEEL_UP
 # define GLUT_WHEEL_UP   0x0003
@@ -27,6 +30,76 @@ GLMmodel* OBJ;
 GLfloat aMVP[16];
 GLfloat *obj_color, *obj_vertices;
 GLfloat cur_scene_x = 1;
+
+GLfloat x_max = -1e9;
+GLfloat x_min = 1e9;
+	
+GLfloat y_max = -1e9;
+GLfloat y_min = 1e9;
+
+GLfloat z_max = -1e9;
+GLfloat z_min = 1e9;
+
+GLfloat x_center, y_center, z_center;
+GLfloat scale = 1;
+
+void print_aMVP(){
+	int n = 4;
+	for(int i = 0; i < n; ++i){
+		for(int j = 0; j < n; ++j)
+			printf("%.3f ", aMVP[i*4+j]);
+		printf("\n");
+	}
+	printf("\n");
+}
+
+void transMatrix(GLfloat *A){
+	int n = 4;
+	for(int i = 0; i < n; ++i)
+		for(int j = i+1; j < n; ++j)
+			std::swap(A[i*n+j], A[i+j*n]);
+}
+
+void copyMatrix(GLfloat *A, const GLfloat B[][4]){
+	int n = 4;
+	for(int i = 0; i < n; ++i)
+		for(int j = 0; j < n; ++j)
+			A[i*n+j] = B[i][j];
+}
+
+void multiMatrix(GLfloat A[][4], GLfloat *B){
+	GLfloat ans[4][4] = {0};
+	int n = 4;
+	print_aMVP();
+	transMatrix(B);
+	print_aMVP();
+
+	for(int i = 0; i < n; ++i)
+		for(int j = 0; j < n; ++j)
+			for(int k = 0; k < n; ++k)
+				ans[i][j] += (A[i][k] * B[k*n+j]);
+	copyMatrix(B, ans);
+	transMatrix(B);
+}
+
+void scaleAll(){
+	GLfloat M[4][4] = {0};
+	M[0][0] = scale;
+	M[1][1] = scale;
+	M[2][2] = scale;
+	M[3][3] = 1;
+	multiMatrix(M, aMVP);
+}
+
+void matrixInit(){
+	printf("Matrix Initialization!!\n");
+	aMVP[0] = 1;	aMVP[4] = 0;	aMVP[8]  = 0;	aMVP[12] = -x_center;
+	aMVP[1] = 0;	aMVP[5] = 1;	aMVP[9]  = 0;	aMVP[13] = -y_center;
+	aMVP[2] = 0;	aMVP[6] = 0;	aMVP[10] = 1;	aMVP[14] = -z_center;
+	aMVP[3] = 0;	aMVP[7] = 0;	aMVP[11] = 0;	aMVP[15] = 1;
+	
+	scaleAll();
+}
 
 void colorModel()
 {
@@ -52,16 +125,6 @@ void colorModel()
 	
 	obj_color = new GLfloat[(int)OBJ->numtriangles * 9];
 	obj_vertices = new GLfloat[(int)OBJ->numtriangles * 9];
-	GLfloat scale = 1;
-	
-	GLfloat x_max = -1e9;
-	GLfloat x_min = 1e9;
-	
-	GLfloat y_max = -1e9;
-	GLfloat y_min = 1e9;
-
-	GLfloat z_max = -1e9;
-	GLfloat z_min = 1e9;
 	
 
 	for(int i=0, j=0; i<(int)OBJ->numtriangles; i++, j += 3)
@@ -75,7 +138,7 @@ void colorModel()
 		int indc1 = indv1;
 		int indc2 = indv2;
 		int indc3 = indv3;
-
+/*
 		// vertices
 		GLfloat vx, vy, vz;
 		obj_vertices[j*3+0] = OBJ->vertices[indv1*3+0] * scale;
@@ -89,7 +152,7 @@ void colorModel()
 		obj_vertices[(j+2)*3+0] = OBJ->vertices[indv3*3+0] * scale;
 		obj_vertices[(j+2)*3+1] = OBJ->vertices[indv3*3+1] * scale;
 		obj_vertices[(j+2)*3+2] = OBJ->vertices[indv3*3+2] * scale;
-
+*/
 		if( i == 0 ){
 			x_min = x_max = OBJ->vertices[indv1*3+0];
 			y_min = y_max = OBJ->vertices[indv1*3+1];
@@ -122,6 +185,20 @@ void colorModel()
 		}
 		// colors
 		GLfloat c1, c2, c3;
+
+
+		obj_vertices[j*3+0] = OBJ->vertices[indv1*3+0];
+		obj_vertices[j*3+1]  = OBJ->vertices[indv1*3+1];
+		obj_vertices[j*3+2]  = OBJ->vertices[indv1*3+2] ;
+
+		obj_vertices[(j+1)*3+0] = OBJ->vertices[indv2*3+0];
+		obj_vertices[(j+1)*3+1] = OBJ->vertices[indv2*3+1];
+		obj_vertices[(j+1)*3+2] = OBJ->vertices[indv2*3+2];
+
+		obj_vertices[(j+2)*3+0] = OBJ->vertices[indv3*3+0];
+		obj_vertices[(j+2)*3+1] = OBJ->vertices[indv3*3+1];
+		obj_vertices[(j+2)*3+2] = OBJ->vertices[indv3*3+2];
+
 		obj_color[j*3+0] = OBJ->colors[indv1*3+0];
 		obj_color[j*3+1] = OBJ->colors[indv1*3+1];
 		obj_color[j*3+2] = OBJ->colors[indv1*3+2];
@@ -134,11 +211,16 @@ void colorModel()
 		obj_color[(j+2)*3+1] = OBJ->colors[indv3*3+1];
 		obj_color[(j+2)*3+2] = OBJ->colors[indv3*3+2];
 	}
+	x_center = (x_max + x_min) / 2;
+	y_center = (y_max + y_min) / 2;
+	z_center = (z_max + z_min) / 2;
+
+	printf("%f %f %f\n", x_center, y_center, z_center);
 
 	GLfloat max_line = max_cmp( x_max - x_min, y_max - y_min );
 	max_line = max_cmp( max_line, z_max - z_min);
 	scale = 2 / max_line;
-
+/*
 	for(int i = 0; i < (int)OBJ->numtriangles * 9; ++i)
 		obj_vertices[i] *= scale;
 	
@@ -163,6 +245,7 @@ void colorModel()
 		obj_vertices[i+2] -= z_move;
 	}
 	//printf("scale = %f\n", scale);
+*/
 }
 
 void loadOBJString(){
@@ -176,10 +259,11 @@ void loadOBJModel()
 	// read an obj model here
 	loadOBJString();
 	OBJ = glmReadOBJ(filename[current_obj]);
-	//printf("%s\n", filename[current_obj]);
-
 	// traverse the color model
 	colorModel();
+	printf("HRARARAr\n");
+	matrixInit();
+	printf("NONONON\n");
 }
 void idle()
 {
@@ -219,10 +303,8 @@ void renderScene(void)
 	};
 
 	// Move example triangle to left by 0.5
-	aMVP[0] = cur_scene_x;	aMVP[4] = 0;	aMVP[8] = 0;	aMVP[12] = 0;
-	aMVP[1] = 0;	aMVP[5] = cur_scene_x;	aMVP[9] = 0;	aMVP[13] = 0;
-	aMVP[2] = 0;	aMVP[6] = 0;	aMVP[10] = cur_scene_x;	aMVP[14] = 0;
-	aMVP[3] = 0;	aMVP[7] = 0;	aMVP[11] = 0;	aMVP[15] = 1;
+	
+	
 	
 
 	glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, obj_vertices);
@@ -344,18 +426,15 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			break;
 		case 99:
 			loadOBJModel();
-			glutDisplayFunc (renderScene);
 			break;
 		case 'n':
 			current_obj = ( current_obj + 1 ) % 33;
 			loadOBJModel();
-			glutDisplayFunc (renderScene);
 			break;
 		case 'b':
 			current_obj  -= 1;
 			current_obj += (current_obj < 0 )*33;
 			loadOBJModel();
-			glutDisplayFunc (renderScene);
 			break;
 		case 'h':
 			printf("===========THIS IS HELP !!!!!==========\n");
@@ -391,7 +470,6 @@ int main(int argc, char **argv) {
 
 	// load obj models through glm
 	loadOBJModel();
-
 	// register glut callback functions
 	glutDisplayFunc (renderScene);
 	glutIdleFunc    (idle);

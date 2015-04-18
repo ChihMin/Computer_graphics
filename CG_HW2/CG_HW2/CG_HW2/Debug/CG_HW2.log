@@ -1,13 +1,23 @@
-﻿已經開始建置於 2015/4/15 下午 02:07:16。
+﻿已經開始建置於 2015/4/18 下午 09:14:16。
      1>節點 2 (build 目標) 上的專案 "C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\CG_HW2\CG_HW2.vcxproj"。
      1>InitializeBuildStatus:
          由於指定了 "AlwaysCreate"，因此正在建立 "Debug\CG_HW2.unsuccessfulbuild"。
        ClCompile:
          所有輸出都是最新的。
-         所有輸出都是最新的。
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\..\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         main.cpp
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(187): warning C4101: 'c3' : 未參考的區域變數
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(187): warning C4101: 'c1' : 未參考的區域變數
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(187): warning C4101: 'c2' : 未參考的區域變數
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(395): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(400): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
        Link:
-         所有輸出都是最新的。
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\lib glew32.lib freeglut.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\CG_HW2.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.lib" /MACHINE:X86 Debug\glm.obj
+         Debug\main.obj
+         Debug\textfile.obj
          CG_HW2.vcxproj -> C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.exe.manifest" /manifest Debug\CG_HW2.exe.intermediate.manifest
        FinalizeBuildStatus:
          正在刪除檔案 "Debug\CG_HW2.unsuccessfulbuild"。
          正在變更時間戳記 "Debug\CG_HW2.lastbuildstate"。
@@ -15,4 +25,4 @@
 
 建置成功。
 
-經過時間 00:00:00.09
+經過時間 00:00:00.78
