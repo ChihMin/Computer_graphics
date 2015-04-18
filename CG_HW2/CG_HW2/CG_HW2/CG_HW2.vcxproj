@@ -14,10 +14,12 @@
     <ClCompile Include="glm.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="textfile.cpp" />
+    <ClCompile Include="transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glm.h" />
     <ClInclude Include="textfile.h" />
+    <ClInclude Include="transform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />

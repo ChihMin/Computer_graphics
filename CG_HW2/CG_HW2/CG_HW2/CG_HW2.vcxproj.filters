@@ -24,12 +24,18 @@
     <ClCompile Include="glm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="textfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="glm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
