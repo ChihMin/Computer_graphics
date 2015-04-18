@@ -19,10 +19,14 @@
 # define min_cmp(a,b) (((a)<(b))?(a):(b))
 #endif
 
+#define TRANS_MODE 0
+#define SCALE_MODE 1
+
 // Shader attributes
 GLint iLocPosition;
 GLint iLocColor;
 GLint iLocMVP;
+int mode = 0;
 int current_obj;
 char filename[100][100];
 
@@ -72,7 +76,7 @@ void multiMatrix(GLfloat A[][4], GLfloat *B){
 	int n = 4;
 	print_aMVP();
 	transMatrix(B);
-	print_aMVP();
+	
 
 	for(int i = 0; i < n; ++i)
 		for(int j = 0; j < n; ++j)
@@ -80,6 +84,7 @@ void multiMatrix(GLfloat A[][4], GLfloat *B){
 				ans[i][j] += (A[i][k] * B[k*n+j]);
 	copyMatrix(B, ans);
 	transMatrix(B);
+	print_aMVP();
 }
 
 void scaleAll(){
@@ -87,6 +92,15 @@ void scaleAll(){
 	M[0][0] = scale;
 	M[1][1] = scale;
 	M[2][2] = scale;
+	M[3][3] = 1;
+	multiMatrix(M, aMVP);
+}
+
+void scaling(GLfloat x, GLfloat y, GLfloat z){
+	GLfloat M[4][4] = {0};
+	M[0][0] = x;
+	M[1][1] = y;
+	M[2][2] = z;
 	M[3][3] = 1;
 	multiMatrix(M, aMVP);
 }
@@ -138,21 +152,7 @@ void colorModel()
 		int indc1 = indv1;
 		int indc2 = indv2;
 		int indc3 = indv3;
-/*
-		// vertices
-		GLfloat vx, vy, vz;
-		obj_vertices[j*3+0] = OBJ->vertices[indv1*3+0] * scale;
-		obj_vertices[j*3+1]  = OBJ->vertices[indv1*3+1] * scale;
-		obj_vertices[j*3+2]  = OBJ->vertices[indv1*3+2] * scale;
 
-		obj_vertices[(j+1)*3+0] = OBJ->vertices[indv2*3+0] * scale;
-		obj_vertices[(j+1)*3+1] = OBJ->vertices[indv2*3+1] * scale;
-		obj_vertices[(j+1)*3+2] = OBJ->vertices[indv2*3+2] * scale;
-
-		obj_vertices[(j+2)*3+0] = OBJ->vertices[indv3*3+0] * scale;
-		obj_vertices[(j+2)*3+1] = OBJ->vertices[indv3*3+1] * scale;
-		obj_vertices[(j+2)*3+2] = OBJ->vertices[indv3*3+2] * scale;
-*/
 		if( i == 0 ){
 			x_min = x_max = OBJ->vertices[indv1*3+0];
 			y_min = y_max = OBJ->vertices[indv1*3+1];
@@ -215,37 +215,9 @@ void colorModel()
 	y_center = (y_max + y_min) / 2;
 	z_center = (z_max + z_min) / 2;
 
-	printf("%f %f %f\n", x_center, y_center, z_center);
-
 	GLfloat max_line = max_cmp( x_max - x_min, y_max - y_min );
 	max_line = max_cmp( max_line, z_max - z_min);
 	scale = 2 / max_line;
-/*
-	for(int i = 0; i < (int)OBJ->numtriangles * 9; ++i)
-		obj_vertices[i] *= scale;
-	
-	GLfloat x_move = 0,  y_move = 0, z_move = 0;
-
-	x_max *= scale;
-	y_max *= scale;
-	z_max *= scale;
-	
-	x_min *= scale;
-	y_min *= scale;
-	z_min *= scale;
-	
-
-	x_move = (x_max + x_min) / 2;
-	y_move = (y_max + y_min) / 2;
-	z_move = (z_max + z_min) / 2;
-
-	for(int i = 0; i < (int)OBJ->numtriangles * 9; i = i + 3){
-		obj_vertices[i] -= x_move;
-		obj_vertices[i+1] -= y_move;
-		obj_vertices[i+2] -= z_move;
-	}
-	//printf("scale = %f\n", scale);
-*/
 }
 
 void loadOBJString(){
@@ -261,9 +233,8 @@ void loadOBJModel()
 	OBJ = glmReadOBJ(filename[current_obj]);
 	// traverse the color model
 	colorModel();
-	printf("HRARARAr\n");
+	// initialize normarlization matrix
 	matrixInit();
-	printf("NONONON\n");
 }
 void idle()
 {
@@ -418,14 +389,10 @@ void processMouseMotion(int x, int y){  // callback on mouse drag
 
 void processNormalKeys(unsigned char key, int x, int y) {
 	//printf("key = %d ", key );
-	if( key < 97 && key != 27 )  key += 32;
 
 	switch(key) {
 		case 27: /* the Esc key */ 
 			exit(0); 
-			break;
-		case 99:
-			loadOBJModel();
 			break;
 		case 'n':
 			current_obj = ( current_obj + 1 ) % 33;
@@ -436,6 +403,70 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			current_obj += (current_obj < 0 )*33;
 			loadOBJModel();
 			break;
+		case 's':
+			mode = SCALE_MODE;
+			break;
+		case 'x':
+			switch(mode){
+				case 0:
+
+					break;
+				case 1:
+					scaling(0.9, 1, 1);
+					break;
+			}
+			break;
+		case 'X':
+			switch(mode){
+				case 0:
+
+					break;
+				case 1:
+					scaling(1.1, 1, 1);
+					break;
+			}
+			break;	
+		case 'y':
+			switch(mode){
+				case 0:
+
+					break;
+				case 1:
+					scaling(1, 0.9, 1);
+					break;
+			}
+			break;
+		case 'Y':
+			switch(mode){
+				case 0:
+
+					break;
+				case 1:
+					scaling(1, 1.1, 1);
+					break;
+			}
+			break;	
+		case 'z':
+			switch(mode){
+				case 0:
+
+					break;
+				case 1:
+					scaling(1, 1, 0.9);
+					break;
+			}
+			break;
+		case 'Z':
+			switch(mode){
+				case 0:
+
+					break;
+				case 1:
+					scaling(1, 1, 1.1);
+					break;
+			}
+			break;	
+
 		case 'h':
 			printf("===========THIS IS HELP !!!!!==========\n");
 			printf("Press 'c' to change mode(solid / wireframe)\n\n");
@@ -443,9 +474,7 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			printf("Press 'n' to go to next model\n\n");
 			printf("If you want to exit, please press 'esc'\n");
 			printf("===============================\n");
-			break;
-
-			
+			break;		
 	}
 }
 
