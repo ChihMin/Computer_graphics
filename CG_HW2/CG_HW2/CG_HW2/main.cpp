@@ -162,7 +162,7 @@ void loadOBJModel()
 	OBJ = glmReadOBJ(filename[current_obj]);
 	// traverse the color model
 	colorModel();
-	// initialize normarlization matrix
+	// initialize transform matrix
 	matrixInit();
 }
 void idle()

@@ -31,6 +31,12 @@ void copyMatrix(GLfloat *A, const GLfloat B[][4]){
 			A[i*n+j] = B[i][j];
 }
 
+void update_center(GLfloat A[][4]){
+	x_center = x_center + A[0][3];
+	y_center = y_center + A[1][3];
+	z_center = z_center + A[2][3];
+}
+
 void multiMatrix(GLfloat A[][4], GLfloat *B){
 	GLfloat ans[4][4] = {0};
 	int n = 4;
@@ -56,15 +62,6 @@ void scaleAll(){
 	multiMatrix(M, aMVP);
 }
 
-void scaling(GLfloat x, GLfloat y, GLfloat z){
-	GLfloat M[4][4] = {0};
-	M[0][0] = x;
-	M[1][1] = y;
-	M[2][2] = z;
-	M[3][3] = 1;
-	multiMatrix(M, aMVP);
-}
-
 void transport(GLfloat x, GLfloat y, GLfloat z){
 	GLfloat M[4][4] = {0};
 	for(int i = 0; i < 4; ++i)
@@ -72,10 +69,35 @@ void transport(GLfloat x, GLfloat y, GLfloat z){
 	M[0][3] = x;
 	M[1][3] = y;
 	M[2][3] = z;
+
+	multiMatrix(M, aMVP);
+	update_center(M);
+}
+
+void transport(GLfloat x, GLfloat y, GLfloat z, bool no_update){
+	GLfloat M[4][4] = {0};
+	for(int i = 0; i < 4; ++i)
+		M[i][i] = 1;
+	M[0][3] = x;
+	M[1][3] = y;
+	M[2][3] = z;
+
 	multiMatrix(M, aMVP);
 }
 
+void scaling(GLfloat x, GLfloat y, GLfloat z){
+	transport(-x_center, -y_center, -z_center, NO_UPDATE);
+	GLfloat M[4][4] = {0};
+	M[0][0] = x;
+	M[1][1] = y;
+	M[2][2] = z;
+	M[3][3] = 1;
+	multiMatrix(M, aMVP);
+	transport(x_center, y_center, z_center, NO_UPDATE);
+}
+
 void rotate(GLfloat x, GLfloat y, GLfloat z){
+	transport(-x_center, -y_center, -z_center, NO_UPDATE);
 	GLfloat M[3][4][4] = {0};
 	for(int i = 0; i < 3; ++i)
 		for(int j = 0; j < 4; ++j)
@@ -116,6 +138,7 @@ void rotate(GLfloat x, GLfloat y, GLfloat z){
 		}
 		multiMatrix(M[i], aMVP);
 	}
+	transport(x_center, y_center, z_center, NO_UPDATE);
 }
 
 void matrixInit(){
