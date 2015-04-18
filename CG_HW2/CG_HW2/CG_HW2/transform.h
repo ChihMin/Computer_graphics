@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <algorithm>
+#include <cmath>
 
 #include <GL/glew.h>
 #include <freeglut/glut.h>
@@ -18,4 +19,5 @@ void multiMatrix(GLfloat A[][4], GLfloat *B);
 void scaleAll();
 void scaling(GLfloat x, GLfloat y, GLfloat z);
 void transport(GLfloat x, GLfloat y, GLfloat z);
+void rotate(GLfloat x, GLfloat y, GLfloat z);
 void matrixInit();

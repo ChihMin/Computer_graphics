@@ -20,6 +20,7 @@
 
 #define TRANSPORT_MODE 0
 #define SCALE_MODE 1
+#define ROTATE_MODE 2
 
 // Shader attributes
 GLint iLocPosition;
@@ -42,9 +43,6 @@ GLfloat y_min = 1e9;
 
 GLfloat z_max = -1e9;
 GLfloat z_min = 1e9;
-
-
-
 
 void colorModel()
 {
@@ -340,6 +338,9 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		case 't':
 			mode = TRANSPORT_MODE;
 			break;
+		case 'r':
+			mode = ROTATE_MODE;
+			break;
 		case 'x':
 			switch(mode){
 				case 0:
@@ -347,6 +348,9 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					break;
 				case 1:
 					scaling(0.9, 1, 1);
+					break;
+				case ROTATE_MODE:
+					rotate(-10, 0, 0);
 					break;
 			}
 			break;
@@ -358,6 +362,9 @@ void processNormalKeys(unsigned char key, int x, int y) {
 				case 1:
 					scaling(1.1, 1, 1);
 					break;
+				case ROTATE_MODE:
+					rotate(10, 0, 0);
+					break;
 			}
 			break;	
 		case 'y':
@@ -367,6 +374,9 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					break;
 				case 1:
 					scaling(1, 0.9, 1);
+					break;
+				case ROTATE_MODE:
+					rotate(0, -10, 0);
 					break;
 			}
 			break;
@@ -378,6 +388,9 @@ void processNormalKeys(unsigned char key, int x, int y) {
 				case 1:
 					scaling(1, 1.1, 1);
 					break;
+				case ROTATE_MODE:
+					rotate(0, 10, 0);
+					break;
 			}
 			break;	
 		case 'z':
@@ -388,6 +401,9 @@ void processNormalKeys(unsigned char key, int x, int y) {
 				case 1:
 					scaling(1, 1, 0.9);
 					break;
+				case ROTATE_MODE:
+					rotate(0, 0, -10);
+					break;
 			}
 			break;
 		case 'Z':
@@ -397,6 +413,9 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					break;
 				case 1:
 					scaling(1, 1, 1.1);
+					break;
+				case ROTATE_MODE:
+					rotate(0, 0, 10);
 					break;
 			}
 			break;	
