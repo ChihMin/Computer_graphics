@@ -15,11 +15,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="textfile.cpp" />
     <ClCompile Include="transform.cpp" />
+    <ClCompile Include="viewing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glm.h" />
     <ClInclude Include="textfile.h" />
     <ClInclude Include="transform.h" />
+    <ClInclude Include="viewing.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />

@@ -125,7 +125,7 @@ void rotate(GLfloat x, GLfloat y, GLfloat z){
 			M[i][1][2] = -SIN[i];
 			M[i][2][1] =  SIN[i];				
 		}
-		else if (i == 2){
+		else if (i == 1){
 			M[i][0][0] = M[i][2][2] = COS[i];
 			M[i][0][2] = -SIN[i];
 			M[i][2][0] =  SIN[i];			

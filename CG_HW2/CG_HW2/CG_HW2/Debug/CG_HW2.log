@@ -1,4 +1,4 @@
-﻿已經開始建置於 2015/4/19 下午 02:09:28。
+﻿已經開始建置於 2015/4/19 下午 05:04:44。
      1>節點 2 (build 目標) 上的專案 "C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\CG_HW2\CG_HW2.vcxproj"。
      1>InitializeBuildStatus:
          由於指定了 "AlwaysCreate"，因此正在建立 "Debug\CG_HW2.unsuccessfulbuild"。
@@ -17,6 +17,7 @@
          Debug\main.obj
          Debug\textfile.obj
          Debug\transform.obj
+         Debug\viewing.obj
          CG_HW2.vcxproj -> C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.exe
        Manifest:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.exe.manifest" /manifest Debug\CG_HW2.exe.intermediate.manifest
@@ -27,4 +28,4 @@
 
 建置成功。
 
-經過時間 00:00:00.83
+經過時間 00:00:01.04

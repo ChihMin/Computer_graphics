@@ -7,6 +7,7 @@
 #include "textfile.h"
 #include "GLM.h"
 #include "transform.h"
+#include "viewing.h"
 
 #ifndef GLUT_WHEEL_UP
 # define GLUT_WHEEL_UP   0x0003
@@ -112,10 +113,6 @@ void colorModel()
 			z_min = min_cmp( z_min, OBJ->vertices[indv2*3+2] );
 			z_min = min_cmp( z_min, OBJ->vertices[indv3*3+2] );
 		}
-		// colors
-		GLfloat c1, c2, c3;
-
-
 		obj_vertices[j*3+0] = OBJ->vertices[indv1*3+0];
 		obj_vertices[j*3+1]  = OBJ->vertices[indv1*3+1];
 		obj_vertices[j*3+2]  = OBJ->vertices[indv1*3+2] ;
@@ -166,6 +163,7 @@ void loadOBJModel()
 	colorModel();
 	// initialize transform matrix
 	matrixInit();
+	viewInit();
 }
 void idle()
 {
@@ -180,8 +178,6 @@ void renderScene(void)
 	// NOTE:
 	// You should add comment to describe where are your Model,
 	// Viewing, and Projection transform matrices.
-
-
 
 
 	///Example of displaying colorful triangle
