@@ -140,9 +140,11 @@ void colorModel()
 		obj_color[(j+2)*3+1] = OBJ->colors[indv3*3+1];
 		obj_color[(j+2)*3+2] = OBJ->colors[indv3*3+2];
 	}
-	x_center = (x_max + x_min) / 2;
-	y_center = (y_max + y_min) / 2;
-	z_center = (z_max + z_min) / 2;
+	x_center = (x_max + x_min) / 2.0;
+	y_center = (y_max + y_min) / 2.0;
+	z_center = (z_max + z_min) / 2.0;
+
+	printf("center = %.3f %.3f %.3f\n", x_center, y_center, z_center);
 
 	GLfloat max_line = max_cmp( x_max - x_min, y_max - y_min );
 	max_line = max_cmp( max_line, z_max - z_min);
