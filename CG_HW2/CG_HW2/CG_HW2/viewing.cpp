@@ -1,6 +1,9 @@
 #include "viewing.h"
 
 GLfloat x_eye, y_eye, z_eye;
+GLfloat x_up, y_up, z_up;
+GLfloat x_cor, y_cor, z_cor;
+GLfloat viewMatrix[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
 
 void update_eye(GLfloat A[][4]){
 	x_eye = x_eye + A[0][3];
@@ -16,8 +19,8 @@ void view_transport(GLfloat x, GLfloat y, GLfloat z){
 	M[1][3] = y;
 	M[2][3] = z;
 
-	multiMatrix(M, aMVP);
-	update_eye(M);
+	multiMatrix(viewMatrix, M, viewMatrix );
+	multiple_all_matrix(M);
 }
 
 void makeIdentityMatrix(GLfloat M[][4]){
@@ -41,7 +44,7 @@ void viewLookat(GLfloat ex, GLfloat ey, GLfloat ez,
 				GLfloat cx, GLfloat cy, GLfloat cz,
 				GLfloat ux, GLfloat uy, GLfloat uz)
 {
-	GLfloat forward[3], side[3], up[3];
+	GLfloat forward[3], side[3], up[3], Ry[3];
 	forward[0] = cx - ex;
 	forward[1] = cy - ey;
 	forward[2] = cz - ez;
@@ -53,25 +56,29 @@ void viewLookat(GLfloat ex, GLfloat ey, GLfloat ez,
 	normalize(forward);
 	normalize(up);
 
-	cross(side, forward, up);
+	cross(side, up, forward);
+	cross(Ry, forward, side);
+	
+	normalize(side);
+	normalize(Ry);
 
 	GLfloat M[4][4] = {0};
 	makeIdentityMatrix(M);
 
 	for(int j = 0; j < 3; ++j){ 
 		M[0][j] = side[j];
-		M[1][j] = up[j];
-		M[2][j] = forward[j];
-		if(j == 3){
-			M[0][j] = -side[j];
-			M[1][j] = -up[j];
-			M[2][j] = -forward[j];
-		}
+		M[1][j] = Ry[j];
+		M[2][j] = forward[j];	
 	}
-	view_transport(-x_eye, -y_eye, -z_eye);
-	multiMatrix(M, aMVP);
+	view_transport(-ex, -ey, -ez);
+	multiMatrix(viewMatrix, M, viewMatrix);
+	multiple_all_matrix(M);
 }
 
 void viewInit(){
-	viewLookat(0.0, 0.0, 2.0, x_center, y_center, z_center, 0.0, 1.0, 0.0);
+	x_eye = 0, y_eye = 0, z_eye = 2.0;
+	x_cor = 0, y_cor = 0, z_cor = 0;
+	x_up = 0, y_up = 1.0, z_up = 0;
+
+	viewLookat(0.0, 0.0, 2.0, x_cor, y_cor, z_cor, 0.0, 1.0, 0.0);
 }
