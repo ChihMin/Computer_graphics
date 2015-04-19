@@ -61,13 +61,10 @@ void viewLookat(GLfloat ex, GLfloat ey, GLfloat ez,
 
 	cross(side, up, forward);
 	cross(Ry, forward, side);
-<<<<<<< HEAD
-	
+
 	normalize(side);
 	normalize(Ry);
 
-=======
->>>>>>> 9da3d6e7916b68577af4a6fd0d35aa6cc385c45d
 	GLfloat M[4][4] = {0};
 	makeIdentityMatrix(M);
 
@@ -82,14 +79,10 @@ void viewLookat(GLfloat ex, GLfloat ey, GLfloat ez,
 }
 
 void viewInit(){
-<<<<<<< HEAD
+
 	x_eye = 0, y_eye = 0, z_eye = 0.0;
 	x_cor = 0, y_cor = 0, z_cor = -1;
 	x_up = 0, y_up = 1.0, z_up = 0;
 
 	viewLookat(x_eye, y_eye, z_eye, x_cor, y_cor, z_cor, 0.0, 1.0, 0.0);
-=======
-	x_eye = 0.0, y_eye = 0.0, z_eye = 2.0;
-	viewLookat(0.0, 0.0, 2.0, x_center, y_center, z_center, 0.0, 1.0, 0.0);
->>>>>>> 9da3d6e7916b68577af4a6fd0d35aa6cc385c45d
 }
