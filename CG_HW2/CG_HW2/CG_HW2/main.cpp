@@ -9,6 +9,7 @@
 #include "GLM.h"
 #include "transform.h"
 #include "viewing.h"
+#include "projection.h"
 
 #ifndef GLUT_WHEEL_UP
 # define GLUT_WHEEL_UP   0x0003
@@ -176,10 +177,9 @@ void loadOBJModel()
 				viewMatrix[i][j] = geoMatrix[i][j] = 1;
 			else
 				viewMatrix[i][j] = geoMatrix[i][j] = 0;
-
 	matrixInit();
-	viewInit();		
-	//gluLookAt(0, 0, -2, 0, 0, 0, 0, 1, 0);
+	viewInit();
+	projInit();
 }
 void idle()
 {
@@ -447,6 +447,24 @@ void processNormalKeys(unsigned char key, int x, int y) {
 				case ROTATE_MODE:
 					rotate(0, -10, 0);
 					break;
+				case VIEWING_EYE_MODE:
+					y_eye = y_eye - 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_CENTER_MODE:
+					y_cor = y_cor - 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_UP_MODE:
+					y_up = y_up - 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
 			}
 			break;
 		case 'Y':
@@ -459,6 +477,24 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					break;
 				case ROTATE_MODE:
 					rotate(0, 10, 0);
+					break;
+				case VIEWING_EYE_MODE:
+					y_eye = y_eye + 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_CENTER_MODE:
+					y_cor = y_cor + 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_UP_MODE:
+					y_up = y_up + 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
 					break;
 			}
 			break;	

@@ -1,14 +1,15 @@
-﻿已經開始建置於 2015/4/19 下午 11:48:04。
+﻿已經開始建置於 2015/4/20 上午 01:10:24。
      1>節點 2 (build 目標) 上的專案 "C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\CG_HW2\CG_HW2.vcxproj"。
      1>InitializeBuildStatus:
          由於指定了 "AlwaysCreate"，因此正在建立 "Debug\CG_HW2.unsuccessfulbuild"。
        ClCompile:
          所有輸出都是最新的。
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\..\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt viewing.cpp
-         viewing.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\..\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt projection.cpp
+         projection.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\lib glew32.lib freeglut.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\CG_HW2.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.lib" /MACHINE:X86 Debug\glm.obj
          Debug\main.obj
+         Debug\projection.obj
          Debug\textfile.obj
          Debug\transform.obj
          Debug\viewing.obj
@@ -22,4 +23,4 @@
 
 建置成功。
 
-經過時間 00:00:00.77
+經過時間 00:00:01.01
