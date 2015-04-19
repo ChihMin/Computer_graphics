@@ -4,6 +4,10 @@
 #include "transform.h"
 
 extern GLfloat x_eye, y_eye, z_eye;
+extern GLfloat x_up, y_up, z_up;
+extern GLfloat x_cor, y_cor, z_cor;
+extern GLfloat viewMatrix[][4];
+
 void makeIdentityMatrix(GLfloat M[][4]);
 void normalize(GLfloat *v);
 void cross(GLfloat *X, GLfloat *Y, GLfloat *Z);

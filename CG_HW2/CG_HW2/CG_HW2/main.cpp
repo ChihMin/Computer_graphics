@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <algorithm>
+#include <cstring>
 
 #include <GL/glew.h>
 #include <freeglut/glut.h>
@@ -8,6 +9,7 @@
 #include "GLM.h"
 #include "transform.h"
 #include "viewing.h"
+#include "projection.h"
 
 #ifndef GLUT_WHEEL_UP
 # define GLUT_WHEEL_UP   0x0003
@@ -22,7 +24,9 @@
 #define TRANSPORT_MODE 0
 #define SCALE_MODE 1
 #define ROTATE_MODE 2
-
+#define VIEWING_EYE_MODE 3
+#define VIEWING_CENTER_MODE 4
+#define VIEWING_UP_MODE 5
 // Shader attributes
 GLint iLocPosition;
 GLint iLocColor;
@@ -162,8 +166,20 @@ void loadOBJModel()
 	// traverse the color model
 	colorModel();
 	// initialize transform matrix
+	aMVP[0] = 1;	aMVP[4] = 0;	aMVP[8]  = 0;	aMVP[12] = 0;
+	aMVP[1] = 0;	aMVP[5] = 1;	aMVP[9]  = 0;	aMVP[13] = 0;
+	aMVP[2] = 0;	aMVP[6] = 0;	aMVP[10] = 1;	aMVP[14] = 0;
+	aMVP[3] = 0;	aMVP[7] = 0;	aMVP[11] = 0;	aMVP[15] = 1;
+	
+	for(int i = 0; i < 4; ++i)
+		for(int j = 0; j < 4; ++j)
+			if( i == j )
+				viewMatrix[i][j] = geoMatrix[i][j] = 1;
+			else
+				viewMatrix[i][j] = geoMatrix[i][j] = 0;
 	matrixInit();
 	viewInit();
+	projInit();
 }
 void idle()
 {
@@ -339,6 +355,25 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		case 'r':
 			mode = ROTATE_MODE;
 			break;
+		case 'e':
+			mode = VIEWING_EYE_MODE;
+			break;
+		case 'E':
+			mode = VIEWING_EYE_MODE;
+			break;
+		case 'c':
+			mode = VIEWING_CENTER_MODE;
+			break;
+		case 'C':
+			mode = VIEWING_CENTER_MODE;
+			break;
+		case 'u':
+			mode = VIEWING_UP_MODE;
+			break;
+		case 'U':
+			mode = VIEWING_UP_MODE;
+			break;
+
 		case 'x':
 			switch(mode){
 				case 0:
@@ -349,6 +384,24 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					break;
 				case ROTATE_MODE:
 					rotate(-10, 0, 0);
+					break;
+				case VIEWING_EYE_MODE:
+					x_eye = x_eye - 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_CENTER_MODE:
+					x_cor = x_cor - 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_UP_MODE:
+					x_up = x_up - 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
 					break;
 			}
 			break;
@@ -363,6 +416,24 @@ void processNormalKeys(unsigned char key, int x, int y) {
 				case ROTATE_MODE:
 					rotate(10, 0, 0);
 					break;
+				case VIEWING_EYE_MODE:
+					x_eye = x_eye + 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_CENTER_MODE:
+					x_cor = x_cor + 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_UP_MODE:
+					x_up = x_up + 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
 			}
 			break;	
 		case 'y':
@@ -376,6 +447,24 @@ void processNormalKeys(unsigned char key, int x, int y) {
 				case ROTATE_MODE:
 					rotate(0, -10, 0);
 					break;
+				case VIEWING_EYE_MODE:
+					y_eye = y_eye - 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_CENTER_MODE:
+					y_cor = y_cor - 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_UP_MODE:
+					y_up = y_up - 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
 			}
 			break;
 		case 'Y':
@@ -388,6 +477,24 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					break;
 				case ROTATE_MODE:
 					rotate(0, 10, 0);
+					break;
+				case VIEWING_EYE_MODE:
+					y_eye = y_eye + 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_CENTER_MODE:
+					y_cor = y_cor + 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_UP_MODE:
+					y_up = y_up + 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
 					break;
 			}
 			break;	
