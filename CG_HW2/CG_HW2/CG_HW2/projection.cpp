@@ -9,6 +9,6 @@ void projInit(){
 			if( i == j  )
 				projMatrix[i][j] = 1;
 		}
-	projMatrix[2][2] = 1;
+	projMatrix[2][2] = 0;
 	multiple_all_matrix(projMatrix);
 }

@@ -386,19 +386,19 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					rotate(-10, 0, 0);
 					break;
 				case VIEWING_EYE_MODE:
-					x_eye = x_eye - 0.01;
+					x_eye = x_eye - 0.1;
 					viewLookat(	x_eye, y_eye, z_eye, 
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
 					break;
 				case VIEWING_CENTER_MODE:
-					x_cor = x_cor - 0.01;
+					x_cor = x_cor - 0.1;
 					viewLookat(	x_eye, y_eye, z_eye, 
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
 					break;
 				case VIEWING_UP_MODE:
-					x_up = x_up - 0.01;
+					x_up = x_up - 0.1;
 					viewLookat(	x_eye, y_eye, z_eye, 
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
@@ -417,19 +417,19 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					rotate(10, 0, 0);
 					break;
 				case VIEWING_EYE_MODE:
-					x_eye = x_eye + 0.01;
+					x_eye = x_eye + 0.1;
 					viewLookat(	x_eye, y_eye, z_eye, 
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
 					break;
 				case VIEWING_CENTER_MODE:
-					x_cor = x_cor + 0.01;
+					x_cor = x_cor + 0.1;
 					viewLookat(	x_eye, y_eye, z_eye, 
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
 					break;
 				case VIEWING_UP_MODE:
-					x_up = x_up + 0.01;
+					x_up = x_up + 0.1;
 					viewLookat(	x_eye, y_eye, z_eye, 
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
@@ -448,19 +448,19 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					rotate(0, -10, 0);
 					break;
 				case VIEWING_EYE_MODE:
-					y_eye = y_eye - 0.01;
+					y_eye = y_eye - 0.1;
 					viewLookat(	x_eye, y_eye, z_eye, 
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
 					break;
 				case VIEWING_CENTER_MODE:
-					y_cor = y_cor - 0.01;
+					y_cor = y_cor - 0.1;
 					viewLookat(	x_eye, y_eye, z_eye, 
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
 					break;
 				case VIEWING_UP_MODE:
-					y_up = y_up - 0.01;
+					y_up = y_up - 0.1;
 					viewLookat(	x_eye, y_eye, z_eye, 
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
@@ -479,19 +479,19 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					rotate(0, 10, 0);
 					break;
 				case VIEWING_EYE_MODE:
-					y_eye = y_eye + 0.01;
+					y_eye = y_eye + 0.1;
 					viewLookat(	x_eye, y_eye, z_eye, 
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
 					break;
 				case VIEWING_CENTER_MODE:
-					y_cor = y_cor + 0.01;
+					y_cor = y_cor + 0.1;
 					viewLookat(	x_eye, y_eye, z_eye, 
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
 					break;
 				case VIEWING_UP_MODE:
-					y_up = y_up + 0.01;
+					y_up = y_up + 0.1;
 					viewLookat(	x_eye, y_eye, z_eye, 
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
@@ -509,6 +509,24 @@ void processNormalKeys(unsigned char key, int x, int y) {
 				case ROTATE_MODE:
 					rotate(0, 0, -10);
 					break;
+					case VIEWING_EYE_MODE:
+					z_eye = z_eye - 0.1;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_CENTER_MODE:
+					z_cor = z_cor - 0.1;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_UP_MODE:
+					z_up = z_up - 0.1;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;			
 			}
 			break;
 		case 'Z':
@@ -521,6 +539,24 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					break;
 				case ROTATE_MODE:
 					rotate(0, 0, 10);
+					break;
+				case VIEWING_EYE_MODE:
+					z_eye = z_eye + 0.1;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_CENTER_MODE:
+					z_cor = z_cor + 0.1;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+				case VIEWING_UP_MODE:
+					z_up = z_up + 0.1;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
 					break;
 			}
 			break;	
