@@ -11,6 +11,7 @@ extern GLfloat viewMatrix[][4];
 extern GLfloat projMatrix[][4];
 
 void print_aMVP(){
+
 	int n = 4;
 	for(int i = 0; i < n; ++i){   
 		for(int j = 0; j < n; ++j)
@@ -43,7 +44,7 @@ void update_center(GLfloat A[][4]){
 void multiMatrix(GLfloat A[][4], GLfloat *B){
 	GLfloat ans[4][4] = {0};
 	int n = 4;
-	print_aMVP();
+	//print_aMVP();
 	transMatrix(B);
 	
 
@@ -53,7 +54,7 @@ void multiMatrix(GLfloat A[][4], GLfloat *B){
 				ans[i][j] += (A[i][k] * B[k*n+j]);
 	copyMatrix(B, ans);
 	transMatrix(B);
-	print_aMVP();
+	//print_aMVP();
 }
 
 void multiMatrix(GLfloat A[][4], GLfloat B[][4], GLfloat C[][4]){
@@ -194,7 +195,7 @@ void rotate(GLfloat x, GLfloat y, GLfloat z){
 }
 
 void matrixInit(){
-	printf("Matrix Initialization!!\n");
+	//printf("Matrix Initialization!!\n");
 
 	transport(-x_center, -y_center, -z_center);
 	scaleAll();

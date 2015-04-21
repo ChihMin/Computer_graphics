@@ -145,7 +145,7 @@ void colorModel()
 	y_center = (y_max + y_min) / 2.0;
 	z_center = (z_max + z_min) / 2.0;
 
-	printf("center = %.3f %.3f %.3f\n", x_center, y_center, z_center);
+	//printf("center = %.3f %.3f %.3f\n", x_center, y_center, z_center);
 
 	GLfloat max_line = max_cmp( x_max - x_min, y_max - y_min );
 	max_line = max_cmp( max_line, z_max - z_min);
@@ -573,13 +573,42 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			orthDefault();
 			break;
 		case 'h':
-			printf("===========THIS IS HELP !!!!!==========\n");
-			printf("Press 'c' to change mode(solid / wireframe)\n\n");
-			printf("Press 'b' to go to last model\n\n");
-			printf("Press 'n' to go to next model\n\n");
+			printf("WARNING !! INPUT IS CASE SENSITIVE!!\n");
+			printf("===========FOR BASIC CONTROL==========\n");
+			printf("***** SELECT MODE*****\n");
+			printf("	--GEOMETRY TRANSFORMATION--\n");
+			printf("		-Press 't' to switch translate offset mode\n");
+			printf("		-Press 's' to switch scaling mode\n");
+			printf("		-Press 'r' to switch rotation mode\n");
+			printf("	--VIEWING TRANSFORMATION--\n");
+			printf("		-Press 'e'/'E' to switch Eye position mode\n");
+			printf("		-Press 'c'/'C' to switch center position mode\n");
+			printf("	--PROJECTION--\n");
+			printf("		-Press p or P to select Perspective projection\n");
+			printf("		-Press o or O to select Parallel projection\n");
+			printf("		-DEFAULT is Parallel Projection\n");
+			printf("***** After Select Mode *****\n");
+			printf("	You can press x/X for x-axis control\n");
+			printf("	You can press y/Y for y-axis control\n");
+			printf("	You can press z/Z for z-axis control\n");
+			printf("*** SELECT MODEL OBJECT***\n\n");
+			printf("	Press 'b' to go to last model\n");
+			printf("	Press 'n' to go to next model\n");
+			printf("===========FOR ANVANCED CONTROL===\n");
+
 			printf("If you want to exit, please press 'esc'\n");
-			printf("===============================\n");
 			break;		
+	}
+}
+
+void processSpecialKeys(int key, int x, int y){
+	switch (key) {
+		case GLUT_KEY_LEFT:
+			printf("LEFT ~~~~\n");
+			break;
+		case GLUT_KEY_RIGHT:
+			printf("RIGHT~~~\n");
+			break;
 	}
 }
 
@@ -608,6 +637,7 @@ int main(int argc, char **argv) {
 	glutDisplayFunc (renderScene);
 	glutIdleFunc    (idle);
 	glutKeyboardFunc(processNormalKeys);
+	glutSpecialFunc(processSpecialKeys);
 	glutMouseFunc   (processMouse);
 	glutMotionFunc  (processMouseMotion);
 
