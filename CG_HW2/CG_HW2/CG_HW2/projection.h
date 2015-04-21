@@ -9,5 +9,9 @@ extern GLfloat proj_x_min, proj_y_min, proj_z_min;
 
 void projInit();
 void identityMatrix(GLfloat M[][4]);
+void projPerspective();
+void projOrth();
+void orthDefault();
+void perspectiveDefault();
 
 #endif

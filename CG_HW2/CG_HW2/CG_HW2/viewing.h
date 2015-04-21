@@ -17,6 +17,10 @@ void viewLookat(
 					GLfloat ux, GLfloat uy, GLfloat uz
 				);
 void view_transport(GLfloat x, GLfloat y, GLfloat z);
+void setViewPosition(GLfloat ex, GLfloat ey, GLfloat ez,
+				GLfloat cx, GLfloat cy, GLfloat cz,
+				GLfloat ux, GLfloat uy, GLfloat uz);
 void update_eye();
 void viewInit();
+
 #endif

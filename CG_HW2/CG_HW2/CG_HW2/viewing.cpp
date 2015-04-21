@@ -73,7 +73,7 @@ void viewLookat(GLfloat ex, GLfloat ey, GLfloat ez,
 
 	for(int j = 0; j < 3; ++j){ 
 		M[0][j] = side[j];
-		M[1][j] = -Ry[j];
+		M[1][j] = Ry[j];
 		M[2][j] = -forward[j];	
 	}
 	makeIdentityMatrix(viewMatrix);
@@ -82,10 +82,19 @@ void viewLookat(GLfloat ex, GLfloat ey, GLfloat ez,
 	multiple_all_matrix(M);
 }
 
+void setViewPosition(GLfloat ex, GLfloat ey, GLfloat ez,
+				GLfloat cx, GLfloat cy, GLfloat cz,
+				GLfloat ux, GLfloat uy, GLfloat uz)
+{
+	x_eye = ex, y_eye = ey, z_eye = ez;
+	x_cor = cx, y_cor = cy, z_cor = cz;
+	x_up = ux, y_up = uy, z_up = uz;
+}
+
 void viewInit(){
 
-	x_eye = 0, y_eye = 0, z_eye = 3;
-	x_cor = 0, y_cor = 0, z_cor =  0;
+	x_eye = 0, y_eye = 0, z_eye = 0;
+	x_cor = 0, y_cor = 0, z_cor =  -1;
 	x_up = 0, y_up = 10.0, z_up = 0;
 
 	viewLookat(x_eye, y_eye, z_eye, x_cor, y_cor, z_cor, 0.0, 2.0, 0.0);

@@ -1,4 +1,5 @@
 #include "projection.h"
+#include "viewing.h"
 
 GLfloat projMatrix[4][4];
 GLfloat proj_x_max, proj_y_max, proj_z_far;
@@ -27,7 +28,7 @@ void projPerspective(){
 	GLfloat A = (proj_x_max + proj_x_min) / (proj_x_max - proj_x_min);
 	GLfloat B = (proj_y_max + proj_y_min) / (proj_y_max - proj_y_min);
 	GLfloat C = -(proj_z_far + proj_z_near) / (proj_z_far - proj_z_near);
-	GLfloat D = 2 * proj_z_far * proj_z_near / (proj_z_far - proj_z_near);
+	GLfloat D = -2 * proj_z_far * proj_z_near / (proj_z_far - proj_z_near);
 	
 	projMatrix[0][0] = 2 * proj_z_near / (proj_x_max - proj_x_min);
 	projMatrix[1][1] = 2 * proj_z_near / (proj_y_max - proj_y_min);
@@ -40,17 +41,35 @@ void projPerspective(){
 	multiple_all_matrix(projMatrix);
 }
 
-
-void projInit(){
+void orthDefault(){
+	setViewPosition(0, 0, 0, 0, 0, -1, 0, 10, 0);
+	viewLookat(0, 0, 0, 0, 0, -1, 0, 10, 0);
 	proj_x_min = -1;
 	proj_x_max=  1;
 	
 	proj_y_min = -1;
 	proj_y_max = 1;
 
-	proj_z_near  = -2;
-	proj_z_far = 2;
+	proj_z_near  = 1;
+	proj_z_far = -1;
+	projOrth();
+}
 
-	//projOrth();
+void perspectiveDefault(){
+	setViewPosition(0, 0, 3, 0, 0, 0, 0, 10, 0);
+	viewLookat(0, 0, 3, 0, 0, 0, 0, 10, 0);
+	proj_x_min = -1;
+	proj_x_max=  1;
+	
+	proj_y_min = -1;
+	proj_y_max = 1;
+
+	proj_z_near = 2;
+	proj_z_far = -2;
 	projPerspective();
+}
+
+void projInit(){
+	orthDefault();
+	//perspectiveDefault();
 }
