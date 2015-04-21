@@ -22,17 +22,35 @@ void projOrth(){
 	multiple_all_matrix(projMatrix);
 }
 
+void projPerspective(){
+	identityMatrix(projMatrix);
+	GLfloat A = (proj_x_max + proj_x_min) / (proj_x_max - proj_x_min);
+	GLfloat B = (proj_y_max + proj_y_min) / (proj_y_max - proj_y_min);
+	GLfloat C = -(proj_z_far + proj_z_near) / (proj_z_far - proj_z_near);
+	GLfloat D = 2 * proj_z_far * proj_z_near / (proj_z_far - proj_z_near);
+	
+	projMatrix[0][0] = 2 * proj_z_near / (proj_x_max - proj_x_min);
+	projMatrix[1][1] = 2 * proj_z_near / (proj_y_max - proj_y_min);
+	projMatrix[0][2] = A;
+	projMatrix[1][2] = B;
+	projMatrix[2][2] = C;
+	projMatrix[2][3] = D;
+	projMatrix[3][2] = -1;
+	projMatrix[3][3] = 0;
+	multiple_all_matrix(projMatrix);
+}
 
 
 void projInit(){
-	proj_x_min = -2;
-	proj_x_max=  2;
+	proj_x_min = -1;
+	proj_x_max=  1;
 	
-	proj_y_min = -2;
-	proj_y_max = 2;
+	proj_y_min = -1;
+	proj_y_max = 1;
 
 	proj_z_near  = -2;
 	proj_z_far = 2;
 
-	projOrth();
+	//projOrth();
+	projPerspective();
 }
