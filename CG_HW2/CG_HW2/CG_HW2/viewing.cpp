@@ -62,8 +62,8 @@ void viewLookat(GLfloat ex, GLfloat ey, GLfloat ez,
 	normalize(forward);
 	normalize(up);
 
-	cross(side, up, forward);
-	cross(Ry, forward, side);
+	cross(side, forward, up);
+	cross(Ry, side, forward);
 
 	normalize(side);
 	normalize(Ry);
@@ -74,7 +74,7 @@ void viewLookat(GLfloat ex, GLfloat ey, GLfloat ez,
 	for(int j = 0; j < 3; ++j){ 
 		M[0][j] = side[j];
 		M[1][j] = Ry[j];
-		M[2][j] = -forward[j];	
+		M[2][j] = forward[j];	
 	}
 	makeIdentityMatrix(viewMatrix);
 	view_transport(-ex, -ey, -ez);

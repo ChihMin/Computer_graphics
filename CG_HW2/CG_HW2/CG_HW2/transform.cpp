@@ -87,7 +87,7 @@ void multiple_all_matrix(GLfloat M[][4]){
 	GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
 	multiMatrix(I, geoMatrix, I);
 	multiMatrix(I, viewMatrix, I);
-	//multiMatrix(I, projMatrix, I);
+	multiMatrix(I, projMatrix, I);
 	copyMatrix(aMVP, I);
 	transMatrix(aMVP);
 }
