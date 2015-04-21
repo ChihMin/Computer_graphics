@@ -31,56 +31,50 @@
 GLint iLocPosition;
 GLint iLocColor;
 GLint iLocMVP;
+int now = 0;
 int mode = 0;
 int current_obj;
 char filename[100][100];
 
-GLMmodel* OBJ;
+GLMmodel* OBJ[10];
 
-GLfloat *obj_color, *obj_vertices;
+GLfloat *obj_color[10], *obj_vertices[10];
 GLfloat cur_scene_x = 1;
 
-GLfloat x_max = -1e9;
-GLfloat x_min = 1e9;
+GLfloat x_max[10];
+GLfloat x_min[10];
 	
-GLfloat y_max = -1e9;
-GLfloat y_min = 1e9;
+GLfloat y_max[10];
+GLfloat y_min[10];
 
-GLfloat z_max = -1e9;
-GLfloat z_min = 1e9;
+GLfloat z_max[10];
+GLfloat z_min[10];
 
 void colorModel()
 {
-
-
-	// TODO:
-	//// You should traverse the vertices and the colors of each vertex. 
-	//// Normalize each vertex into [-1, 1], which will fit the camera clipping window.
-
-	// number of triangles
-	OBJ->numtriangles;
+	OBJ[current_obj]->numtriangles;
 
 	// number of vertices
-	OBJ->numvertices;
+	OBJ[current_obj]->numvertices;
 
 	// The center position of the model 
 	// (should be calculated by yourself)
-	OBJ->position[0];
-	OBJ->position[1];
-	OBJ->position[2];
+	OBJ[current_obj]->position[0];
+	OBJ[current_obj]->position[1];
+	OBJ[current_obj]->position[2];
 
-	//printf("%f %f %f\n", OBJ->position[0], OBJ->position[1], OBJ->position[2]);
+	//printf("%f %f %f\n", OBJ[current_obj]->position[0], OBJ[current_obj]->position[1], OBJ[current_obj]->position[2]);
 	
-	obj_color = new GLfloat[(int)OBJ->numtriangles * 9];
-	obj_vertices = new GLfloat[(int)OBJ->numtriangles * 9];
+	obj_color[now] = new GLfloat[(int)OBJ[current_obj]->numtriangles * 9];
+	obj_vertices[now] = new GLfloat[(int)OBJ[current_obj]->numtriangles * 9];
 	
 
-	for(int i=0, j=0; i<(int)OBJ->numtriangles; i++, j += 3)
+	for(int i=0, j=0; i<(int)OBJ[current_obj]->numtriangles; i++, j += 3)
 	{
 		// the index of each vertex
-		int indv1 = OBJ->triangles[i].vindices[0];
-		int indv2 = OBJ->triangles[i].vindices[1];
-		int indv3 = OBJ->triangles[i].vindices[2];
+		int indv1 = OBJ[current_obj]->triangles[i].vindices[0];
+		int indv2 = OBJ[current_obj]->triangles[i].vindices[1];
+		int indv3 = OBJ[current_obj]->triangles[i].vindices[2];
 
 		// the index of each color
 		int indc1 = indv1;
@@ -88,68 +82,68 @@ void colorModel()
 		int indc3 = indv3;
 
 		if( i == 0 ){
-			x_min = x_max = OBJ->vertices[indv1*3+0];
-			y_min = y_max = OBJ->vertices[indv1*3+1];
-			z_min = z_max = OBJ->vertices[indv1*3+2];
+			x_min[now] = x_max[now] = OBJ[current_obj]->vertices[indv1*3+0];
+			y_min[now] = y_max[now] = OBJ[current_obj]->vertices[indv1*3+1];
+			z_min[now] = z_max[now] = OBJ[current_obj]->vertices[indv1*3+2];
 		}
 		else{
-			x_max = max_cmp( x_max, OBJ->vertices[indv1*3+0] );
-			x_max = max_cmp( x_max, OBJ->vertices[indv2*3+0] );
-			x_max = max_cmp( x_max, OBJ->vertices[indv3*3+0] );
+			x_max[now] = max_cmp( x_max[now], OBJ[current_obj]->vertices[indv1*3+0] );
+			x_max[now] = max_cmp( x_max[now], OBJ[current_obj]->vertices[indv2*3+0] );
+			x_max[now] = max_cmp( x_max[now], OBJ[current_obj]->vertices[indv3*3+0] );
 
-			x_min = min_cmp( x_min, OBJ->vertices[indv1*3+0] );
-			x_min = min_cmp( x_min, OBJ->vertices[indv2*3+0] );
-			x_min = min_cmp( x_min, OBJ->vertices[indv3*3+0] );
+			x_min[now] = min_cmp( x_min[now], OBJ[current_obj]->vertices[indv1*3+0] );
+			x_min[now] = min_cmp( x_min[now], OBJ[current_obj]->vertices[indv2*3+0] );
+			x_min[now] = min_cmp( x_min[now], OBJ[current_obj]->vertices[indv3*3+0] );
 			
-			y_max = max_cmp( y_max, OBJ->vertices[indv1*3+1] );
-			y_max = max_cmp( y_max, OBJ->vertices[indv2*3+1] );
-			y_max = max_cmp( y_max, OBJ->vertices[indv3*3+1] );
+			y_max[now] = max_cmp( y_max[now], OBJ[current_obj]->vertices[indv1*3+1] );
+			y_max[now] = max_cmp( y_max[now], OBJ[current_obj]->vertices[indv2*3+1] );
+			y_max[now] = max_cmp( y_max[now], OBJ[current_obj]->vertices[indv3*3+1] );
 
-			y_min = min_cmp( y_min, OBJ->vertices[indv1*3+1] );
-			y_min = min_cmp( y_min, OBJ->vertices[indv2*3+1] );
-			y_min = min_cmp( y_min, OBJ->vertices[indv3*3+1] );
+			y_min[now] = min_cmp( y_min[now], OBJ[current_obj]->vertices[indv1*3+1] );
+			y_min[now] = min_cmp( y_min[now], OBJ[current_obj]->vertices[indv2*3+1] );
+			y_min[now] = min_cmp( y_min[now], OBJ[current_obj]->vertices[indv3*3+1] );
 
-			z_max = max_cmp( z_max, OBJ->vertices[indv1*3+2] );
-			z_max = max_cmp( z_max, OBJ->vertices[indv2*3+2] );
-			z_max = max_cmp( z_max, OBJ->vertices[indv3*3+2] );
+			z_max[now] = max_cmp( z_max[now], OBJ[current_obj]->vertices[indv1*3+2] );
+			z_max[now] = max_cmp( z_max[now], OBJ[current_obj]->vertices[indv2*3+2] );
+			z_max[now] = max_cmp( z_max[now], OBJ[current_obj]->vertices[indv3*3+2] );
 
-			z_min = min_cmp( z_min, OBJ->vertices[indv1*3+2] );
-			z_min = min_cmp( z_min, OBJ->vertices[indv2*3+2] );
-			z_min = min_cmp( z_min, OBJ->vertices[indv3*3+2] );
+			z_min[now] = min_cmp( z_min[now], OBJ[current_obj]->vertices[indv1*3+2] );
+			z_min[now] = min_cmp( z_min[now], OBJ[current_obj]->vertices[indv2*3+2] );
+			z_min[now] = min_cmp( z_min[now], OBJ[current_obj]->vertices[indv3*3+2] );
 		}
-		obj_vertices[j*3+0] = OBJ->vertices[indv1*3+0];
-		obj_vertices[j*3+1]  = OBJ->vertices[indv1*3+1];
-		obj_vertices[j*3+2]  = OBJ->vertices[indv1*3+2] ;
+		obj_vertices[now][j*3+0] = OBJ[current_obj]->vertices[indv1*3+0];
+		obj_vertices[now][j*3+1]  = OBJ[current_obj]->vertices[indv1*3+1];
+		obj_vertices[now][j*3+2]  = OBJ[current_obj]->vertices[indv1*3+2] ;
 
-		obj_vertices[(j+1)*3+0] = OBJ->vertices[indv2*3+0];
-		obj_vertices[(j+1)*3+1] = OBJ->vertices[indv2*3+1];
-		obj_vertices[(j+1)*3+2] = OBJ->vertices[indv2*3+2];
+		obj_vertices[now][(j+1)*3+0] = OBJ[current_obj]->vertices[indv2*3+0];
+		obj_vertices[now][(j+1)*3+1] = OBJ[current_obj]->vertices[indv2*3+1];
+		obj_vertices[now][(j+1)*3+2] = OBJ[current_obj]->vertices[indv2*3+2];
 
-		obj_vertices[(j+2)*3+0] = OBJ->vertices[indv3*3+0];
-		obj_vertices[(j+2)*3+1] = OBJ->vertices[indv3*3+1];
-		obj_vertices[(j+2)*3+2] = OBJ->vertices[indv3*3+2];
+		obj_vertices[now][(j+2)*3+0] = OBJ[current_obj]->vertices[indv3*3+0];
+		obj_vertices[now][(j+2)*3+1] = OBJ[current_obj]->vertices[indv3*3+1];
+		obj_vertices[now][(j+2)*3+2] = OBJ[current_obj]->vertices[indv3*3+2];
 
-		obj_color[j*3+0] = OBJ->colors[indv1*3+0];
-		obj_color[j*3+1] = OBJ->colors[indv1*3+1];
-		obj_color[j*3+2] = OBJ->colors[indv1*3+2];
+		obj_color[now][j*3+0] = OBJ[current_obj]->colors[indv1*3+0];
+		obj_color[now][j*3+1] = OBJ[current_obj]->colors[indv1*3+1];
+		obj_color[now][j*3+2] = OBJ[current_obj]->colors[indv1*3+2];
 
-		obj_color[(j+1)*3+0] = OBJ->colors[indv2*3+0];
-		obj_color[(j+1)*3+1] = OBJ->colors[indv2*3+1];
-		obj_color[(j+1)*3+2] = OBJ->colors[indv2*3+2];
+		obj_color[now][(j+1)*3+0] = OBJ[current_obj]->colors[indv2*3+0];
+		obj_color[now][(j+1)*3+1] = OBJ[current_obj]->colors[indv2*3+1];
+		obj_color[now][(j+1)*3+2] = OBJ[current_obj]->colors[indv2*3+2];
 
-		obj_color[(j+2)*3+0] = OBJ->colors[indv3*3+0];
-		obj_color[(j+2)*3+1] = OBJ->colors[indv3*3+1];
-		obj_color[(j+2)*3+2] = OBJ->colors[indv3*3+2];
+		obj_color[now][(j+2)*3+0] = OBJ[current_obj]->colors[indv3*3+0];
+		obj_color[now][(j+2)*3+1] = OBJ[current_obj]->colors[indv3*3+1];
+		obj_color[now][(j+2)*3+2] = OBJ[current_obj]->colors[indv3*3+2];
 	}
-	x_center = (x_max + x_min) / 2.0;
-	y_center = (y_max + y_min) / 2.0;
-	z_center = (z_max + z_min) / 2.0;
+	x_center[now] = (x_max[now] + x_min[now]) / 2.0;
+	y_center[now] = (y_max[now] + y_min[now]) / 2.0;
+	z_center[now] = (z_max[now] + z_min[now]) / 2.0;
 
-	//printf("center = %.3f %.3f %.3f\n", x_center, y_center, z_center);
+	printf("center = %.3f %.3f %.3f\n", x_center[now], y_center[now], z_center[now]);
 
-	GLfloat max_line = max_cmp( x_max - x_min, y_max - y_min );
-	max_line = max_cmp( max_line, z_max - z_min);
-	scale = 2 / max_line;
+	GLfloat max_line = max_cmp( x_max[now] - x_min[now], y_max[now] - y_min[now] );
+	max_line = max_cmp( max_line, z_max[now] - z_min[now]);
+	scale[now] = 2 / max_line;
 }
 
 void loadOBJString(){
@@ -162,29 +156,37 @@ void loadOBJModel()
 {
 	// read an obj model here
 	loadOBJString();
-	OBJ = glmReadOBJ(filename[current_obj]);
+	while(current_obj < 4){
+		OBJ[current_obj] = glmReadOBJ(filename[current_obj]);
+		colorModel();
+		matrixInit();
+		viewInit();
+		projInit();
+		multiple_all_matrix();
+		current_obj++;
+		now++;
+	}
 	// traverse the color model
-	colorModel();
+	
 	// initialize transform matrix
 	aMVP[0] = 1;	aMVP[4] = 0;	aMVP[8]  = 0;	aMVP[12] = 0;
 	aMVP[1] = 0;	aMVP[5] = 1;	aMVP[9]  = 0;	aMVP[13] = 0;
-	aMVP[2] = 0;	aMVP[6] = 0;	aMVP[10] = -1;	aMVP[14] = 0;
+	aMVP[2] = 0;	aMVP[6] = 0;	aMVP[10] = 1;	aMVP[14] = 0;
 	aMVP[3] = 0;	aMVP[7] = 0;	aMVP[11] = 0;	aMVP[15] = 1;
 	
-	for(int i = 0; i < 4; ++i)
-		for(int j = 0; j < 4; ++j)
-			if( i == j )
-				viewMatrix[i][j] = geoMatrix[i][j] = 1;
-			else
-				viewMatrix[i][j] = geoMatrix[i][j] = 0;
-	matrixInit();
-	viewInit();
-	projInit();
+	
+	
 }
+
+void advanceLoadOBJModel(){
+	//makeIdentityMatrix();
+}
+
 void idle()
 {
 	glutPostRedisplay();
 }
+
 
 void renderScene(void)
 {
@@ -217,18 +219,16 @@ void renderScene(void)
 	};
 
 	// Move example triangle to left by 0.5
-	
-	
-	
-
-	glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, obj_vertices);
-	glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_FALSE, 0, obj_color);
-
-	glUniformMatrix4fv(iLocMVP, 1, GL_FALSE, aMVP);
-
-	// draw the array we just bound
-	glDrawArrays(GL_TRIANGLES, 0, 3 * (int)OBJ->numtriangles);
-	
+	for(int i = 0; i < current_obj; ++i){
+		glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, obj_vertices[i]);
+		glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_FALSE, 0, obj_color[i]);
+		
+		glUniformMatrix4fv(iLocMVP, 1, GL_FALSE, aMVP);
+		now = i;
+		
+		// draw the array we just bound
+		glDrawArrays(GL_TRIANGLES, 0, 3 * (int)OBJ[i]->numtriangles);
+	}
 	glutSwapBuffers();
 }
 
@@ -657,6 +657,7 @@ int main(int argc, char **argv) {
 	loadOBJModel();
 	// register glut callback functions
 	glutDisplayFunc (renderScene);
+	//glutDisplayFunc (rScene);
 	glutIdleFunc    (idle);
 	glutKeyboardFunc(processNormalKeys);
 	glutSpecialFunc(processSpecialKeys);
@@ -672,7 +673,8 @@ int main(int argc, char **argv) {
 	glutMainLoop();
 
 	// free
-	glmDelete(OBJ);
+	for(int i = 0; i < current_obj; ++i)
+		glmDelete(OBJ[i]);
 
 	return 0;
 }

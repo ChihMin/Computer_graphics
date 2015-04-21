@@ -11,9 +11,8 @@
 #define NO_UPDATE 0
 
 extern GLfloat aMVP[];
-extern GLfloat geoMatrix[][4];
-extern GLfloat x_center, y_center, z_center;
-extern GLfloat scale;
+extern GLfloat x_center[], y_center[], z_center[];
+extern GLfloat scale[];
 
 void print_aMVP();
 void update_center(GLfloat A[]);
@@ -27,4 +26,5 @@ void transport(GLfloat x, GLfloat y, GLfloat z);
 void transport(GLfloat x, GLfloat y, GLfloat z, bool no_update);
 void rotate(GLfloat x, GLfloat y, GLfloat z);
 void multiple_all_matrix(GLfloat M[][4]);
+void multiple_all_matrix();
 void matrixInit();
