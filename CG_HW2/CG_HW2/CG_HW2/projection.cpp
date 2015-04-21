@@ -1,6 +1,7 @@
 #include "projection.h"
 #include "viewing.h"
 
+bool projMode;
 GLfloat projMatrix[4][4];
 GLfloat proj_x_max, proj_y_max, proj_z_far;
 GLfloat proj_x_min, proj_y_min, proj_z_near;
@@ -53,6 +54,7 @@ void orthDefault(){
 	proj_z_near  = 1;
 	proj_z_far = -1;
 	projOrth();
+	projMode = 0;
 }
 
 void perspectiveDefault(){
@@ -67,9 +69,44 @@ void perspectiveDefault(){
 	proj_z_near = 2;
 	proj_z_far = -2;
 	projPerspective();
+	projMode = 1;
 }
 
 void projInit(){
 	orthDefault();
 	//perspectiveDefault();
+}
+void refresh(){
+	if(!projMode)	projOrth();
+	else	projPerspective();
+}
+void addX(){
+	proj_x_min = proj_x_min + 0.1;
+	proj_x_max = proj_x_max + 0.1;
+	refresh();
+}
+void addY(){
+	proj_y_min = proj_y_min + 0.1;
+	proj_y_max = proj_y_max + 0.1;
+	refresh();
+}
+void addZ(){
+	proj_z_near = proj_z_near + 0.1;
+	proj_z_far = proj_z_far + 0.1;
+	refresh();
+}
+void subX(){
+	proj_x_min = proj_x_min - 0.1;
+	proj_x_max = proj_x_max - 0.1;
+	refresh();
+}
+void subY(){
+	proj_y_min = proj_y_min - 0.1;
+	proj_y_max = proj_y_max - 0.1;
+	refresh();
+}
+void subZ(){
+	proj_z_near = proj_z_near - 0.1;
+	proj_z_far = proj_z_far - 0.1;
+	refresh();
 }

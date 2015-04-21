@@ -329,6 +329,36 @@ void processMouseMotion(int x, int y){  // callback on mouse drag
 	printf("(%d, %d) mouse move\n", x, y);
 }
 
+void print_help(){
+	printf("WARNING !! INPUT IS CASE SENSITIVE!!\n");
+	printf("===========FOR BASIC CONTROL==========\n");
+	printf("***** SELECT MODE*****\n");
+	printf("	--GEOMETRY TRANSFORMATION--\n");
+	printf("		-Press 't' to switch translate offset mode\n");
+	printf("		-Press 's' to switch scaling mode\n");
+	printf("		-Press 'r' to switch rotation mode\n");
+	printf("	--VIEWING TRANSFORMATION--\n");
+	printf("		-Press 'e'/'E' to switch Eye position mode\n");
+	printf("		-Press 'c'/'C' to switch center position mode\n");
+	printf("	--PROJECTION--\n");
+	printf("		-Press p or P to select Perspective projection\n");
+	printf("		-Press o or O to select Parallel projection\n");
+	printf("		-DEFAULT is Parallel Projection\n");
+	printf("		-'UP'& 'DOWN' key move projection box up/down\n");
+	printf("		-'LEFT'& 'RIGHT' key move projection box left/right\n");
+	printf("		-'PAGE UP' key move projection box near\n");
+	printf("		-'PAGE DOWN' key move projection box far\n");
+	printf("***** After Select Mode *****\n");
+	printf("	You can press x/X for x-axis control\n");
+	printf("	You can press y/Y for y-axis control\n");
+	printf("	You can press z/Z for z-axis control\n");
+	printf("*** SELECT MODEL OBJECT***\n\n");
+	printf("	Press 'b' to go to last model\n");
+	printf("	Press 'n' to go to next model\n");
+	printf("===========FOR ANVANCED CONTROL===\n");
+
+	printf("\nIf you want to exit, please press 'esc'\n");
+}
 
 void processNormalKeys(unsigned char key, int x, int y) {
 	//printf("key = %d ", key );
@@ -573,41 +603,33 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			orthDefault();
 			break;
 		case 'h':
-			printf("WARNING !! INPUT IS CASE SENSITIVE!!\n");
-			printf("===========FOR BASIC CONTROL==========\n");
-			printf("***** SELECT MODE*****\n");
-			printf("	--GEOMETRY TRANSFORMATION--\n");
-			printf("		-Press 't' to switch translate offset mode\n");
-			printf("		-Press 's' to switch scaling mode\n");
-			printf("		-Press 'r' to switch rotation mode\n");
-			printf("	--VIEWING TRANSFORMATION--\n");
-			printf("		-Press 'e'/'E' to switch Eye position mode\n");
-			printf("		-Press 'c'/'C' to switch center position mode\n");
-			printf("	--PROJECTION--\n");
-			printf("		-Press p or P to select Perspective projection\n");
-			printf("		-Press o or O to select Parallel projection\n");
-			printf("		-DEFAULT is Parallel Projection\n");
-			printf("***** After Select Mode *****\n");
-			printf("	You can press x/X for x-axis control\n");
-			printf("	You can press y/Y for y-axis control\n");
-			printf("	You can press z/Z for z-axis control\n");
-			printf("*** SELECT MODEL OBJECT***\n\n");
-			printf("	Press 'b' to go to last model\n");
-			printf("	Press 'n' to go to next model\n");
-			printf("===========FOR ANVANCED CONTROL===\n");
-
-			printf("If you want to exit, please press 'esc'\n");
-			break;		
+			print_help();
+			break;
+		case 'H':
+			print_help();
+			break;
 	}
 }
 
 void processSpecialKeys(int key, int x, int y){
 	switch (key) {
 		case GLUT_KEY_LEFT:
-			printf("LEFT ~~~~\n");
+			addX();
 			break;
 		case GLUT_KEY_RIGHT:
-			printf("RIGHT~~~\n");
+			subX();
+			break;
+		case GLUT_KEY_UP:
+			addY();
+			break;
+		case GLUT_KEY_DOWN:
+			subY();
+			break;
+		case GLUT_KEY_PAGE_UP:
+			addZ();
+			break;
+		case GLUT_KEY_PAGE_DOWN:
+			subZ();
 			break;
 	}
 }

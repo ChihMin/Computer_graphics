@@ -13,5 +13,11 @@ void projPerspective();
 void projOrth();
 void orthDefault();
 void perspectiveDefault();
+void addX();
+void addY();
+void addZ();
+void subX();
+void subY();
+void subZ();
 
 #endif

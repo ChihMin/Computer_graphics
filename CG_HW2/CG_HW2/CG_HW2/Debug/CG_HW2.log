@@ -1,4 +1,4 @@
-﻿已經開始建置於 2015/4/21 下午 10:48:50。
+﻿已經開始建置於 2015/4/21 下午 11:19:49。
      1>節點 2 (build 目標) 上的專案 "C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\CG_HW2\CG_HW2.vcxproj"。
      1>InitializeBuildStatus:
          由於指定了 "AlwaysCreate"，因此正在建立 "Debug\CG_HW2.unsuccessfulbuild"。
@@ -11,36 +11,36 @@
      1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(146): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
      1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(309): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
      1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(314): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(380): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(383): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(389): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(395): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(401): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(411): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(414): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(420): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(426): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(432): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(442): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(445): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(451): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(457): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(463): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(473): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(476): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(482): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(488): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(494): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(504): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(507): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(513): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(519): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(525): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(535): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(538): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(544): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(550): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(556): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(410): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(413): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(419): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(425): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(431): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(441): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(444): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(450): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(456): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(462): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(472): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(475): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(481): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(487): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(493): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(503): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(506): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(512): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(518): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(524): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(534): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(537): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(543): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(549): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(555): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(565): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(568): warning C4305: '引數' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(574): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(580): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw2\cg_hw2\cg_hw2\main.cpp(586): warning C4244: '=' : 將 'double' 轉換為 'GLfloat'，由於型別不同，可能導致資料遺失
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\lib glew32.lib freeglut.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\CG_HW2.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW2\CG_HW2\Debug\CG_HW2.lib" /MACHINE:X86 Debug\glm.obj
          Debug\main.obj
