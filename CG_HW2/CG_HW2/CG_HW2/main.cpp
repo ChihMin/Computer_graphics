@@ -560,7 +560,18 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					break;
 			}
 			break;	
-
+		case 'P':
+			perspectiveDefault();
+			break;
+		case 'p':
+			perspectiveDefault();
+			break;
+		case 'O':
+			orthDefault();
+			break;
+		case 'o':
+			orthDefault();
+			break;
 		case 'h':
 			printf("===========THIS IS HELP !!!!!==========\n");
 			printf("Press 'c' to change mode(solid / wireframe)\n\n");
