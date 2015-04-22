@@ -4,8 +4,9 @@
 #include "transform.h"
 
 extern GLfloat projMatrix[][4];
-extern GLfloat proj_x_max, proj_y_max, proj_z_max;
-extern GLfloat proj_x_min, proj_y_min, proj_z_min;
+extern GLfloat proj_x_max, proj_y_max, proj_z_far;
+extern GLfloat proj_x_min, proj_y_min, proj_z_near;
+extern bool projMode;
 
 void projInit();
 void advance_proj();
