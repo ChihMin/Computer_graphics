@@ -21,6 +21,8 @@
 # define min_cmp(a,b) (((a)<(b))?(a):(b))
 #endif
 
+#define BASIC_MODE 0
+#define ADVANCED_MODE 1
 #define TRANSPORT_MODE 0
 #define SCALE_MODE 1
 #define ROTATE_MODE 2
@@ -31,9 +33,12 @@
 GLint iLocPosition;
 GLint iLocColor;
 GLint iLocMVP;
+int num_of_objects = 1;
 int now = 0;
 int mode = 0;
+int begin_model = 0;
 int current_obj;
+bool is_basic_mode = 0;
 char filename[100][100];
 
 GLMmodel* OBJ[10];
@@ -154,9 +159,11 @@ void loadOBJString(){
 
 void loadOBJModel()
 {
-
+	for(int i = 0; i < 10; ++i)
+		for(int j = 0; j < 16; ++j)
+			aMVP[i][j] = 0;
 	// initialize transform matrix
-	for(now = 0; now < 4; ++now){
+	for(now = 0; now < num_of_objects; ++now){
 		aMVP[now][0] = 1;	aMVP[now][4] = 0;	aMVP[now][8]  = 0;	aMVP[now][12] = 0;
 		aMVP[now][1] = 0;	aMVP[now][5] = 1;	aMVP[now][9]  = 0;	aMVP[now][13] = 0;
 		aMVP[now][2] = 0;	aMVP[now][6] = 0;	aMVP[now][10] = 1;	aMVP[now][14] = 0;
@@ -167,8 +174,8 @@ void loadOBJModel()
 	viewInit();
 	projInit();
 	current_obj = now = 0;
-	while(current_obj < 4){
-		OBJ[current_obj] = glmReadOBJ(filename[current_obj]);
+	while(current_obj < num_of_objects){
+		OBJ[current_obj] = glmReadOBJ(filename[(begin_model+current_obj)%33]);
 		colorModel();
 		matrixInit();
 
@@ -366,14 +373,42 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			exit(0); 
 			break;
 		case 'n':
-			current_obj = ( current_obj + 1 ) % 33;
+			begin_model = ( begin_model + 1 ) % 33;
 			loadOBJModel();
 			break;
 		case 'b':
-			current_obj  -= 1;
-			current_obj += (current_obj < 0 )*33;
+			begin_model  -= 1;
+			begin_model += (begin_model < 0 )*33;
 			loadOBJModel();
 			break;
+		case 'a':
+			if(!is_basic_mode){
+				is_basic_mode = ADVANCED_MODE;
+				num_of_objects = 4;
+				loadOBJModel();
+			}
+			else{
+				is_basic_mode = BASIC_MODE;
+				num_of_objects = 1;
+				loadOBJModel();
+				now = 0;
+			}
+			break;
+		case 'A':
+			if(!is_basic_mode){
+				is_basic_mode = ADVANCED_MODE;
+				num_of_objects = 4;
+				loadOBJModel();
+			}
+			else{
+				is_basic_mode = BASIC_MODE;
+				num_of_objects = 1;
+				loadOBJModel();
+				now = 0;
+			}
+			
+			break;
+		
 		case 's':
 			mode = SCALE_MODE;
 			break;
@@ -664,7 +699,10 @@ int main(int argc, char **argv) {
 	}
 
 	// load obj models through glm
+	num_of_objects = 1;
+	now = 0;
 	loadOBJModel();
+
 	// register glut callback functions
 	glutDisplayFunc (renderScene);
 	//glutDisplayFunc (rScene);
