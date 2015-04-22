@@ -29,6 +29,7 @@
 #define VIEWING_EYE_MODE 3
 #define VIEWING_CENTER_MODE 4
 #define VIEWING_UP_MODE 5
+#define PROJECTION_MODE 6
 // Shader attributes
 GLint iLocPosition;
 GLint iLocColor;
@@ -40,6 +41,7 @@ int begin_model = 0;
 int current_obj;
 int last_x, last_y;
 bool is_basic_mode = 0;
+bool mouse_button;
 char filename[100][100];
 
 GLMmodel* OBJ[10];
@@ -318,11 +320,13 @@ void processMouse(int who, int state, int x, int y)
 	switch(who){
 	case GLUT_LEFT_BUTTON:  
 		last_x = last_y = -1;
+		mouse_button = 0;
 		printf("left button   "); 
 		break;
 	case GLUT_MIDDLE_BUTTON: printf("middle button "); break;
 	case GLUT_RIGHT_BUTTON: 
 		last_x = last_y = -1;
+		mouse_button = 1;
 		printf("right button  "); 
 		break; 
 	case GLUT_WHEEL_UP:      
@@ -368,9 +372,7 @@ void processMouse(int who, int state, int x, int y)
 }
 
 GLfloat get_move_value(int value){
-	if( value > 0 )	return 0.01;
-	else if( value < 0 )	return -0.01;
-	return 0;
+	return (GLfloat)value / 50000;
 }
 
 void processMouseMotion(int x, int y){  // callback on mouse drag
@@ -707,15 +709,19 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			break;
 		case 'P':
 			perspectiveDefault();
+			mode = PROJECTION_MODE;
 			break;
 		case 'p':
 			perspectiveDefault();
+			mode = PROJECTION_MODE;
 			break;
 		case 'O':
 			orthDefault();
+			mode = PROJECTION_MODE;
 			break;
 		case 'o':
 			orthDefault();
+			mode = PROJECTION_MODE;
 			break;
 		case 'h':
 			print_help();
