@@ -371,7 +371,6 @@ void processMouse(int who, int state, int x, int y)
 	case GLUT_UP:                     break;
 	}
 
-	printf("\n");
 }
 
 GLfloat get_move_value(int value){
@@ -462,6 +461,24 @@ void print_help(){
 	printf("	-Press '1' to select model-1 to do transformation\n");
 	printf("	-Press '2' to select model-2 to do transformation\n");
 	printf("	-Press '3' to select model-3 to do transformation\n");
+	printf("	-After Selecting model, you can also control mode as well as BASIC\n");
+	printf("	-For mouse control, only support translate offset, viewing, projection\n");
+	printf("		*Press 't' to transform mode\n");
+	printf("			-left mouse button down:\n");
+	printf("			-drag horizontally for x offset\n");
+	printf("			-dragvertically for y offset\n");
+	printf("		*Press 'E'/'e' to change eye's position:\n");
+	printf("			-left mouse button down: \n");
+	printf("			-drag horizontally for eye x coordinate\n");
+	printf("			-drag vertically for eye y coordinate\n");
+	printf("			-Middle wheel for eye z coordinate\n");
+	printf("		*Press 'o'/'p' to set the mode to projection transformation\n");
+	printf("			-LEFT mouse button down: \n");
+	printf("			-drag horizontally for left-right boundary scaling\n");
+	printf("			-drag vertically for bottom-top boundary scaling\n\n");
+	printf("		*Right mouse button down: \n");
+	printf("			-drag horizontally for moving near clipping plane\n");
+	printf("			-drag vertically for moving far clipping plane\n");
 	printf("------\nIf you want to exit, please press 'esc'\n");
 }
 
