@@ -382,16 +382,7 @@ void processMouseMotion(int x, int y){  // callback on mouse drag
 	else{
 		GLfloat xx = get_move_value(x - last_x);
 		GLfloat yy = -get_move_value(y - last_y);
-/*
-	#define BASIC_MODE 0
-	#define ADVANCED_MODE 1
-	#define TRANSPORT_MODE 0
-	#define SCALE_MODE 1
-	#define ROTATE_MODE 2
-	#define VIEWING_EYE_MODE 3
-	#define VIEWING_CENTER_MODE 4
-	#define VIEWING_UP_MODE 5
-*/		
+
 		switch(mode){
 			case TRANSPORT_MODE:
 				transport(xx ,yy, 0);
@@ -403,6 +394,34 @@ void processMouseMotion(int x, int y){  // callback on mouse drag
 								x_cor, y_cor, z_cor, 
 								x_up, y_up, z_up);
 					break;
+			case PROJECTION_MODE:
+				if(!mouse_button){
+					if( xx < 0 ){
+						proj_x_min += 0.01;
+						proj_x_max -= 0.01;
+					}
+					else if( xx > 0){
+						proj_x_min -= 0.01;
+						proj_x_max += 0.01;
+					}
+					if( yy < 0){
+						proj_y_min += 0.01;
+						proj_y_max -= 0.01;
+					}
+					else if( yy > 0){
+						proj_y_min -= 0.01;
+						proj_y_max += 0.01;
+					}
+				}
+				else{
+					if( xx > 0 )	proj_z_near += 0.01;
+					else if( xx < 0 )	proj_z_near -= 0.01;
+					
+					if( yy > 0)		proj_z_far += 0.01;
+					else if( yy < 0 )	proj_z_far -= 0.01;
+				}
+				if( !projMode)	projOrth();
+				else	projPerspective();
 		}
 		
 	}
