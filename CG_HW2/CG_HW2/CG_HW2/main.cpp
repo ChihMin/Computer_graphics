@@ -197,9 +197,10 @@ void loadOBJModel()
 		}
 
 	}
-
+/*
 	for(int i =0 ; i < 4; ++i)
 		printf("%f %f\n", x_min[i], x_max[i]);
+*/
 }
 
 void idle()
@@ -315,22 +316,24 @@ void setShaders()
 
 void processMouse(int who, int state, int x, int y)
 {
-	printf("(%d, %d) ", x, y);
+
+	if( !is_basic_mode)	return ;
+	//printf("(%d, %d) ", x, y);
 
 	switch(who){
 	case GLUT_LEFT_BUTTON:  
 		last_x = last_y = -1;
 		mouse_button = 0;
-		printf("left button   "); 
+		//printf("left button   "); 
 		break;
 	case GLUT_MIDDLE_BUTTON: printf("middle button "); break;
 	case GLUT_RIGHT_BUTTON: 
 		last_x = last_y = -1;
 		mouse_button = 1;
-		printf("right button  "); 
+		//printf("right button  "); 
 		break; 
 	case GLUT_WHEEL_UP:      
-		printf("wheel up      "); 
+		//printf("wheel up      "); 
 		switch(mode){
 			case TRANSPORT_MODE:
 				transport(0, 0, 0.01);
@@ -356,7 +359,7 @@ void processMouse(int who, int state, int x, int y)
 								x_up, y_up, z_up);
 					break;
 		}
-		printf("wheel down    "); 
+		//printf("wheel down    "); 
 		
 		//glutDisplayFunc (renderScene);
 		break;
@@ -364,8 +367,8 @@ void processMouse(int who, int state, int x, int y)
 	}
 
 	switch(state){
-	case GLUT_DOWN:          printf("start ");         break;
-	case GLUT_UP:            printf("end   ");         break;
+	case GLUT_DOWN:               break;
+	case GLUT_UP:                     break;
 	}
 
 	printf("\n");
@@ -376,7 +379,7 @@ GLfloat get_move_value(int value){
 }
 
 void processMouseMotion(int x, int y){  // callback on mouse drag
-	printf("(%d, %d) mouse move\n", x, y);
+	//printf("(%d, %d) mouse move\n", x, y);
 	if( last_x == -1 && last_y == -1)
 		last_x = x, last_y = y;
 	else{
