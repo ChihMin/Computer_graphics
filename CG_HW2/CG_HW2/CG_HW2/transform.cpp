@@ -9,8 +9,13 @@ GLfloat aMVP[10][16];
 GLfloat geoMatrix[10][4][4];
 GLfloat x_center[4], y_center[4], z_center[4];
 GLfloat scale[4];
+GLfloat x_range_max, x_range_min;
+GLfloat y_range_max, y_range_min;
 extern GLfloat viewMatrix[][4];
 extern GLfloat projMatrix[][4];
+extern GLfloat x_max[], x_min[];
+extern GLfloat y_max[], y_min[];
+extern GLfloat z_max[], z_min[];
 
 void print_aMVP(){
 
@@ -106,6 +111,13 @@ void multiple_all_matrix(){
 		copyMatrix(aMVP[i], I);
 		transMatrix(aMVP[i]);
 	}
+}
+
+void multiple_range(int i){
+	GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+	multiMatrix(I, geoMatrix[i], I);
+	multiMatrix(I, viewMatrix, I);
+	multiMatrix(I, projMatrix, I);
 }
 
 void scaleAll(){

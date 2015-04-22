@@ -38,6 +38,7 @@ int now = 0;
 int mode = 0;
 int begin_model = 0;
 int current_obj;
+int last_x, last_y;
 bool is_basic_mode = 0;
 char filename[100][100];
 
@@ -159,6 +160,7 @@ void loadOBJString(){
 
 void loadOBJModel()
 {
+	last_x = last_y = -1;
 	for(int i = 0; i < 10; ++i)
 		for(int j = 0; j < 16; ++j)
 			aMVP[i][j] = 0;
@@ -193,7 +195,9 @@ void loadOBJModel()
 		}
 
 	}
-	// traverse the color model
+
+	for(int i =0 ; i < 4; ++i)
+		printf("%f %f\n", x_min[i], x_max[i]);
 }
 
 void idle()
@@ -312,9 +316,15 @@ void processMouse(int who, int state, int x, int y)
 	printf("(%d, %d) ", x, y);
 
 	switch(who){
-	case GLUT_LEFT_BUTTON:   printf("left button   "); break;
+	case GLUT_LEFT_BUTTON:  
+		last_x = last_y = -1;
+		printf("left button   "); 
+		break;
 	case GLUT_MIDDLE_BUTTON: printf("middle button "); break;
-	case GLUT_RIGHT_BUTTON:  printf("right button  "); break; 
+	case GLUT_RIGHT_BUTTON: 
+		last_x = last_y = -1;
+		printf("right button  "); 
+		break; 
 	case GLUT_WHEEL_UP:      
 		printf("wheel up      "); 
 		cur_scene_x = cur_scene_x + 0.01;
@@ -336,12 +346,42 @@ void processMouse(int who, int state, int x, int y)
 	printf("\n");
 }
 
+GLfloat get_move_value(int value){
+	if( value > 0 )	return 0.01;
+	else if( value < 0 )	return -0.01;
+	return 0;
+}
+
 void processMouseMotion(int x, int y){  // callback on mouse drag
 	printf("(%d, %d) mouse move\n", x, y);
+	if( last_x == -1 && last_y == -1)
+		last_x = x, last_y = y;
+	else{
+		GLfloat xx = get_move_value(x - last_x);
+		GLfloat yy = -get_move_value(y - last_y);
+/*
+	#define BASIC_MODE 0
+	#define ADVANCED_MODE 1
+	#define TRANSPORT_MODE 0
+	#define SCALE_MODE 1
+	#define ROTATE_MODE 2
+	#define VIEWING_EYE_MODE 3
+	#define VIEWING_CENTER_MODE 4
+	#define VIEWING_UP_MODE 5
+*/		
+		switch(mode){
+			case TRANSPORT_MODE:
+				transport(xx ,yy, 0);
+				break;
+		}
+		
+	}
 }
 
 void print_help(){
 	printf("WARNING !! INPUT IS CASE SENSITIVE!!\n");
+	printf("===========SELECT BASIC or ADVACNE======\n");
+	printf("IMPORTANT ----- PRESS 'a' or 'A' to switch mode between BASIC and ADVANCE!!\n");
 	printf("===========FOR BASIC CONTROL==========\n");
 	printf("***** SELECT MODE*****\n");
 	printf("	--GEOMETRY TRANSFORMATION--\n");
@@ -365,9 +405,12 @@ void print_help(){
 	printf("*** SELECT MODEL OBJECT***\n\n");
 	printf("	Press 'b' to go to last model\n");
 	printf("	Press 'n' to go to next model\n");
-	printf("===========FOR ANVANCED CONTROL===\n");
-
-	printf("\nIf you want to exit, please press 'esc'\n");
+	printf("***************FOR ANVANCED MODE CONTROL******\n");
+	printf("	-Press '0' to select model-0 to do transformation\n");
+	printf("	-Press '1' to select model-1 to do transformation\n");
+	printf("	-Press '2' to select model-2 to do transformation\n");
+	printf("	-Press '3' to select model-3 to do transformation\n");
+	printf("------\nIf you want to exit, please press 'esc'\n");
 }
 
 void processNormalKeys(unsigned char key, int x, int y) {
