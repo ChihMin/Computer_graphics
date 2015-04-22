@@ -42,6 +42,17 @@ void projPerspective(){
 	multiple_all_matrix(projMatrix);
 }
 
+void advance_proj(){
+	proj_x_min = -5;
+	proj_x_max=  5;
+	
+	proj_y_min = -5;
+	proj_y_max = 5;
+
+	proj_z_near  = 5;
+	proj_z_far = -5;
+}
+
 void orthDefault(){
 	setViewPosition(0, 0, 0, 0, 0, -1, 0, 10, 0);
 	viewLookat(0, 0, 0, 0, 0, -1, 0, 10, 0);
@@ -53,6 +64,7 @@ void orthDefault(){
 
 	proj_z_near  = 1;
 	proj_z_far = -1;
+	//advance_proj();
 	projOrth();
 	projMode = 0;
 }

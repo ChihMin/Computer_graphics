@@ -21,66 +21,68 @@
 # define min_cmp(a,b) (((a)<(b))?(a):(b))
 #endif
 
+#define BASIC_MODE 0
+#define ADVANCED_MODE 1
 #define TRANSPORT_MODE 0
 #define SCALE_MODE 1
 #define ROTATE_MODE 2
 #define VIEWING_EYE_MODE 3
 #define VIEWING_CENTER_MODE 4
 #define VIEWING_UP_MODE 5
+#define PROJECTION_MODE 6
 // Shader attributes
 GLint iLocPosition;
 GLint iLocColor;
 GLint iLocMVP;
+int num_of_objects = 1;
+int now = 0;
 int mode = 0;
+int begin_model = 0;
 int current_obj;
+int last_x, last_y;
+bool is_basic_mode = 0;
+bool mouse_button;
 char filename[100][100];
 
-GLMmodel* OBJ;
+GLMmodel* OBJ[10];
 
-GLfloat *obj_color, *obj_vertices;
+GLfloat *obj_color[10], *obj_vertices[10];
 GLfloat cur_scene_x = 1;
 
-GLfloat x_max = -1e9;
-GLfloat x_min = 1e9;
+GLfloat x_max[10];
+GLfloat x_min[10];
 	
-GLfloat y_max = -1e9;
-GLfloat y_min = 1e9;
+GLfloat y_max[10];
+GLfloat y_min[10];
 
-GLfloat z_max = -1e9;
-GLfloat z_min = 1e9;
+GLfloat z_max[10];
+GLfloat z_min[10];
 
 void colorModel()
 {
-
-
-	// TODO:
-	//// You should traverse the vertices and the colors of each vertex. 
-	//// Normalize each vertex into [-1, 1], which will fit the camera clipping window.
-
-	// number of triangles
-	OBJ->numtriangles;
+	OBJ[current_obj]->numtriangles;
 
 	// number of vertices
-	OBJ->numvertices;
+	OBJ[current_obj]->numvertices;
 
 	// The center position of the model 
 	// (should be calculated by yourself)
-	OBJ->position[0];
-	OBJ->position[1];
-	OBJ->position[2];
+	OBJ[current_obj]->position[0];
+	OBJ[current_obj]->position[1];
+	OBJ[current_obj]->position[2];
 
-	//printf("%f %f %f\n", OBJ->position[0], OBJ->position[1], OBJ->position[2]);
+	//printf("%f %f %f\n", OBJ[current_obj]->position[0], OBJ[current_obj]->position[1], OBJ[current_obj]->position[2]);
 	
-	obj_color = new GLfloat[(int)OBJ->numtriangles * 9];
-	obj_vertices = new GLfloat[(int)OBJ->numtriangles * 9];
+	obj_color[now] = new GLfloat[(int)OBJ[current_obj]->numtriangles * 9];
+	obj_vertices[now] = new GLfloat[(int)OBJ[current_obj]->numtriangles * 9];
 	
 
-	for(int i=0, j=0; i<(int)OBJ->numtriangles; i++, j += 3)
+	for(int i=0, j=0; i<(int)OBJ[current_obj]->numtriangles; i++, j += 3)
 	{
 		// the index of each vertex
-		int indv1 = OBJ->triangles[i].vindices[0];
-		int indv2 = OBJ->triangles[i].vindices[1];
-		int indv3 = OBJ->triangles[i].vindices[2];
+		int indv1 = OBJ[current_obj]->triangles[i].vindices[0];
+		int indv2 = OBJ[current_obj]->triangles[i].vindices[1];
+		int indv3 = OBJ[current_obj]->triangles[i].vindices[2];
 
 		// the index of each color
 		int indc1 = indv1;
@@ -88,68 +90,68 @@ void colorModel()
 		int indc3 = indv3;
 
 		if( i == 0 ){
-			x_min = x_max = OBJ->vertices[indv1*3+0];
-			y_min = y_max = OBJ->vertices[indv1*3+1];
-			z_min = z_max = OBJ->vertices[indv1*3+2];
+			x_min[now] = x_max[now] = OBJ[current_obj]->vertices[indv1*3+0];
+			y_min[now] = y_max[now] = OBJ[current_obj]->vertices[indv1*3+1];
+			z_min[now] = z_max[now] = OBJ[current_obj]->vertices[indv1*3+2];
 		}
 		else{
-			x_max = max_cmp( x_max, OBJ->vertices[indv1*3+0] );
-			x_max = max_cmp( x_max, OBJ->vertices[indv2*3+0] );
-			x_max = max_cmp( x_max, OBJ->vertices[indv3*3+0] );
+			x_max[now] = max_cmp( x_max[now], OBJ[current_obj]->vertices[indv1*3+0] );
+			x_max[now] = max_cmp( x_max[now], OBJ[current_obj]->vertices[indv2*3+0] );
+			x_max[now] = max_cmp( x_max[now], OBJ[current_obj]->vertices[indv3*3+0] );
 
-			x_min = min_cmp( x_min, OBJ->vertices[indv1*3+0] );
-			x_min = min_cmp( x_min, OBJ->vertices[indv2*3+0] );
-			x_min = min_cmp( x_min, OBJ->vertices[indv3*3+0] );
+			x_min[now] = min_cmp( x_min[now], OBJ[current_obj]->vertices[indv1*3+0] );
+			x_min[now] = min_cmp( x_min[now], OBJ[current_obj]->vertices[indv2*3+0] );
+			x_min[now] = min_cmp( x_min[now], OBJ[current_obj]->vertices[indv3*3+0] );
 			
-			y_max = max_cmp( y_max, OBJ->vertices[indv1*3+1] );
-			y_max = max_cmp( y_max, OBJ->vertices[indv2*3+1] );
-			y_max = max_cmp( y_max, OBJ->vertices[indv3*3+1] );
+			y_max[now] = max_cmp( y_max[now], OBJ[current_obj]->vertices[indv1*3+1] );
+			y_max[now] = max_cmp( y_max[now], OBJ[current_obj]->vertices[indv2*3+1] );
+			y_max[now] = max_cmp( y_max[now], OBJ[current_obj]->vertices[indv3*3+1] );
 
-			y_min = min_cmp( y_min, OBJ->vertices[indv1*3+1] );
-			y_min = min_cmp( y_min, OBJ->vertices[indv2*3+1] );
-			y_min = min_cmp( y_min, OBJ->vertices[indv3*3+1] );
+			y_min[now] = min_cmp( y_min[now], OBJ[current_obj]->vertices[indv1*3+1] );
+			y_min[now] = min_cmp( y_min[now], OBJ[current_obj]->vertices[indv2*3+1] );
+			y_min[now] = min_cmp( y_min[now], OBJ[current_obj]->vertices[indv3*3+1] );
 
-			z_max = max_cmp( z_max, OBJ->vertices[indv1*3+2] );
-			z_max = max_cmp( z_max, OBJ->vertices[indv2*3+2] );
-			z_max = max_cmp( z_max, OBJ->vertices[indv3*3+2] );
+			z_max[now] = max_cmp( z_max[now], OBJ[current_obj]->vertices[indv1*3+2] );
+			z_max[now] = max_cmp( z_max[now], OBJ[current_obj]->vertices[indv2*3+2] );
+			z_max[now] = max_cmp( z_max[now], OBJ[current_obj]->vertices[indv3*3+2] );
 
-			z_min = min_cmp( z_min, OBJ->vertices[indv1*3+2] );
-			z_min = min_cmp( z_min, OBJ->vertices[indv2*3+2] );
-			z_min = min_cmp( z_min, OBJ->vertices[indv3*3+2] );
+			z_min[now] = min_cmp( z_min[now], OBJ[current_obj]->vertices[indv1*3+2] );
+			z_min[now] = min_cmp( z_min[now], OBJ[current_obj]->vertices[indv2*3+2] );
+			z_min[now] = min_cmp( z_min[now], OBJ[current_obj]->vertices[indv3*3+2] );
 		}
-		obj_vertices[j*3+0] = OBJ->vertices[indv1*3+0];
-		obj_vertices[j*3+1]  = OBJ->vertices[indv1*3+1];
-		obj_vertices[j*3+2]  = OBJ->vertices[indv1*3+2] ;
+		obj_vertices[now][j*3+0] = OBJ[current_obj]->vertices[indv1*3+0];
+		obj_vertices[now][j*3+1]  = OBJ[current_obj]->vertices[indv1*3+1];
+		obj_vertices[now][j*3+2]  = OBJ[current_obj]->vertices[indv1*3+2] ;
 
-		obj_vertices[(j+1)*3+0] = OBJ->vertices[indv2*3+0];
-		obj_vertices[(j+1)*3+1] = OBJ->vertices[indv2*3+1];
-		obj_vertices[(j+1)*3+2] = OBJ->vertices[indv2*3+2];
+		obj_vertices[now][(j+1)*3+0] = OBJ[current_obj]->vertices[indv2*3+0];
+		obj_vertices[now][(j+1)*3+1] = OBJ[current_obj]->vertices[indv2*3+1];
+		obj_vertices[now][(j+1)*3+2] = OBJ[current_obj]->vertices[indv2*3+2];
 
-		obj_vertices[(j+2)*3+0] = OBJ->vertices[indv3*3+0];
-		obj_vertices[(j+2)*3+1] = OBJ->vertices[indv3*3+1];
-		obj_vertices[(j+2)*3+2] = OBJ->vertices[indv3*3+2];
+		obj_vertices[now][(j+2)*3+0] = OBJ[current_obj]->vertices[indv3*3+0];
+		obj_vertices[now][(j+2)*3+1] = OBJ[current_obj]->vertices[indv3*3+1];
+		obj_vertices[now][(j+2)*3+2] = OBJ[current_obj]->vertices[indv3*3+2];
 
-		obj_color[j*3+0] = OBJ->colors[indv1*3+0];
-		obj_color[j*3+1] = OBJ->colors[indv1*3+1];
-		obj_color[j*3+2] = OBJ->colors[indv1*3+2];
+		obj_color[now][j*3+0] = OBJ[current_obj]->colors[indv1*3+0];
+		obj_color[now][j*3+1] = OBJ[current_obj]->colors[indv1*3+1];
+		obj_color[now][j*3+2] = OBJ[current_obj]->colors[indv1*3+2];
 
-		obj_color[(j+1)*3+0] = OBJ->colors[indv2*3+0];
-		obj_color[(j+1)*3+1] = OBJ->colors[indv2*3+1];
-		obj_color[(j+1)*3+2] = OBJ->colors[indv2*3+2];
+		obj_color[now][(j+1)*3+0] = OBJ[current_obj]->colors[indv2*3+0];
+		obj_color[now][(j+1)*3+1] = OBJ[current_obj]->colors[indv2*3+1];
+		obj_color[now][(j+1)*3+2] = OBJ[current_obj]->colors[indv2*3+2];
 
-		obj_color[(j+2)*3+0] = OBJ->colors[indv3*3+0];
-		obj_color[(j+2)*3+1] = OBJ->colors[indv3*3+1];
-		obj_color[(j+2)*3+2] = OBJ->colors[indv3*3+2];
+		obj_color[now][(j+2)*3+0] = OBJ[current_obj]->colors[indv3*3+0];
+		obj_color[now][(j+2)*3+1] = OBJ[current_obj]->colors[indv3*3+1];
+		obj_color[now][(j+2)*3+2] = OBJ[current_obj]->colors[indv3*3+2];
 	}
-	x_center = (x_max + x_min) / 2.0;
-	y_center = (y_max + y_min) / 2.0;
-	z_center = (z_max + z_min) / 2.0;
+	x_center[now] = (x_max[now] + x_min[now]) / 2.0;
+	y_center[now] = (y_max[now] + y_min[now]) / 2.0;
+	z_center[now] = (z_max[now] + z_min[now]) / 2.0;
 
-	//printf("center = %.3f %.3f %.3f\n", x_center, y_center, z_center);
+	//printf("center = %.3f %.3f %.3f\n", x_center[now], y_center[now], z_center[now]);
 
-	GLfloat max_line = max_cmp( x_max - x_min, y_max - y_min );
-	max_line = max_cmp( max_line, z_max - z_min);
-	scale = 2 / max_line;
+	GLfloat max_line = max_cmp( x_max[now] - x_min[now], y_max[now] - y_min[now] );
+	max_line = max_cmp( max_line, z_max[now] - z_min[now]);
+	scale[now] = 2 / max_line;
 }
 
 void loadOBJString(){
@@ -160,31 +162,52 @@ void loadOBJString(){
 
 void loadOBJModel()
 {
+	last_x = last_y = -1;
+	for(int i = 0; i < 10; ++i)
+		for(int j = 0; j < 16; ++j)
+			aMVP[i][j] = 0;
+	// initialize transform matrix
+	for(now = 0; now < num_of_objects; ++now){
+		aMVP[now][0] = 1;	aMVP[now][4] = 0;	aMVP[now][8]  = 0;	aMVP[now][12] = 0;
+		aMVP[now][1] = 0;	aMVP[now][5] = 1;	aMVP[now][9]  = 0;	aMVP[now][13] = 0;
+		aMVP[now][2] = 0;	aMVP[now][6] = 0;	aMVP[now][10] = 1;	aMVP[now][14] = 0;
+		aMVP[now][3] = 0;	aMVP[now][7] = 0;	aMVP[now][11] = 0;	aMVP[now][15] = 1;
+	}
 	// read an obj model here
 	loadOBJString();
-	OBJ = glmReadOBJ(filename[current_obj]);
-	// traverse the color model
-	colorModel();
-	// initialize transform matrix
-	aMVP[0] = 1;	aMVP[4] = 0;	aMVP[8]  = 0;	aMVP[12] = 0;
-	aMVP[1] = 0;	aMVP[5] = 1;	aMVP[9]  = 0;	aMVP[13] = 0;
-	aMVP[2] = 0;	aMVP[6] = 0;	aMVP[10] = -1;	aMVP[14] = 0;
-	aMVP[3] = 0;	aMVP[7] = 0;	aMVP[11] = 0;	aMVP[15] = 1;
-	
-	for(int i = 0; i < 4; ++i)
-		for(int j = 0; j < 4; ++j)
-			if( i == j )
-				viewMatrix[i][j] = geoMatrix[i][j] = 1;
-			else
-				viewMatrix[i][j] = geoMatrix[i][j] = 0;
-	matrixInit();
 	viewInit();
 	projInit();
+	current_obj = now = 0;
+	while(current_obj < num_of_objects){
+		OBJ[current_obj] = glmReadOBJ(filename[(begin_model+current_obj)%33]);
+		colorModel();
+		matrixInit();
+
+		current_obj++;
+		now++;
+	}
+	multiple_all_matrix();
+	if( is_basic_mode){
+		now = 0;
+		GLfloat d[4][2] = {{1,1},{-1,-1},{-1,1},{1,-1}};
+		for(int i = 0; i <4; ++i){
+			scaling(1.0/2.0, 1.0/2.0, 1.0/2.0);
+			transport(d[i][0]/2, d[i][1]/2, 0);
+			now++;
+		}
+
+	}
+/*
+	for(int i =0 ; i < 4; ++i)
+		printf("%f %f\n", x_min[i], x_max[i]);
+*/
 }
+
 void idle()
 {
 	glutPostRedisplay();
 }
+
 
 void renderScene(void)
 {
@@ -215,20 +238,15 @@ void renderScene(void)
 		 0.0f,  0.2f, 0.0f,
 		-0.2f, -0.2f, 0.0f
 	};
-
+	
 	// Move example triangle to left by 0.5
-	
-	
-	
-
-	glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, obj_vertices);
-	glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_FALSE, 0, obj_color);
-
-	glUniformMatrix4fv(iLocMVP, 1, GL_FALSE, aMVP);
-
-	// draw the array we just bound
-	glDrawArrays(GL_TRIANGLES, 0, 3 * (int)OBJ->numtriangles);
-	
+	for(int i = 0; i < current_obj; ++i){
+		glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, obj_vertices[i]);
+		glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_FALSE, 0, obj_color[i]);
+		// draw the array we just bound
+		glUniformMatrix4fv(iLocMVP, 1, GL_FALSE, aMVP[i]);
+		glDrawArrays(GL_TRIANGLES, 0, 3 * (int)OBJ[i]->numtriangles);
+	}
 	glutSwapBuffers();
 }
 
@@ -298,39 +316,123 @@ void setShaders()
 
 void processMouse(int who, int state, int x, int y)
 {
-	printf("(%d, %d) ", x, y);
+
+	if( !is_basic_mode)	return ;
+	//printf("(%d, %d) ", x, y);
 
 	switch(who){
-	case GLUT_LEFT_BUTTON:   printf("left button   "); break;
+	case GLUT_LEFT_BUTTON:  
+		last_x = last_y = -1;
+		mouse_button = 0;
+		//printf("left button   "); 
+		break;
 	case GLUT_MIDDLE_BUTTON: printf("middle button "); break;
-	case GLUT_RIGHT_BUTTON:  printf("right button  "); break; 
+	case GLUT_RIGHT_BUTTON: 
+		last_x = last_y = -1;
+		mouse_button = 1;
+		//printf("right button  "); 
+		break; 
 	case GLUT_WHEEL_UP:      
-		printf("wheel up      "); 
-		cur_scene_x = cur_scene_x + 0.01;
+		//printf("wheel up      "); 
+		switch(mode){
+			case TRANSPORT_MODE:
+				transport(0, 0, 0.01);
+				break;
+			case VIEWING_EYE_MODE:
+					z_eye = z_eye - 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+		}
 		//glutDisplayFunc (renderScene);
 		break;
 	case GLUT_WHEEL_DOWN:   
-		printf("wheel down    "); 
-		cur_scene_x = cur_scene_x - 0.01;
+		switch(mode){
+			case TRANSPORT_MODE:
+				transport(0, 0, -0.01);
+				break;
+			case VIEWING_EYE_MODE:
+					z_eye = z_eye + 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+		}
+		//printf("wheel down    "); 
+		
 		//glutDisplayFunc (renderScene);
 		break;
 	default:                 printf("%-14d", who);     break;
 	}
 
 	switch(state){
-	case GLUT_DOWN:          printf("start ");         break;
-	case GLUT_UP:            printf("end   ");         break;
+	case GLUT_DOWN:               break;
+	case GLUT_UP:                     break;
 	}
 
-	printf("\n");
+}
+
+GLfloat get_move_value(int value){
+	return (GLfloat)value / 50000;
 }
 
 void processMouseMotion(int x, int y){  // callback on mouse drag
-	printf("(%d, %d) mouse move\n", x, y);
+	//printf("(%d, %d) mouse move\n", x, y);
+	if( last_x == -1 && last_y == -1)
+		last_x = x, last_y = y;
+	else{
+		GLfloat xx = get_move_value(x - last_x);
+		GLfloat yy = -get_move_value(y - last_y);
+
+		switch(mode){
+			case TRANSPORT_MODE:
+				transport(xx ,yy, 0);
+				break;
+			case VIEWING_EYE_MODE:
+					x_eye = x_eye + xx*5;
+					y_eye = y_eye + yy*5;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
+			case PROJECTION_MODE:
+				if(!mouse_button){
+					if( xx < 0 ){
+						proj_x_min += 0.01;
+						proj_x_max -= 0.01;
+					}
+					else if( xx > 0){
+						proj_x_min -= 0.01;
+						proj_x_max += 0.01;
+					}
+					if( yy < 0){
+						proj_y_min += 0.01;
+						proj_y_max -= 0.01;
+					}
+					else if( yy > 0){
+						proj_y_min -= 0.01;
+						proj_y_max += 0.01;
+					}
+				}
+				else{
+					if( xx > 0 )	proj_z_near += 0.01;
+					else if( xx < 0 )	proj_z_near -= 0.01;
+					
+					if( yy > 0)		proj_z_far += 0.01;
+					else if( yy < 0 )	proj_z_far -= 0.01;
+				}
+				if( !projMode)	projOrth();
+				else	projPerspective();
+		}
+		
+	}
 }
 
 void print_help(){
 	printf("WARNING !! INPUT IS CASE SENSITIVE!!\n");
+	printf("===========SELECT BASIC or ADVACNE======\n");
+	printf("IMPORTANT ----- PRESS 'a' or 'A' to switch mode between BASIC and ADVANCE!!\n");
 	printf("===========FOR BASIC CONTROL==========\n");
 	printf("***** SELECT MODE*****\n");
 	printf("	--GEOMETRY TRANSFORMATION--\n");
@@ -346,8 +448,7 @@ void print_help(){
 	printf("		-DEFAULT is Parallel Projection\n");
 	printf("		-'UP'& 'DOWN' key move projection box up/down\n");
 	printf("		-'LEFT'& 'RIGHT' key move projection box left/right\n");
-	printf("		-'PAGE UP' key move projection box near\n");
-	printf("		-'PAGE DOWN' key move projection box far\n");
+	printf("		-'<'   &   '>'   key move projection box near/far\n");
 	printf("***** After Select Mode *****\n");
 	printf("	You can press x/X for x-axis control\n");
 	printf("	You can press y/Y for y-axis control\n");
@@ -355,9 +456,30 @@ void print_help(){
 	printf("*** SELECT MODEL OBJECT***\n\n");
 	printf("	Press 'b' to go to last model\n");
 	printf("	Press 'n' to go to next model\n");
-	printf("===========FOR ANVANCED CONTROL===\n");
-
-	printf("\nIf you want to exit, please press 'esc'\n");
+	printf("***************FOR ANVANCED MODE CONTROL******\n");
+	printf("	-Press '0' to select model-0 to do transformation\n");
+	printf("	-Press '1' to select model-1 to do transformation\n");
+	printf("	-Press '2' to select model-2 to do transformation\n");
+	printf("	-Press '3' to select model-3 to do transformation\n");
+	printf("	-After Selecting model, you can also control mode as well as BASIC\n");
+	printf("	-For mouse control, only support translate offset, viewing, projection\n");
+	printf("		*Press 't' to transform mode\n");
+	printf("			-left mouse button down:\n");
+	printf("			-drag horizontally for x offset\n");
+	printf("			-dragvertically for y offset\n");
+	printf("		*Press 'E'/'e' to change eye's position:\n");
+	printf("			-left mouse button down: \n");
+	printf("			-drag horizontally for eye x coordinate\n");
+	printf("			-drag vertically for eye y coordinate\n");
+	printf("			-Middle wheel for eye z coordinate\n");
+	printf("		*Press 'o'/'p' to set the mode to projection transformation\n");
+	printf("			-LEFT mouse button down: \n");
+	printf("			-drag horizontally for left-right boundary scaling\n");
+	printf("			-drag vertically for bottom-top boundary scaling\n\n");
+	printf("		*Right mouse button down: \n");
+	printf("			-drag horizontally for moving near clipping plane\n");
+	printf("			-drag vertically for moving far clipping plane\n");
+	printf("------\nIf you want to exit, please press 'esc'\n");
 }
 
 void processNormalKeys(unsigned char key, int x, int y) {
@@ -368,14 +490,42 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			exit(0); 
 			break;
 		case 'n':
-			current_obj = ( current_obj + 1 ) % 33;
+			begin_model = ( begin_model + 1 ) % 33;
 			loadOBJModel();
 			break;
 		case 'b':
-			current_obj  -= 1;
-			current_obj += (current_obj < 0 )*33;
+			begin_model  -= 1;
+			begin_model += (begin_model < 0 )*33;
 			loadOBJModel();
 			break;
+		case 'a':
+			if(!is_basic_mode){
+				is_basic_mode = ADVANCED_MODE;
+				num_of_objects = 4;
+				loadOBJModel();
+			}
+			else{
+				is_basic_mode = BASIC_MODE;
+				num_of_objects = 1;
+				loadOBJModel();
+				now = 0;
+			}
+			break;
+		case 'A':
+			if(!is_basic_mode){
+				is_basic_mode = ADVANCED_MODE;
+				num_of_objects = 4;
+				loadOBJModel();
+			}
+			else{
+				is_basic_mode = BASIC_MODE;
+				num_of_objects = 1;
+				loadOBJModel();
+				now = 0;
+			}
+			
+			break;
+		
 		case 's':
 			mode = SCALE_MODE;
 			break;
@@ -590,23 +740,45 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					break;
 			}
 			break;	
+		case '<':
+			addZ();
+			break;
+		case '>':
+			subZ();
+			break;
 		case 'P':
 			perspectiveDefault();
+			mode = PROJECTION_MODE;
 			break;
 		case 'p':
 			perspectiveDefault();
+			mode = PROJECTION_MODE;
 			break;
 		case 'O':
 			orthDefault();
+			mode = PROJECTION_MODE;
 			break;
 		case 'o':
 			orthDefault();
+			mode = PROJECTION_MODE;
 			break;
 		case 'h':
 			print_help();
 			break;
 		case 'H':
 			print_help();
+			break;
+		case '0':
+			now = 0;
+			break;
+		case '1':
+			now = 1;
+			break;
+		case '2':
+			now = 2;
+			break;
+		case'3':
+			now = 3;
 			break;
 	}
 }
@@ -625,12 +797,7 @@ void processSpecialKeys(int key, int x, int y){
 		case GLUT_KEY_DOWN:
 			subY();
 			break;
-		case GLUT_KEY_PAGE_UP:
-			addZ();
-			break;
-		case GLUT_KEY_PAGE_DOWN:
-			subZ();
-			break;
+
 	}
 }
 
@@ -654,9 +821,13 @@ int main(int argc, char **argv) {
 	}
 
 	// load obj models through glm
+	num_of_objects = 1;
+	now = 0;
 	loadOBJModel();
+
 	// register glut callback functions
 	glutDisplayFunc (renderScene);
+	//glutDisplayFunc (rScene);
 	glutIdleFunc    (idle);
 	glutKeyboardFunc(processNormalKeys);
 	glutSpecialFunc(processSpecialKeys);
@@ -672,7 +843,8 @@ int main(int argc, char **argv) {
 	glutMainLoop();
 
 	// free
-	glmDelete(OBJ);
+	for(int i = 0; i < current_obj; ++i)
+		glmDelete(OBJ[i]);
 
 	return 0;
 }

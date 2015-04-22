@@ -3,19 +3,26 @@
 
 #include "transform.h"
 
-GLfloat aMVP[16];
-GLfloat geoMatrix[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
-GLfloat x_center, y_center, z_center;
-GLfloat scale = 1;
+extern int now;
+extern int current_obj;
+GLfloat aMVP[10][16];
+GLfloat geoMatrix[10][4][4];
+GLfloat x_center[4], y_center[4], z_center[4];
+GLfloat scale[4];
+GLfloat x_range_max, x_range_min;
+GLfloat y_range_max, y_range_min;
 extern GLfloat viewMatrix[][4];
 extern GLfloat projMatrix[][4];
+extern GLfloat x_max[], x_min[];
+extern GLfloat y_max[], y_min[];
+extern GLfloat z_max[], z_min[];
 
 void print_aMVP(){
 
 	int n = 4;
 	for(int i = 0; i < n; ++i){   
 		for(int j = 0; j < n; ++j)
-			printf("%.3f ", aMVP[i*4+j]);
+			printf("%.3f ", aMVP[now][i*4+j]);
 		printf("\n");
 	}
 	printf("\n");
@@ -36,9 +43,9 @@ void copyMatrix(GLfloat *A, const GLfloat B[][4]){
 }
 
 void update_center(GLfloat A[][4]){
-	x_center = x_center + A[0][3];
-	y_center = y_center + A[1][3];
-	z_center = z_center + A[2][3];
+	x_center[now] = x_center[now] + A[0][3];
+	y_center[now] = y_center[now] + A[1][3];
+	z_center[now] = z_center[now] + A[2][3];
 }
 
 void multiMatrix(GLfloat A[][4], GLfloat *B){
@@ -85,23 +92,43 @@ void multiMatrix(GLfloat *A, GLfloat B[][4], GLfloat C[][4]){
 }
 
 void multiple_all_matrix(GLfloat M[][4]){
+	for(int i = 0; i < current_obj; ++i){
+		GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+		multiMatrix(I, geoMatrix[i], I);
+		multiMatrix(I, viewMatrix, I);
+		multiMatrix(I, projMatrix, I);
+		copyMatrix(aMVP[i], I);
+		transMatrix(aMVP[i]);
+	}
+}
+
+void multiple_all_matrix(){
+	for(int i = 0; i < current_obj; ++i){
+		GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+		multiMatrix(I, geoMatrix[i], I);
+		multiMatrix(I, viewMatrix, I);
+		multiMatrix(I, projMatrix, I);
+		copyMatrix(aMVP[i], I);
+		transMatrix(aMVP[i]);
+	}
+}
+
+void multiple_range(int i){
 	GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
-	multiMatrix(I, geoMatrix, I);
+	multiMatrix(I, geoMatrix[i], I);
 	multiMatrix(I, viewMatrix, I);
 	multiMatrix(I, projMatrix, I);
-	copyMatrix(aMVP, I);
-	transMatrix(aMVP);
 }
 
 void scaleAll(){
 	GLfloat M[4][4] = {0};
-	M[0][0] = scale;
-	M[1][1] = scale;
-	M[2][2] = scale;
+	M[0][0] = scale[now];
+	M[1][1] = scale[now];
+	M[2][2] = scale[now];
 	M[3][3] = 1;
 	
 	
-	multiMatrix(geoMatrix, M, geoMatrix);
+	multiMatrix(geoMatrix[now], M, geoMatrix[now]);
 	multiple_all_matrix(M);
 }
 
@@ -114,7 +141,7 @@ void transport(GLfloat x, GLfloat y, GLfloat z){
 	M[2][3] = z;
 
 	GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
-	multiMatrix(geoMatrix, M, geoMatrix);
+	multiMatrix(geoMatrix[now], M, geoMatrix[now]);
 	multiple_all_matrix(M);
 	update_center(M);
 }
@@ -128,12 +155,12 @@ void transport(GLfloat x, GLfloat y, GLfloat z, bool no_update){
 	M[2][3] = z;
 
 	GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
-	multiMatrix(geoMatrix, M, geoMatrix);
+	multiMatrix(geoMatrix[now], M, geoMatrix[now]);
 	multiple_all_matrix(M);
 }
 
 void scaling(GLfloat x, GLfloat y, GLfloat z){
-	transport(-x_center, -y_center, -z_center, NO_UPDATE);
+	transport(-x_center[now], -y_center[now], -z_center[now], NO_UPDATE);
 	GLfloat M[4][4] = {0};
 	M[0][0] = x;
 	M[1][1] = y;
@@ -141,13 +168,13 @@ void scaling(GLfloat x, GLfloat y, GLfloat z){
 	M[3][3] = 1;
 	
 	GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
-	multiMatrix(geoMatrix, M, geoMatrix);
+	multiMatrix(geoMatrix[now], M, geoMatrix[now]);
 	multiple_all_matrix(M);
-	transport(x_center, y_center, z_center, NO_UPDATE);
+	transport(x_center[now], y_center[now], z_center[now], NO_UPDATE);
 }
 
 void rotate(GLfloat x, GLfloat y, GLfloat z){
-	transport(-x_center, -y_center, -z_center, NO_UPDATE);
+	transport(-x_center[now], -y_center[now], -z_center[now], NO_UPDATE);
 	GLfloat M[3][4][4] = {0};
 	for(int i = 0; i < 3; ++i)
 		for(int j = 0; j < 4; ++j)
@@ -187,17 +214,21 @@ void rotate(GLfloat x, GLfloat y, GLfloat z){
 			
 		}
 		GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
-		multiMatrix(geoMatrix, M[i], geoMatrix);
+		multiMatrix(geoMatrix[now], M[i], geoMatrix[now]);
 		multiple_all_matrix(M[i]);
-		copyMatrix(aMVP, I);
+		copyMatrix(aMVP[now], I);
 	}
-	transport(x_center, y_center, z_center, NO_UPDATE);
+	transport(x_center[now], y_center[now], z_center[now], NO_UPDATE);
 }
 
 void matrixInit(){
 	//printf("Matrix Initialization!!\n");
-
-	transport(-x_center, -y_center, -z_center);
+	
+		for(int j = 0; j < 4; ++j)
+			for(int k = 0; k < 4; ++k)
+				geoMatrix[now][j][k] = (j == k) ? 1 : 0;
+	
+	transport(-x_center[now], -y_center[now], -z_center[now]);
 	scaleAll();
 }
 
