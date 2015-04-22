@@ -183,11 +183,17 @@ void loadOBJModel()
 		now++;
 	}
 	multiple_all_matrix();
-	// traverse the color model
-}
+	if( is_basic_mode){
+		now = 0;
+		GLfloat d[4][2] = {{1,1},{-1,-1},{-1,1},{1,-1}};
+		for(int i = 0; i <4; ++i){
+			scaling(1.0/2.0, 1.0/2.0, 1.0/2.0);
+			transport(d[i][0]/4, d[i][1]/4, 0);
+			now++;
+		}
 
-void advanceLoadOBJModel(){
-	//makeIdentityMatrix();
+	}
+	// traverse the color model
 }
 
 void idle()
