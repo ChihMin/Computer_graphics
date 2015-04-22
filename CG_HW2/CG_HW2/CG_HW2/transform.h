@@ -10,7 +10,7 @@
 
 #define NO_UPDATE 0
 
-extern GLfloat aMVP[];
+extern GLfloat aMVP[][16];
 extern GLfloat x_center[], y_center[], z_center[];
 extern GLfloat scale[];
 

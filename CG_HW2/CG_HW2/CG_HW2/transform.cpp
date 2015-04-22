@@ -4,7 +4,8 @@
 #include "transform.h"
 
 extern int now;
-GLfloat aMVP[16];
+extern int current_obj;
+GLfloat aMVP[10][16];
 GLfloat geoMatrix[10][4][4];
 GLfloat x_center[4], y_center[4], z_center[4];
 GLfloat scale[4];
@@ -16,7 +17,7 @@ void print_aMVP(){
 	int n = 4;
 	for(int i = 0; i < n; ++i){   
 		for(int j = 0; j < n; ++j)
-			printf("%.3f ", aMVP[i*4+j]);
+			printf("%.3f ", aMVP[now][i*4+j]);
 		printf("\n");
 	}
 	printf("\n");
@@ -86,21 +87,25 @@ void multiMatrix(GLfloat *A, GLfloat B[][4], GLfloat C[][4]){
 }
 
 void multiple_all_matrix(GLfloat M[][4]){
-	GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
-	multiMatrix(I, geoMatrix[now], I);
-	multiMatrix(I, viewMatrix, I);
-	multiMatrix(I, projMatrix, I);
-	copyMatrix(aMVP, I);
-	transMatrix(aMVP);
+	for(int i = 0; i < current_obj; ++i){
+		GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+		multiMatrix(I, geoMatrix[i], I);
+		multiMatrix(I, viewMatrix, I);
+		multiMatrix(I, projMatrix, I);
+		copyMatrix(aMVP[i], I);
+		transMatrix(aMVP[i]);
+	}
 }
 
 void multiple_all_matrix(){
-	GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
-	multiMatrix(I, geoMatrix[now], I);
-	multiMatrix(I, viewMatrix, I);
-	multiMatrix(I, projMatrix, I);
-	copyMatrix(aMVP, I);
-	transMatrix(aMVP);
+	for(int i = 0; i < current_obj; ++i){
+		GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+		multiMatrix(I, geoMatrix[i], I);
+		multiMatrix(I, viewMatrix, I);
+		multiMatrix(I, projMatrix, I);
+		copyMatrix(aMVP[i], I);
+		transMatrix(aMVP[i]);
+	}
 }
 
 void scaleAll(){
@@ -199,7 +204,7 @@ void rotate(GLfloat x, GLfloat y, GLfloat z){
 		GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
 		multiMatrix(geoMatrix[now], M[i], geoMatrix[now]);
 		multiple_all_matrix(M[i]);
-		copyMatrix(aMVP, I);
+		copyMatrix(aMVP[now], I);
 	}
 	transport(x_center[now], y_center[now], z_center[now], NO_UPDATE);
 }

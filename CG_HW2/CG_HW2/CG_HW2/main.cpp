@@ -154,28 +154,29 @@ void loadOBJString(){
 
 void loadOBJModel()
 {
+
+	// initialize transform matrix
+	for(now = 0; now < 4; ++now){
+		aMVP[now][0] = 1;	aMVP[now][4] = 0;	aMVP[now][8]  = 0;	aMVP[now][12] = 0;
+		aMVP[now][1] = 0;	aMVP[now][5] = 1;	aMVP[now][9]  = 0;	aMVP[now][13] = 0;
+		aMVP[now][2] = 0;	aMVP[now][6] = 0;	aMVP[now][10] = 1;	aMVP[now][14] = 0;
+		aMVP[now][3] = 0;	aMVP[now][7] = 0;	aMVP[now][11] = 0;	aMVP[now][15] = 1;
+	}
 	// read an obj model here
 	loadOBJString();
+	viewInit();
+	projInit();
+	current_obj = now = 0;
 	while(current_obj < 4){
 		OBJ[current_obj] = glmReadOBJ(filename[current_obj]);
 		colorModel();
 		matrixInit();
-		viewInit();
-		projInit();
-		multiple_all_matrix();
+
 		current_obj++;
 		now++;
 	}
+	multiple_all_matrix();
 	// traverse the color model
-	
-	// initialize transform matrix
-	aMVP[0] = 1;	aMVP[4] = 0;	aMVP[8]  = 0;	aMVP[12] = 0;
-	aMVP[1] = 0;	aMVP[5] = 1;	aMVP[9]  = 0;	aMVP[13] = 0;
-	aMVP[2] = 0;	aMVP[6] = 0;	aMVP[10] = 1;	aMVP[14] = 0;
-	aMVP[3] = 0;	aMVP[7] = 0;	aMVP[11] = 0;	aMVP[15] = 1;
-	
-	
-	
 }
 
 void advanceLoadOBJModel(){
@@ -217,16 +218,13 @@ void renderScene(void)
 		 0.0f,  0.2f, 0.0f,
 		-0.2f, -0.2f, 0.0f
 	};
-
+	
 	// Move example triangle to left by 0.5
 	for(int i = 0; i < current_obj; ++i){
 		glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, obj_vertices[i]);
 		glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_FALSE, 0, obj_color[i]);
-		
-		glUniformMatrix4fv(iLocMVP, 1, GL_FALSE, aMVP);
-		now = i;
-		
 		// draw the array we just bound
+		glUniformMatrix4fv(iLocMVP, 1, GL_FALSE, aMVP[i]);
 		glDrawArrays(GL_TRIANGLES, 0, 3 * (int)OBJ[i]->numtriangles);
 	}
 	glutSwapBuffers();
@@ -607,6 +605,18 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			break;
 		case 'H':
 			print_help();
+			break;
+		case '0':
+			now = 0;
+			break;
+		case '1':
+			now = 1;
+			break;
+		case '2':
+			now = 2;
+			break;
+		case'3':
+			now = 3;
 			break;
 	}
 }
