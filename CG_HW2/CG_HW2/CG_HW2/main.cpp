@@ -328,19 +328,29 @@ void processMouse(int who, int state, int x, int y)
 	case GLUT_WHEEL_UP:      
 		printf("wheel up      "); 
 		switch(mode){
-
 			case TRANSPORT_MODE:
 				transport(0, 0, 0.01);
 				break;
+			case VIEWING_EYE_MODE:
+					z_eye = z_eye - 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
 		}
 		//glutDisplayFunc (renderScene);
 		break;
 	case GLUT_WHEEL_DOWN:   
 		switch(mode){
-
 			case TRANSPORT_MODE:
 				transport(0, 0, -0.01);
 				break;
+			case VIEWING_EYE_MODE:
+					z_eye = z_eye + 0.01;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
 		}
 		printf("wheel down    "); 
 		
@@ -384,6 +394,13 @@ void processMouseMotion(int x, int y){  // callback on mouse drag
 			case TRANSPORT_MODE:
 				transport(xx ,yy, 0);
 				break;
+			case VIEWING_EYE_MODE:
+					x_eye = x_eye + xx*5;
+					y_eye = y_eye + yy*5;
+					viewLookat(	x_eye, y_eye, z_eye, 
+								x_cor, y_cor, z_cor, 
+								x_up, y_up, z_up);
+					break;
 		}
 		
 	}
