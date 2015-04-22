@@ -327,12 +327,23 @@ void processMouse(int who, int state, int x, int y)
 		break; 
 	case GLUT_WHEEL_UP:      
 		printf("wheel up      "); 
-		cur_scene_x = cur_scene_x + 0.01;
+		switch(mode){
+
+			case TRANSPORT_MODE:
+				transport(0, 0, 0.01);
+				break;
+		}
 		//glutDisplayFunc (renderScene);
 		break;
 	case GLUT_WHEEL_DOWN:   
+		switch(mode){
+
+			case TRANSPORT_MODE:
+				transport(0, 0, -0.01);
+				break;
+		}
 		printf("wheel down    "); 
-		cur_scene_x = cur_scene_x - 0.01;
+		
 		//glutDisplayFunc (renderScene);
 		break;
 	default:                 printf("%-14d", who);     break;
