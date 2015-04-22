@@ -144,7 +144,7 @@ void colorModel()
 	y_center[now] = (y_max[now] + y_min[now]) / 2.0;
 	z_center[now] = (z_max[now] + z_min[now]) / 2.0;
 
-	printf("center = %.3f %.3f %.3f\n", x_center[now], y_center[now], z_center[now]);
+	//printf("center = %.3f %.3f %.3f\n", x_center[now], y_center[now], z_center[now]);
 
 	GLfloat max_line = max_cmp( x_max[now] - x_min[now], y_max[now] - y_min[now] );
 	max_line = max_cmp( max_line, z_max[now] - z_min[now]);
@@ -188,7 +188,7 @@ void loadOBJModel()
 		GLfloat d[4][2] = {{1,1},{-1,-1},{-1,1},{1,-1}};
 		for(int i = 0; i <4; ++i){
 			scaling(1.0/2.0, 1.0/2.0, 1.0/2.0);
-			transport(d[i][0]/4, d[i][1]/4, 0);
+			transport(d[i][0]/2, d[i][1]/2, 0);
 			now++;
 		}
 
@@ -357,8 +357,7 @@ void print_help(){
 	printf("		-DEFAULT is Parallel Projection\n");
 	printf("		-'UP'& 'DOWN' key move projection box up/down\n");
 	printf("		-'LEFT'& 'RIGHT' key move projection box left/right\n");
-	printf("		-'PAGE UP' key move projection box near\n");
-	printf("		-'PAGE DOWN' key move projection box far\n");
+	printf("		-'<'   &   '>'   key move projection box near/far\n");
 	printf("***** After Select Mode *****\n");
 	printf("	You can press x/X for x-axis control\n");
 	printf("	You can press y/Y for y-axis control\n");
@@ -629,6 +628,12 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					break;
 			}
 			break;	
+		case '<':
+			addZ();
+			break;
+		case '>':
+			subZ();
+			break;
 		case 'P':
 			perspectiveDefault();
 			break;
@@ -676,12 +681,7 @@ void processSpecialKeys(int key, int x, int y){
 		case GLUT_KEY_DOWN:
 			subY();
 			break;
-		case GLUT_KEY_PAGE_UP:
-			addZ();
-			break;
-		case GLUT_KEY_PAGE_DOWN:
-			subZ();
-			break;
+
 	}
 }
 
