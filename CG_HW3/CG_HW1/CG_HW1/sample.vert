@@ -1,5 +1,6 @@
 attribute vec4 av4position;
 attribute vec3 av3normal;
+attribute vec3 av3color;
 
 struct LightSourceParameters {
 	vec4 ambient;
@@ -23,7 +24,7 @@ struct MaterialParameters {
 	float shininess;
 };
 
-uniform mat4 mvp;
+
 uniform mat4 um4rotateMatrix, um4modelMatrix;
 uniform MaterialParameters Material;
 uniform LightSourceParameters LightSource;
@@ -34,18 +35,21 @@ varying vec3 vv3normal, vv3halfVector;
 
 void main() {
 
-	
-	vec4 color=(0,0,0,0);
+	mat4 mvp = mat4(
+		vec4(    1,    0,    0,    0),
+		vec4(    0,    1,    0,    0),
+		vec4(    0,    0,	 -0.1, 0),
+		vec4(    0,    0,    0,    1)
+	);	
 
-	
-	
+	vec4 color= vec4(0.0, 0.0, 0.0, 0.0);
 
 	/* Compute the ambient terms */
 	vv4ambient = Material.ambient * LightSource.ambient;
 	
 	color= vv4ambient;
 	
-	vv4color=color;
+	vv4color= color;
 	
 	gl_Position = mvp * av4position;
 }

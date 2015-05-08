@@ -25,8 +25,7 @@ GLint iLocPosition;
 GLint iLocColor;
 GLint iLocNormal;
 GLint iLocMDiffuse;
-GLfloat *normals;
-
+GLint iLocMAmbient;
 /***** May be I need to use this iLoc ******/
 GLint iLocLAmbient; 
 GLint iLocLDiffuse;
@@ -37,16 +36,21 @@ GLint iLocLPosition;
 GLint iLocLSpotDir;
 GLint iLocLSpotCosCutOff;
 GLint iLocLSpotExp;
+
 /*******************************************/
 
 char filename[100][100];
 
 GLMmodel* OBJ;
 GLMgroup* group;
-GLfloat *obj_color;
-GLfloat *obj_vertices;
+GLfloat **obj_vertices;
+GLfloat **obj_color;
+GLfloat **group_ambient;
+GLfloat *normals;
 
+int group_num;
 int current_obj;
+int num_triangles ;
 bool graphics_mode;
 
 GLfloat min_cmp( GLfloat a,  GLfloat b){
@@ -80,9 +84,22 @@ void colorModel()
 	OBJ->position[2];
 
 	printf("%f %f %f\n", OBJ->position[0], OBJ->position[1], OBJ->position[2]);
+	printf("num of groups = %d\n", OBJ->numgroups);
+
+	num_triangles = 0;
+	group_num = 0;
+	group = OBJ->groups;
+	while(group){
+		num_triangles += group->numtriangles;
+		group_num++;
+		printf("culmulate triangles = %d\n",  num_triangles);
+		group = group->next;
+	}
 	
-	obj_color = new GLfloat[(int)OBJ->numtriangles * 9];
-	obj_vertices = new GLfloat[(int)OBJ->numtriangles * 9];
+	obj_vertices = new GLfloat*[group_num];
+	obj_color = new GLfloat*[group_num];
+	group_ambient = new GLfloat*[group_num];
+
 	GLfloat scale = 1;
 	
 	GLfloat x_max = -1e9;
@@ -94,45 +111,50 @@ void colorModel()
 	GLfloat z_max = -1e9;
 	GLfloat z_min = 1e9;
 	
-
+	
 	group = OBJ->groups;
+	int now_group = 0;
 	while(group){
 		// get material data here
-		
-	}
-
-	for(int i=0, j=0; i<(int)OBJ->numtriangles; i++, j += 3)
-	{
-		// the index of each vertex
-		int indv1 = OBJ->triangles[i].vindices[0];
-		int indv2 = OBJ->triangles[i].vindices[1];
-		int indv3 = OBJ->triangles[i].vindices[2];
-
-		// the index of each color
-		int indc1 = indv1;
-		int indc2 = indv2;
-		int indc3 = indv3;
-
-		// vertices
-		GLfloat vx, vy, vz;
-		obj_vertices[j*3+0] = OBJ->vertices[indv1*3+0] * scale;
-		obj_vertices[j*3+1]  = OBJ->vertices[indv1*3+1] * scale;
-		obj_vertices[j*3+2]  = OBJ->vertices[indv1*3+2] * scale;
-
-		obj_vertices[(j+1)*3+0] = OBJ->vertices[indv2*3+0] * scale;
-		obj_vertices[(j+1)*3+1] = OBJ->vertices[indv2*3+1] * scale;
-		obj_vertices[(j+1)*3+2] = OBJ->vertices[indv2*3+2] * scale;
-
-		obj_vertices[(j+2)*3+0] = OBJ->vertices[indv3*3+0] * scale;
-		obj_vertices[(j+2)*3+1] = OBJ->vertices[indv3*3+1] * scale;
-		obj_vertices[(j+2)*3+2] = OBJ->vertices[indv3*3+2] * scale;
-
-		if( i == 0 ){
-			x_min = x_max = OBJ->vertices[indv1*3+0];
-			y_min = y_max = OBJ->vertices[indv1*3+1];
-			z_min = z_max = OBJ->vertices[indv1*3+2];
+		group_ambient[now_group] = new GLfloat[4];
+		printf("---------- Group %d -----------\n", now_group);
+		for(int i = 0; i < 4; ++i){
+			group_ambient[now_group][i] = OBJ->materials[group->material].ambient[i];
 		}
-		else{
+		printf("ambient size = %d\n", sizeof(OBJ->materials[group->material].ambient));
+		printf("diffuse size = %d\n", sizeof(OBJ->materials[group->material].diffuse));
+		printf("specular size = %d\n", sizeof(OBJ->materials[group->material].specular));
+		
+		obj_vertices[now_group] = new GLfloat[(int)group->numtriangles * 9];
+		obj_color[now_group] = new GLfloat[(int)group->numtriangles * 9];
+		for(int i=0, j=0; i<(int)group->numtriangles; i++, j += 3)
+		{
+			// the index of each vertex
+			int triangleID = OBJ->groups->triangles[i];
+			int indv1 = OBJ->triangles[triangleID].vindices[0];
+			int indv2 = OBJ->triangles[triangleID].vindices[1];
+			int indv3 = OBJ->triangles[triangleID].vindices[2];
+
+			// the index of each color
+			int indc1 = indv1;
+			int indc2 = indv2;
+			int indc3 = indv3;
+
+			// vertices
+			GLfloat vx, vy, vz;
+			obj_vertices[now_group][j*3+0] = OBJ->vertices[indv1*3+0] * scale;
+			obj_vertices[now_group][j*3+1]  = OBJ->vertices[indv1*3+1] * scale;
+			obj_vertices[now_group][j*3+2]  = OBJ->vertices[indv1*3+2] * scale;
+
+			obj_vertices[now_group][(j+1)*3+0] = OBJ->vertices[indv2*3+0] * scale;
+			obj_vertices[now_group][(j+1)*3+1] = OBJ->vertices[indv2*3+1] * scale;
+			obj_vertices[now_group][(j+1)*3+2] = OBJ->vertices[indv2*3+2] * scale;
+
+			obj_vertices[now_group][(j+2)*3+0] = OBJ->vertices[indv3*3+0] * scale;
+			obj_vertices[now_group][(j+2)*3+1] = OBJ->vertices[indv3*3+1] * scale;
+			obj_vertices[now_group][(j+2)*3+2] = OBJ->vertices[indv3*3+2] * scale;
+
+			
 			x_max = max_cmp( x_max, OBJ->vertices[indv1*3+0] );
 			x_max = max_cmp( x_max, OBJ->vertices[indv2*3+0] );
 			x_max = max_cmp( x_max, OBJ->vertices[indv3*3+0] );
@@ -155,30 +177,48 @@ void colorModel()
 
 			z_min = min_cmp( z_min, OBJ->vertices[indv1*3+2] );
 			z_min = min_cmp( z_min, OBJ->vertices[indv2*3+2] );
-			z_min = min_cmp( z_min, OBJ->vertices[indv3*3+2] );
+			z_min = min_cmp( z_min, OBJ->vertices[indv3*3+2] );	
+			
+			// colors
+			GLfloat c1, c2, c3;
+			obj_color[now_group][j*3+0] = OBJ->colors[indv1*3+0];
+			obj_color[now_group][j*3+1] = OBJ->colors[indv1*3+1];
+			obj_color[now_group][j*3+2] = OBJ->colors[indv1*3+2];
+
+			obj_color[now_group][(j+1)*3+0] = OBJ->colors[indv2*3+0];
+			obj_color[now_group][(j+1)*3+1] = OBJ->colors[indv2*3+1];
+			obj_color[now_group][(j+1)*3+2] = OBJ->colors[indv2*3+2];
+
+			obj_color[now_group][(j+2)*3+0] = OBJ->colors[indv3*3+0];
+			obj_color[now_group][(j+2)*3+1] = OBJ->colors[indv3*3+1];
+			obj_color[now_group][(j+2)*3+2] = OBJ->colors[indv3*3+2];
 		}
-		// colors
-		GLfloat c1, c2, c3;
-		obj_color[j*3+0] = OBJ->colors[indv1*3+0];
-		obj_color[j*3+1] = OBJ->colors[indv1*3+1];
-		obj_color[j*3+2] = OBJ->colors[indv1*3+2];
-
-		obj_color[(j+1)*3+0] = OBJ->colors[indv2*3+0];
-		obj_color[(j+1)*3+1] = OBJ->colors[indv2*3+1];
-		obj_color[(j+1)*3+2] = OBJ->colors[indv2*3+2];
-
-		obj_color[(j+2)*3+0] = OBJ->colors[indv3*3+0];
-		obj_color[(j+2)*3+1] = OBJ->colors[indv3*3+1];
-		obj_color[(j+2)*3+2] = OBJ->colors[indv3*3+2];
+		group = group->next;
+		now_group++;
+	}	
+	
+	printf("ambient : ");
+	for(int j = 0; j < group_num; ++j){
+		for(int i = 0; i < 4; ++i){
+			//group_ambient[i] = 1;
+			printf("%.3f ", group_ambient[j][i]);
+		}
+		printf("\n");
 	}
+	
 
 	GLfloat max_line = max_cmp( x_max - x_min, y_max - y_min );
 	max_line = max_cmp( max_line, z_max - z_min);
 	scale = 2 / max_line;
 
-	for(int i = 0; i < (int)OBJ->numtriangles * 9; ++i)
-		obj_vertices[i] *= scale;
-	
+	group = OBJ->groups;
+	now_group = 0;
+	while(group){
+		for(int i = 0; i < (int)group->numtriangles * 9; ++i)
+			obj_vertices[now_group][i] *= scale;
+		group = group->next;
+		now_group++;
+	}
 	GLfloat x_move = 0,  y_move = 0, z_move = 0;
 
 	x_max *= scale;
@@ -189,21 +229,27 @@ void colorModel()
 	y_min *= scale;
 	z_min *= scale;
 	
-
 	x_move = (x_max + x_min) / 2;
 	y_move = (y_max + y_min) / 2;
 	z_move = (z_max + z_min) / 2;
 
-	for(int i = 0; i < (int)OBJ->numtriangles * 9; i = i + 3){
-		obj_vertices[i] -= x_move;
-		obj_vertices[i+1] -= y_move;
-		obj_vertices[i+2] -= z_move;
+
+	group = OBJ->groups;
+	now_group = 0;
+	while(group){
+		for(int i = 0; i < (int)group->numtriangles * 9; i = i + 3){
+			obj_vertices[now_group][i] -= x_move;
+			obj_vertices[now_group][i+1] -= y_move;
+			obj_vertices[now_group][i+2] -= z_move;
+		}
+		group = group->next;
+		now_group++;
 	}
-	printf("scale = %f\n", scale);
+	printf("scale = %f x_move = %f, y_move = %f z_move = %f\n", scale, x_move, y_move, z_move);
 }
 
 void loadOBJString(){
-	sprintf(filename[0], "ColorModels/armadillo12KN.obj");
+	sprintf(filename[0], "ColorModels/dragon10KN.obj");
 }
 
 void loadOBJModel()
@@ -228,31 +274,19 @@ void renderScene(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnableVertexAttribArray(iLocPosition);
-	glEnableVertexAttribArray(iLocColor);
 	glEnableVertexAttribArray(iLocNormal);
-
-
-	static GLfloat triangle_color[] = {
-		1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 1.0f
-	};
-
-	static GLfloat triangle_vertex[]= {
-		 0.5f, -0.5f, 0.0f,
-		 0.0f, -1.0f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		 0.0f, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0.0f
-	};
-	for(int i = 0; i < (int)OBJ->numtriangles; ++i){
-		glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_TRUE, 0, obj_vertices+(i*9));
-		glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_TRUE, 0, obj_color+(i*9));
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+	
+	group = OBJ->groups;
+	int now_group = 0;
+	while(group){
+		glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_TRUE, 0, obj_vertices[now_group]);
+		glVertexAttribPointer(iLocColor, 3, GL_FLOAT, GL_TRUE, 0, obj_color[now_group]);
+		glUniform4f(iLocLAmbient, group_ambient[now_group][0], group_ambient[now_group][1],
+								  group_ambient[now_group][2],group_ambient[now_group][3]);
+		glUniform4f(iLocMAmbient, 1, 1, 1, 1);
+		glDrawArrays(GL_TRIANGLES, 0, 3 * (int)group->numtriangles);
+		now_group++;
+		group = group->next;
 	}
 	/*
 	for(int i = 0; i < 2;++i){
@@ -326,12 +360,12 @@ void setShaders()
 	glLinkProgram(p);
 
 	iLocPosition = glGetAttribLocation (p, "av4position");
-	iLocColor    = glGetAttribLocation (p, "av3color");
+	iLocColor = glGetAttribLocation(p, "av3color");
+	iLocNormal = glGetAttribLocation(p, "av3normal");
 
-	iLocNormal = glGetAttribLocation(p, "av3position");
-	iLocMDiffuse = glGetAttribLocation(p, "uv4matDiffuse");
-
-/*
+	//iLocMDiffuse = glGetUniformLocation(p, "uv4matDiffuse");
+	iLocMAmbient = glGetUniformLocation(p, "Material.ambient");
+	
 	iLocLAmbient = glGetUniformLocation(p, "LightSource.ambient");
 	iLocLDiffuse = glGetUniformLocation(p, "LightSource.diffuse"); 
 	iLocLSpecular = glGetUniformLocation(p, "LightSource.specular");
@@ -341,7 +375,7 @@ void setShaders()
 	iLocLSpotDir = glGetUniformLocation(p, "LightSource.spotDirection");
 	iLocLSpotCosCutOff = glGetUniformLocation(p, "LightSource.spotCosCutoff");
 	iLocLSpotExp = glGetUniformLocation(p, "LightSource.spotExponent");
-	*/
+
 	glUseProgram(p);
 }
 
