@@ -58,7 +58,7 @@ bool graphics_mode;
 
 /******** Light Control *****/
 bool specular_open = true;
-
+bool diffuse_open = true;
 GLfloat min_cmp( GLfloat a,  GLfloat b){
 	if( a > b ) return b;
 	return a;
@@ -133,7 +133,7 @@ void colorModel()
 		obj_color[now_group] = new GLfloat[(int)group->numtriangles * 9];
 		obj_normals[now_group] = new GLfloat[(int)group->numtriangles * 9];
 
-		for(int i=0, j=0; i<(int)group->numtriangles; i++, j += 3)
+		for(int i=1, j=0; i<(int)group->numtriangles; i++, j += 3)
 		{
 			// the index of each vertex
 			int triangleID = OBJ->groups->triangles[i];
@@ -271,7 +271,7 @@ void colorModel()
 		group = group->next;
 		now_group++;
 	}
-	printf("scale = %f x_move = %f, y_move = %f z_move = %f\n", scale, x_move, y_move, z_move);
+	//printf("scale = %f x_move = %f, y_move = %f z_move = %f\n", scale, x_move, y_move, z_move);
 }
 
 void loadOBJString(){
@@ -304,11 +304,15 @@ void renderScene(void)
 	
 	group = OBJ->groups;
 	int now_group = 0;
-	glUniform4f (iLocLPosition, 1, 1, 1, 0);
-	glUniform4f (iLocLDiffuse, 0.3f, 0.3f, 0.3f, 1.0f);
-	//glUniform4f (iLocLDiffuse, 0.0f, 0.0f, 0.0f, 1.0f);
+	glUniform4f (iLocLPosition, 0, 0, 1, 0);
+	glUniform4f(iLocLAmbient, 0.1, 0.1, 0.1, 0.1);
+	if(diffuse_open)
+		glUniform4f (iLocLDiffuse, 0.8f, 0.8f, 0.8f, 0.8f);
+	else
+		glUniform4f (iLocLDiffuse, 0.0f, 0.0f, 0.0f, 1.0f);
+	
 	if(specular_open)
-		glUniform4f (iLocLSpecular, 0.2f, 0.2f, 0.2f, 1);
+		glUniform4f (iLocLSpecular, 1.0f, 1.0f, 1.0f, 1);
 	else
 		glUniform4f (iLocLSpecular, 0.0f, 0.0f, 0.0f, 1);
 
@@ -338,7 +342,7 @@ void renderScene(void)
 									OBJ->materials[group->material].specular[3]
 					);
 
-		glUniform4f(iLocLAmbient, 1, 1, 1, 1);
+		
 		glDrawArrays(GL_TRIANGLES, 0, 3 * (int)group->numtriangles);
 		now_group++;
 		group = group->next;
@@ -418,10 +422,10 @@ void setShaders()
 	iLocColor = glGetAttribLocation(p, "av3color");
 	iLocNormal = glGetAttribLocation(p, "av3normal");
 
-	iLocMDiffuse = glGetUniformLocation(p, "uv4matDiffuse");
 	iLocMAmbient = glGetUniformLocation(p, "Material.ambient");
 	iLocMDiffuse = glGetUniformLocation(p, "Material.diffuse");
-	iLocMShiness = glGetUniformLocation(p, "Material.shiness");
+	iLocMShiness = glGetUniformLocation(p, "Material.shiniess");
+	iLocMSpecular = glGetUniformLocation(p, "Material.specular");
 
 	iLocLAmbient = glGetUniformLocation(p, "LightSource.ambient");
 	iLocLDiffuse = glGetUniformLocation(p, "LightSource.diffuse"); 
@@ -483,6 +487,11 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			current_obj += (current_obj < 0 )*33;
 			loadOBJModel();
 			break;
+
+		case 'd':
+			diffuse_open = !diffuse_open;
+			break;
+
 		case 'h':
 			printf("===========THIS IS HELP !!!!!==========\n");
 			printf("Press 'c' to change mode(solid / wireframe)\n\n");
