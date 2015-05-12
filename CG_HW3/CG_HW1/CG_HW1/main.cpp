@@ -27,6 +27,7 @@ GLint iLocNormal;
 GLint iLocMDiffuse;
 GLint iLocMAmbient;
 GLint iLocMSpecular;
+GLint iLocMShiness;
 /***** May be I need to use this iLoc ******/
 GLint iLocLAmbient; 
 GLint iLocLDiffuse;
@@ -54,6 +55,9 @@ int group_num;
 int current_obj;
 int num_triangles ;
 bool graphics_mode;
+
+/******** Light Control *****/
+bool specular_open = true;
 
 GLfloat min_cmp( GLfloat a,  GLfloat b){
 	if( a > b ) return b;
@@ -125,10 +129,6 @@ void colorModel()
 		for(int i = 0; i < 4; ++i){
 			group_ambient[now_group][i] = OBJ->materials[group->material].ambient[i];
 		}
-		printf("ambient size = %d\n", sizeof(OBJ->materials[group->material].ambient));
-		printf("diffuse size = %d\n", sizeof(OBJ->materials[group->material].diffuse));
-		printf("specular size = %d\n", sizeof(OBJ->materials[group->material].specular));
-		
 		obj_vertices[now_group] = new GLfloat[(int)group->numtriangles * 9];
 		obj_color[now_group] = new GLfloat[(int)group->numtriangles * 9];
 		obj_normals[now_group] = new GLfloat[(int)group->numtriangles * 9];
@@ -302,16 +302,23 @@ void renderScene(void)
 	glEnableVertexAttribArray(iLocPosition);
 	glEnableVertexAttribArray(iLocNormal);
 	
-
 	group = OBJ->groups;
 	int now_group = 0;
-	glUniform4f (iLocLPosition, -1, 1, 1, 0);
-	glUniform4f (iLocLDiffuse, 0.5f, 0.5f, 0.50f, 1.0f);
+	glUniform4f (iLocLPosition, 1, 1, 1, 0);
+	glUniform4f (iLocLDiffuse, 0.3f, 0.3f, 0.3f, 1.0f);
+	//glUniform4f (iLocLDiffuse, 0.0f, 0.0f, 0.0f, 1.0f);
+	if(specular_open)
+		glUniform4f (iLocLSpecular, 0.2f, 0.2f, 0.2f, 1);
+	else
+		glUniform4f (iLocLSpecular, 0.0f, 0.0f, 0.0f, 1);
+
 	while(group){
 		glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, obj_vertices[now_group]);
 		glVertexAttribPointer(iLocColor, 3, GL_FLOAT, GL_FALSE, 0, obj_color[now_group]);
 		glVertexAttribPointer(iLocNormal, 3, GL_FLOAT, GL_FALSE, 0, obj_normals[now_group]);
 
+		glUniform1f( iLocMShiness, OBJ->materials[group->material].shininess);
+		//printf("shiness = %f\n", OBJ->materials[group->material].shininess);
 		glUniform4f (iLocMAmbient,	OBJ->materials[group->material].ambient[0], 
 									OBJ->materials[group->material].ambient[1],
 									OBJ->materials[group->material].ambient[2],
@@ -414,6 +421,7 @@ void setShaders()
 	iLocMDiffuse = glGetUniformLocation(p, "uv4matDiffuse");
 	iLocMAmbient = glGetUniformLocation(p, "Material.ambient");
 	iLocMDiffuse = glGetUniformLocation(p, "Material.diffuse");
+	iLocMShiness = glGetUniformLocation(p, "Material.shiness");
 
 	iLocLAmbient = glGetUniformLocation(p, "LightSource.ambient");
 	iLocLDiffuse = glGetUniformLocation(p, "LightSource.diffuse"); 
@@ -484,7 +492,9 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			printf("===============================\n");
 			break;
 
-			
+		case 's':
+			specular_open = !specular_open;
+			break;
 	}
 }
 

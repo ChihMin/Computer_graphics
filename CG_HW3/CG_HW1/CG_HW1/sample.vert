@@ -54,7 +54,15 @@ void main() {
 	vec4 Idiff = LightSource.diffuse * Material.diffuse * max(dot(av3normal,L), 0.0);  
 	Idiff = clamp(Idiff, 0.0, 1.0); 
 
-	color= vv4ambient + Idiff;
+	
+	/* Compute the specular lighting */
+	vec3 E = vec3(-1, -1, 1); // we are in Eye Coordinates, so EyePos is (0,0,0) 
+	vec3 N = av3normal;
+	vec3 R = normalize(-reflect(L,N));  
+	vec4 Ispec = LightSource.specular * pow(max(dot(R,E),0.0), 0.3 * Material.shininess);
+	Ispec = clamp(Ispec, 0.0, 1.0); 
+
+	color= vv4ambient + Idiff + Ispec;
 	
 	vv4color= color;
 	
