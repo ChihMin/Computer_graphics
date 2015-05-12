@@ -26,6 +26,7 @@ GLint iLocColor;
 GLint iLocNormal;
 GLint iLocMDiffuse;
 GLint iLocMAmbient;
+GLint iLocMSpecular;
 /***** May be I need to use this iLoc ******/
 GLint iLocLAmbient; 
 GLint iLocLDiffuse;
@@ -46,6 +47,7 @@ GLMgroup* group;
 GLfloat **obj_vertices;
 GLfloat **obj_color;
 GLfloat **group_ambient;
+GLfloat **obj_normals;
 GLfloat *normals;
 
 int group_num;
@@ -98,7 +100,9 @@ void colorModel()
 	
 	obj_vertices = new GLfloat*[group_num];
 	obj_color = new GLfloat*[group_num];
+	obj_normals = new GLfloat*[group_num];
 	group_ambient = new GLfloat*[group_num];
+	
 
 	GLfloat scale = 1;
 	
@@ -127,6 +131,8 @@ void colorModel()
 		
 		obj_vertices[now_group] = new GLfloat[(int)group->numtriangles * 9];
 		obj_color[now_group] = new GLfloat[(int)group->numtriangles * 9];
+		obj_normals[now_group] = new GLfloat[(int)group->numtriangles * 9];
+
 		for(int i=0, j=0; i<(int)group->numtriangles; i++, j += 3)
 		{
 			// the index of each vertex
@@ -134,11 +140,31 @@ void colorModel()
 			int indv1 = OBJ->triangles[triangleID].vindices[0];
 			int indv2 = OBJ->triangles[triangleID].vindices[1];
 			int indv3 = OBJ->triangles[triangleID].vindices[2];
-
+			int indfn= OBJ->triangles[triangleID].findex;
+			if(indfn > 0)
+				printf("indfn = %d\n", indfn);
 			// the index of each color
 			int indc1 = indv1;
 			int indc2 = indv2;
 			int indc3 = indv3;
+
+			//the index of each normals
+			int indn1 = OBJ->triangles[triangleID].nindices[0];
+			int indn2 = OBJ->triangles[triangleID].nindices[1];
+			int indn3 = OBJ->triangles[triangleID].nindices[2];
+			
+			// the vertex normal
+			obj_normals[now_group][j*3+0] = OBJ->normals[indn1*3];
+			obj_normals[now_group][j*3+1] = OBJ->normals[indn1*3+1];
+			obj_normals[now_group][j*3+2] = OBJ->normals[indn1*3+2];
+
+			obj_normals[now_group][(j+1)*3+0] = OBJ->normals[indn2*3];
+			obj_normals[now_group][(j+1)*3+1] = OBJ->normals[indn2*3+1];
+			obj_normals[now_group][(j+1)*3+2] = OBJ->normals[indn2*3+2];
+
+			obj_normals[now_group][(j+2)*3+0] = OBJ->normals[indn3*3];
+			obj_normals[now_group][(j+2)*3+1] = OBJ->normals[indn3*3+1];
+			obj_normals[now_group][(j+2)*3+2] = OBJ->normals[indn3*3+2];
 
 			// vertices
 			GLfloat vx, vy, vz;
@@ -196,7 +222,7 @@ void colorModel()
 		group = group->next;
 		now_group++;
 	}	
-	
+/*	
 	printf("ambient : ");
 	for(int j = 0; j < group_num; ++j){
 		for(int i = 0; i < 4; ++i){
@@ -205,7 +231,7 @@ void colorModel()
 		}
 		printf("\n");
 	}
-	
+*/	
 
 	GLfloat max_line = max_cmp( x_max - x_min, y_max - y_min );
 	max_line = max_cmp( max_line, z_max - z_min);
@@ -276,14 +302,36 @@ void renderScene(void)
 	glEnableVertexAttribArray(iLocPosition);
 	glEnableVertexAttribArray(iLocNormal);
 	
+
 	group = OBJ->groups;
 	int now_group = 0;
+	glUniform4f (iLocLPosition, -1, 1, 1, 0);
+	glUniform4f (iLocLDiffuse, 0.5f, 0.5f, 0.50f, 1.0f);
 	while(group){
-		glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_TRUE, 0, obj_vertices[now_group]);
-		glVertexAttribPointer(iLocColor, 3, GL_FLOAT, GL_TRUE, 0, obj_color[now_group]);
-		glUniform4f(iLocLAmbient, group_ambient[now_group][0], group_ambient[now_group][1],
-								  group_ambient[now_group][2],group_ambient[now_group][3]);
-		glUniform4f(iLocMAmbient, 1, 1, 1, 1);
+		glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, obj_vertices[now_group]);
+		glVertexAttribPointer(iLocColor, 3, GL_FLOAT, GL_FALSE, 0, obj_color[now_group]);
+		glVertexAttribPointer(iLocNormal, 3, GL_FLOAT, GL_FALSE, 0, obj_normals[now_group]);
+
+		glUniform4f (iLocMAmbient,	OBJ->materials[group->material].ambient[0], 
+									OBJ->materials[group->material].ambient[1],
+									OBJ->materials[group->material].ambient[2],
+									OBJ->materials[group->material].ambient[3]
+					);
+		
+		glUniform4f (iLocMDiffuse,	OBJ->materials[group->material].diffuse[0], 
+									OBJ->materials[group->material].diffuse[1],
+									OBJ->materials[group->material].diffuse[2],
+									OBJ->materials[group->material].diffuse[3]
+					);
+		
+	
+		glUniform4f (iLocMSpecular,	OBJ->materials[group->material].specular[0], 
+									OBJ->materials[group->material].specular[1],
+									OBJ->materials[group->material].specular[2],
+									OBJ->materials[group->material].specular[3]
+					);
+
+		glUniform4f(iLocLAmbient, 1, 1, 1, 1);
 		glDrawArrays(GL_TRIANGLES, 0, 3 * (int)group->numtriangles);
 		now_group++;
 		group = group->next;
@@ -363,9 +411,10 @@ void setShaders()
 	iLocColor = glGetAttribLocation(p, "av3color");
 	iLocNormal = glGetAttribLocation(p, "av3normal");
 
-	//iLocMDiffuse = glGetUniformLocation(p, "uv4matDiffuse");
+	iLocMDiffuse = glGetUniformLocation(p, "uv4matDiffuse");
 	iLocMAmbient = glGetUniformLocation(p, "Material.ambient");
-	
+	iLocMDiffuse = glGetUniformLocation(p, "Material.diffuse");
+
 	iLocLAmbient = glGetUniformLocation(p, "LightSource.ambient");
 	iLocLDiffuse = glGetUniformLocation(p, "LightSource.diffuse"); 
 	iLocLSpecular = glGetUniformLocation(p, "LightSource.specular");
@@ -416,18 +465,15 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		case 99:
 			graphics_mode = 1 - graphics_mode;
 			loadOBJModel();
-			glutDisplayFunc (renderScene);
 			break;
 		case 'n':
 			current_obj = ( current_obj + 1 ) % 33;
 			loadOBJModel();
-			glutDisplayFunc (renderScene);
 			break;
 		case 'b':
 			current_obj  -= 1;
 			current_obj += (current_obj < 0 )*33;
 			loadOBJModel();
-			glutDisplayFunc (renderScene);
 			break;
 		case 'h':
 			printf("===========THIS IS HELP !!!!!==========\n");
