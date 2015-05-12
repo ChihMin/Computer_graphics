@@ -51,6 +51,10 @@ GLfloat **group_ambient;
 GLfloat **obj_normals;
 GLfloat *normals;
 
+GLfloat p_x = 0, p_y = 0, p_z = 0.5;
+GLfloat s_x = 0, s_y = 0, s_z = -1;
+GLfloat s_cos = 0;
+
 int group_num;
 int current_obj;
 int num_triangles ;
@@ -59,6 +63,7 @@ bool graphics_mode;
 /******** Light Control *****/
 bool specular_open = true;
 bool diffuse_open = true;
+bool ambient_open = true;
 GLfloat min_cmp( GLfloat a,  GLfloat b){
 	if( a > b ) return b;
 	return a;
@@ -304,10 +309,15 @@ void renderScene(void)
 	
 	group = OBJ->groups;
 	int now_group = 0;
-	glUniform4f (iLocLPosition, 0, 0, 1, 0);
-	glUniform4f(iLocLAmbient, 0.5, 0.5, 0.5, 0.5); 
-	glUniform3f(iLocLSpotDir, 0, 0, -1);
-	glUniform1f(iLocLSpotCosCutOff, 0.9f);  // here is spot light !!
+	glUniform4f (iLocLPosition, p_x, p_y, p_z, 0);
+	
+	glUniform3f(iLocLSpotDir, s_x, s_y, s_z);
+	glUniform1f(iLocLSpotCosCutOff, s_cos);  // here is spot light !!
+
+	if(ambient_open)
+		glUniform4f(iLocLAmbient, 0.5, 0.5, 0.5, 1); 
+	else
+		glUniform4f(iLocLAmbient, 0.0, 0.0, 0.0, 1);
 
 	if(diffuse_open)
 		glUniform4f (iLocLDiffuse, 0.8f, 0.8f, 0.8f, 0.8f);
@@ -470,9 +480,6 @@ void processMouseMotion(int x, int y){  // callback on mouse drag
 }
 
 void processNormalKeys(unsigned char key, int x, int y) {
-	//printf("key = %d ", key );
-	if( key < 97 && key != 27 )  key += 32;
-
 	switch(key) {
 		case 27: /* the Esc key */ 
 			exit(0); 
@@ -491,8 +498,42 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			loadOBJModel();
 			break;
 
+		case 'a':
+			ambient_open = !ambient_open;
+			break;
+
 		case 'd':
 			diffuse_open = !diffuse_open;
+			break;
+
+		case 's':
+			specular_open = !specular_open;
+			break;
+		
+		case 'D':
+			s_cos = 0;
+			p_x = p_y = 0;
+			p_z = 100000;
+			break;
+
+		case 'P':
+			p_x = p_y = 0;
+			s_cos = 0;
+			p_z = 0.5;
+			break;
+
+		case 'S':
+			p_x = p_y = 0;
+			p_z = 0.5;
+			s_cos = 0.9;
+			break;
+		
+		case '+':
+			s_cos -= 0.1;
+			break;
+		
+		case '-':
+			s_cos += 0.1;
 			break;
 
 		case 'h':
@@ -503,12 +544,28 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			printf("If you want to exit, please press 'esc'\n");
 			printf("===============================\n");
 			break;
-
-		case 's':
-			specular_open = !specular_open;
-			break;
 	}
 }
+
+
+void processSpecialKeys(int key, int x, int y){
+	switch (key) {
+		case GLUT_KEY_LEFT:
+			p_x -= 0.1;
+			break;
+		case GLUT_KEY_RIGHT:
+			p_x += 0.1;
+			break;
+		case GLUT_KEY_UP:
+			p_y += 0.1;
+			break;
+		case GLUT_KEY_DOWN:
+			p_y -= 0.1;
+			break;
+
+	}
+}
+
 
 int main(int argc, char **argv) {
 	// glut init
@@ -541,6 +598,7 @@ int main(int argc, char **argv) {
 	glutKeyboardFunc(processNormalKeys);
 	glutMouseFunc   (processMouse);
 	glutMotionFunc  (processMouseMotion);
+	glutSpecialFunc(processSpecialKeys);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_NORMALIZE);
