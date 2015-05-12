@@ -51,7 +51,7 @@ GLfloat **group_ambient;
 GLfloat **obj_normals;
 GLfloat *normals;
 
-GLfloat p_x = 0, p_y = 0, p_z = 0.5;
+GLfloat p_x = 0, p_y = 0, p_z = 100000;
 GLfloat s_x = 0, s_y = 0, s_z = -1;
 GLfloat s_cos = 0;
 
@@ -76,7 +76,7 @@ GLfloat max_cmp(GLfloat a, GLfloat b){
 
 void colorModel()
 {
-	printf("Enter Color Model After setShader\n");
+	//printf("Enter Color Model After setShader\n");
 
 	// TODO:
 	//// You should traverse the vertices and the colors of each vertex. 
@@ -93,17 +93,17 @@ void colorModel()
 	OBJ->position[0];
 	OBJ->position[1];
 	OBJ->position[2];
-
+/*
 	printf("%f %f %f\n", OBJ->position[0], OBJ->position[1], OBJ->position[2]);
 	printf("num of groups = %d\n", OBJ->numgroups);
-
+*/
 	num_triangles = 0;
 	group_num = 0;
 	group = OBJ->groups;
 	while(group){
 		num_triangles += group->numtriangles;
 		group_num++;
-		printf("culmulate triangles = %d\n",  num_triangles);
+		//printf("culmulate triangles = %d\n",  num_triangles);
 		group = group->next;
 	}
 	
@@ -130,7 +130,7 @@ void colorModel()
 	while(group){
 		// get material data here
 		group_ambient[now_group] = new GLfloat[4];
-		printf("---------- Group %d -----------\n", now_group);
+		//printf("---------- Group %d -----------\n", now_group);
 		for(int i = 0; i < 4; ++i){
 			group_ambient[now_group][i] = OBJ->materials[group->material].ambient[i];
 		}
@@ -146,8 +146,10 @@ void colorModel()
 			int indv2 = OBJ->triangles[triangleID].vindices[1];
 			int indv3 = OBJ->triangles[triangleID].vindices[2];
 			int indfn= OBJ->triangles[triangleID].findex;
+		/*	
 			if(indfn > 0)
 				printf("indfn = %d\n", indfn);
+		*/	
 			// the index of each color
 			int indc1 = indv1;
 			int indc2 = indv2;
@@ -538,11 +540,19 @@ void processNormalKeys(unsigned char key, int x, int y) {
 
 		case 'h':
 			printf("===========THIS IS HELP !!!!!==========\n");
+			printf("***REMIND : The key is ' CASE SENSITIVE '\n\n");
 			printf("Press 'c' to change mode(solid / wireframe)\n\n");
-			printf("Press 'b' to go to last model\n\n");
-			printf("Press 'n' to go to next model\n\n");
-			printf("If you want to exit, please press 'esc'\n");
-			printf("===============================\n");
+			printf("Press 'a' to turn on/off ambient\n");
+			printf("Press 'd' to turn on/off diffuse\n");
+			printf("Press 's' to turn on/off specular\n\n");
+			printf("-------------------- MODE SWITCH -------------\n");
+			printf("-------Default is Directional Light mode ---\n\n");
+			printf("Press 'D'(BIG S) to Directional Light mode\n");
+			printf("Press 'P'(BIG P) to Point Light mode\n");
+			printf("Press 'S'(BIG S) to SpotLight mode\n");
+			printf("\tPress 'up, down, left, right'_key to change light position\n\t\t\t\t\t\t\t(also spotlight)\n");
+			printf("\tPress '+' , '-' to adjust spotlight 'RADIUS'\n");
+			printf("========================================\n");
 			break;
 	}
 }
