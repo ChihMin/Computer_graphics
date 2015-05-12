@@ -305,7 +305,10 @@ void renderScene(void)
 	group = OBJ->groups;
 	int now_group = 0;
 	glUniform4f (iLocLPosition, 0, 0, 1, 0);
-	glUniform4f(iLocLAmbient, 0.1, 0.1, 0.1, 0.1);
+	glUniform4f(iLocLAmbient, 0.5, 0.5, 0.5, 0.5); 
+	glUniform3f(iLocLSpotDir, 0, 0, -1);
+	glUniform1f(iLocLSpotCosCutOff, 0.9f);  // here is spot light !!
+
 	if(diffuse_open)
 		glUniform4f (iLocLDiffuse, 0.8f, 0.8f, 0.8f, 0.8f);
 	else

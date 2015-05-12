@@ -52,6 +52,14 @@ void main() {
 	vec3 R = normalize(-reflect(L,N));  
 	vec4 Ispec = Material.specular * LightSource.specular * pow(max(dot(R,E),0.0), 2);
 	Ispec = clamp(Ispec, 0.0, 1.0); 
+	
+	vec3 s_d = normalize(LightSource.spotDirection);
+	vec3 s_v = normalize(-LightSource.position.xyz + vv4Position.xyz);
+	if(max(dot(s_d, s_v), 0.0) < LightSource.spotCosCutoff){
+		Idiff = vec4(0,0,0,0);
+		Ispec = vec4(0,0,0,0);
+	}
+
 
 	color = ambient + Idiff + Ispec;
 
