@@ -24,6 +24,7 @@
 GLint iLocPosition;
 GLint iLocColor;
 GLint iLocNormal;
+GLint iLocMVP;
 GLint iLocMDiffuse;
 GLint iLocMAmbient;
 GLint iLocMSpecular;
@@ -50,10 +51,14 @@ GLfloat **obj_color;
 GLfloat **group_ambient;
 GLfloat **obj_normals;
 GLfloat *normals;
+GLfloat aMVP[16];
 
 GLfloat p_x = 0, p_y = 0, p_z = 100000;
 GLfloat s_x = 0, s_y = 0, s_z = -1;
 GLfloat s_cos = 0;
+
+GLfloat geoMatrix[4][4] =  {{1,0,0,0},{0,1,0,0},{0,0,-0.1,0},{0,0,0,1}};
+GLfloat viewMatrix[4][4];
 
 int group_num;
 int current_obj;
@@ -72,6 +77,128 @@ GLfloat min_cmp( GLfloat a,  GLfloat b){
 GLfloat max_cmp(GLfloat a, GLfloat b){
 	if( a < b ) return b;
 	return a;
+}
+
+void multiMatrix(GLfloat A[][4], GLfloat B[][4], GLfloat C[][4]){
+	GLfloat ans[4][4] = {0};
+	for(int i = 0; i < 4; ++i)
+		for(int j = 0; j < 4; ++j)
+			for(int k = 0; k < 4; ++k)
+				ans[i][j] += (B[i][k] * C[k][j]);
+	
+	for(int i = 0; i < 4; ++i)
+		for(int j = 0; j < 4; ++j)
+			A[i][j] = ans[i][j] ;
+}
+void copyMatrix(GLfloat *A, const GLfloat B[][4]){
+	int n = 4;
+	for(int i = 0; i < n; ++i)
+		for(int j = 0; j < n; ++j)
+			A[i*n+j] = B[i][j];
+}
+
+void transMatrix(GLfloat *A){
+	int n = 4;
+	for(int i = 0; i < n; ++i)
+		for(int j = i+1; j < n; ++j)
+			std::swap(A[i*n+j], A[i+j*n]);
+}
+
+void multiple_all_matrix(){
+		GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+
+		multiMatrix(I, geoMatrix, I);
+		multiMatrix(I, viewMatrix, I);
+		copyMatrix(aMVP, I);
+		transMatrix(aMVP);
+}
+
+
+void normalize(GLfloat *v){
+	GLfloat dis = sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+	v[0] /= dis;
+	v[1] /= dis;
+	v[2] /= dis;
+}
+
+void cross(GLfloat *A, GLfloat *B, GLfloat *C){
+	A[0] = B[1] * C[2] - B[2] * C[1];
+	A[1] = B[2] * C[0] - B[0] * C[2];
+	A[2] = B[0] * C[1] - B[1] * C[0];
+}
+
+void makeIdentityMatrix(GLfloat M[][4]){
+	for(int i = 0; i < 4; ++i)
+		for(int j = 0; j < 4; ++j)
+			if( i == j) M[i][j] = 1;
+			else	M[i][j] = 0;
+}
+
+void view_transport(GLfloat x, GLfloat y, GLfloat z){
+	GLfloat M[4][4] = {0};
+	for(int i = 0; i < 4; ++i)
+		M[i][i] = 1;
+	M[0][3] = x;
+	M[1][3] = y;
+	M[2][3] = z;
+	//update_view(M);
+	multiMatrix(viewMatrix, M, viewMatrix );
+}
+
+void viewLookat(GLfloat ex, GLfloat ey, GLfloat ez,
+				GLfloat cx, GLfloat cy, GLfloat cz,
+				GLfloat ux, GLfloat uy, GLfloat uz)
+{
+	GLfloat forward[3], side[3], up[3], Ry[3];
+	forward[0] = cx - ex;
+	forward[1] = cy - ey;
+	forward[2] = cz - ez;
+
+	up[0] = ux;
+	up[1] = uy;
+	up[2] = uz;
+
+	normalize(forward);
+	normalize(up);
+
+	cross(side, forward, up);
+	cross(Ry, side, forward);
+
+	normalize(side);
+	normalize(Ry);
+
+	GLfloat M[4][4] = {0};
+	makeIdentityMatrix(M);
+
+	for(int j = 0; j < 3; ++j){ 
+		M[0][j] = side[j];
+		M[1][j] = Ry[j];
+		M[2][j] = -forward[j];	
+	}
+	makeIdentityMatrix(viewMatrix);
+	view_transport(-ex, -ey, -ez);
+	multiMatrix(viewMatrix, M, viewMatrix);
+	multiple_all_matrix();
+}
+
+
+void viewInit(){
+	GLfloat x_eye = 0, y_eye = 0, z_eye = 1;
+	GLfloat x_cor = 0, y_cor = 0, z_cor =  0;
+	GLfloat x_up = 0, y_up = 10.0, z_up = 0;
+
+	viewLookat(x_eye, y_eye, z_eye, x_cor, y_cor, z_cor, 0.0, 2.0, 0.0);
+}
+
+
+
+void initMatrix(){
+		aMVP[0] = 1;	aMVP[4] = 0;	aMVP[8]  = 0;	aMVP[12] = 0;
+		aMVP[1] = 0;	aMVP[5] = 1;	aMVP[9]  = 0;	aMVP[13] = 0;
+		aMVP[2] = 0;	aMVP[6] = 0;	aMVP[10] = 1;	aMVP[14] = 0;
+		aMVP[3] = 0;	aMVP[7] = 0;	aMVP[11] = 0;	aMVP[15] = 1;
+
+		viewInit();
 }
 
 void colorModel()
@@ -311,6 +438,7 @@ void renderScene(void)
 	
 	group = OBJ->groups;
 	int now_group = 0;
+	
 	glUniform4f (iLocLPosition, p_x, p_y, p_z, 0);
 	
 	glUniform3f(iLocLSpotDir, s_x, s_y, s_z);
@@ -357,7 +485,7 @@ void renderScene(void)
 									OBJ->materials[group->material].specular[3]
 					);
 
-		
+		glUniformMatrix4fv(iLocMVP, 1, GL_FALSE, aMVP);
 		glDrawArrays(GL_TRIANGLES, 0, 3 * (int)group->numtriangles);
 		now_group++;
 		group = group->next;
@@ -433,10 +561,12 @@ void setShaders()
 	// link program
 	glLinkProgram(p);
 
+	
 	iLocPosition = glGetAttribLocation (p, "av4position");
 	iLocColor = glGetAttribLocation(p, "av3color");
 	iLocNormal = glGetAttribLocation(p, "av3normal");
 
+	iLocMVP = glGetUniformLocation(p, "mvp");
 	iLocMAmbient = glGetUniformLocation(p, "Material.ambient");
 	iLocMDiffuse = glGetUniformLocation(p, "Material.diffuse");
 	iLocMShiness = glGetUniformLocation(p, "Material.shiniess");
@@ -600,7 +730,9 @@ int main(int argc, char **argv) {
 	loadOBJString();
 	// load obj models through glm
 	loadOBJModel();
-	
+	initMatrix();
+
+
 	// register glut callback functions
 	glutDisplayFunc (renderScene);
 

@@ -25,6 +25,7 @@ struct MaterialParameters {
 };
 
 
+uniform mat4 mvp;
 uniform mat4 um4rotateMatrix, um4modelMatrix;
 uniform MaterialParameters Material;
 uniform LightSourceParameters LightSource;
@@ -36,12 +37,6 @@ varying vec3 vv3normal, vv3halfVector;
 
 void main() {
 
-	mat4 mvp = mat4(
-		vec4(    1,    0,    0,    0),
-		vec4(    0,    1,    0,    0),
-		vec4(    0,    0,	 -0.1, 0),
-		vec4(    0,    0,    0,    1)
-	);	
 	vv4Position = mvp * av4position;
 	vv3normalOrigin = av3normal;
 	vv3normal = (mvp * vec4(av3normal, 0.0)).xyz;
