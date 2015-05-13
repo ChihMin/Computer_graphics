@@ -34,6 +34,7 @@ varying vec3 vv3normal, vv3halfVector;
 varying vec4 vv4color;
 
 void main() {
+	
 	vec4 color= vec4(0.0, 0.0, 0.0, 0.0);
 	
 	/* Compute the ambient terms */
@@ -47,19 +48,19 @@ void main() {
 
 	
 	/* Compute the specular lighting */
-	vec3 E = normalize(vec3(0,0,1)); // we are in Eye Coordinates, so EyePos is (0,0,0) 
-	N = normalize(vv3normal);	
+	vec3 E = normalize(-vv4Position.xyz); // we are in Eye Coordinates, so EyePos is (0,0,0) 
+	N = normalize(vv3normalOrigin);	
 	vec3 R = normalize(-reflect(L,N));  
-	vec4 Ispec = Material.specular * LightSource.specular * pow(max(dot(R,E),0.0), 2);
+	vec4 Ispec = Material.specular * LightSource.specular * pow(max(dot(R,E),0.0), 20);
 	Ispec = clamp(Ispec, 0.0, 1.0); 
 	
 	vec3 s_d = normalize(LightSource.spotDirection);
 	vec3 s_v = normalize(-LightSource.position.xyz + vv4Position.xyz);
+	
 	if(max(dot(s_d, s_v), 0.0) < LightSource.spotCosCutoff){
 		Idiff = vec4(0,0,0,0);
 		Ispec = vec4(0,0,0,0);
 	}
-
 
 	color = ambient + Idiff + Ispec;
 

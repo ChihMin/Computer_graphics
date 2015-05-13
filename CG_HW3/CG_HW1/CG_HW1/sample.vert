@@ -39,7 +39,9 @@ void main() {
 
 	vv4Position = mvp * av4position;
 	vv3normalOrigin = av3normal;
-	vv3normal = (mvp * vec4(av3normal, 0.0)).xyz;
+	vv3normal = (transpose(inverse(mvp)) * vec4(av3normal, 0.0)).xyz;
+
+
 	gl_Position = vv4Position;
 }
 

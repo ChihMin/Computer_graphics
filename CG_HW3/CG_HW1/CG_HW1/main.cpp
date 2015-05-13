@@ -55,9 +55,9 @@ GLfloat aMVP[16];
 
 GLfloat p_x = 0, p_y = 0, p_z = 100000;
 GLfloat s_x = 0, s_y = 0, s_z = -1;
-GLfloat s_cos = 0;
+GLfloat s_cos = 0.5;
 
-GLfloat geoMatrix[4][4] =  {{1,0,0,0},{0,1,0,0},{0,0,-0.1,0},{0,0,0,1}};
+GLfloat geoMatrix[4][4] =  {{1,0,0,0},{0,1,0,0},{0,0,-1,0},{0,0,0,1}};
 GLfloat viewMatrix[4][4];
 
 int group_num;
@@ -183,8 +183,8 @@ void viewLookat(GLfloat ex, GLfloat ey, GLfloat ez,
 
 
 void viewInit(){
-	GLfloat x_eye = 0, y_eye = 0, z_eye = 1;
-	GLfloat x_cor = 0, y_cor = 0, z_cor =  0;
+	GLfloat x_eye = 0, y_eye = 0, z_eye = 0;
+	GLfloat x_cor = 0, y_cor = 0, z_cor =  -1;
 	GLfloat x_up = 0, y_up = 10.0, z_up = 0;
 
 	viewLookat(x_eye, y_eye, z_eye, x_cor, y_cor, z_cor, 0.0, 2.0, 0.0);
@@ -200,6 +200,33 @@ void initMatrix(){
 
 		viewInit();
 }
+
+void scaling(GLfloat x, GLfloat y, GLfloat z){
+	GLfloat M[4][4] = {0};
+	M[0][0] = x;
+	M[1][1] = y;
+	M[2][2] = z;
+	M[3][3] = 1;
+	
+	GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+	multiMatrix(geoMatrix, M, geoMatrix);
+	multiple_all_matrix();
+}
+
+void transport(GLfloat x, GLfloat y, GLfloat z){
+	GLfloat M[4][4] = {0};
+	for(int i = 0; i < 4; ++i)
+		M[i][i] = 1;
+	M[0][3] = x;
+	M[1][3] = y;
+	M[2][3] = z;
+
+	GLfloat I[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+	multiMatrix(geoMatrix, M, geoMatrix);
+	multiple_all_matrix();
+}
+
+
 
 void colorModel()
 {
@@ -371,45 +398,18 @@ void colorModel()
 	max_line = max_cmp( max_line, z_max - z_min);
 	scale = 2 / max_line;
 
-	group = OBJ->groups;
-	now_group = 0;
-	while(group){
-		for(int i = 0; i < (int)group->numtriangles * 9; ++i)
-			obj_vertices[now_group][i] *= scale;
-		group = group->next;
-		now_group++;
-	}
-	GLfloat x_move = 0,  y_move = 0, z_move = 0;
+	GLfloat x_move = (x_max + x_min) / 2;
+	GLfloat y_move = (y_max + y_min) / 2;
+	GLfloat z_move = (z_max + z_min) / 2;
 
-	x_max *= scale;
-	y_max *= scale;
-	z_max *= scale;
-	
-	x_min *= scale;
-	y_min *= scale;
-	z_min *= scale;
-	
-	x_move = (x_max + x_min) / 2;
-	y_move = (y_max + y_min) / 2;
-	z_move = (z_max + z_min) / 2;
+	transport(-x_move, -y_move, -z_move);
+	scaling(scale, scale, scale);
 
-
-	group = OBJ->groups;
-	now_group = 0;
-	while(group){
-		for(int i = 0; i < (int)group->numtriangles * 9; i = i + 3){
-			obj_vertices[now_group][i] -= x_move;
-			obj_vertices[now_group][i+1] -= y_move;
-			obj_vertices[now_group][i+2] -= z_move;
-		}
-		group = group->next;
-		now_group++;
-	}
 	//printf("scale = %f x_move = %f, y_move = %f z_move = %f\n", scale, x_move, y_move, z_move);
 }
 
 void loadOBJString(){
-	sprintf(filename[0], "ColorModels/dragon10KN.obj");
+	sprintf(filename[0], "ColorModels/duck4KN.obj");
 }
 
 void loadOBJModel()
@@ -490,15 +490,7 @@ void renderScene(void)
 		now_group++;
 		group = group->next;
 	}
-	/*
-	for(int i = 0; i < 2;++i){
-		glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, &triangle_vertex[i*9]);
-		glVertexAttribPointer(   iLocColor, 3, GL_FLOAT, GL_FALSE, 0, &triangle_color[i*9]);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-	}
-	*/
-	// draw the array we just bound
-	//glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), &triangle_vertex[0], GL_STATIC_DRAW);
+	
 
 	if( graphics_mode )	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); 
 	else	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ); 
@@ -643,15 +635,15 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			break;
 		
 		case 'D':
-			s_cos = 0;
+			s_cos = 0.5;
 			p_x = p_y = 0;
 			p_z = 100000;
 			break;
 
 		case 'P':
 			p_x = p_y = 0;
-			s_cos = 0;
-			p_z = 0.5;
+			s_cos = 0.0;
+			p_z = 1;
 			break;
 
 		case 'S':
