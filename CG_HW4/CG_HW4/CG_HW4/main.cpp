@@ -68,6 +68,7 @@ InfoHeader IH[MAX_TEXTURE_NUM]; //BMP InfoHeader
 
 int isTextureMapping = 0;
 GLint iLocTexCoord;
+GLint iLocUstexture;
 GLint texture_wrap_mode = GL_REPEAT;
 GLint texture_mag_filter = GL_LINEAR;
 GLint texture_min_filter = GL_LINEAR;
@@ -202,7 +203,7 @@ void initTextures(int index)
 	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
 	
 
-	glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, IH[index].Width,IH[index].Height , 0, GL_BGR, GL_UNSIGNED_BYTE, image[index]);
+	glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, IH[index].Width,IH[index].Height , 0, GL_RGB, GL_UNSIGNED_BYTE, image[index]);
 
 
 	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
@@ -384,11 +385,6 @@ void loadOBJModel(int index)
 	// uncomment them only if there is no vertex normal info in your .obj file
 	// glm will calculate the vertex normals for you
 //	glmFacetNormals(OBJ); 
-/*
-	int indv1 = OBJ->triangles[0].nindices[0];
-	if(indv1 == 3452816845) 
-		glmVertexNormals(OBJ, 90.0);
-*/
 //	glmVertexNormals(OBJ, 90.0);  
 
 	// parse texture model and align the vertices
@@ -766,6 +762,7 @@ void renderScene(void)
 		// enable attributes array
 		glEnableVertexAttribArray(iLocPosition);
 		glEnableVertexAttribArray(iLocNormal);
+
 		// TODO: texture VertexAttribArray is enabled here
 		glEnableVertexAttribArray(iLocTexCoord);
 
@@ -797,7 +794,6 @@ void renderScene(void)
 
 		// TODO: bind texture vertex attribute pointer here
 		glVertexAttribPointer(iLocTexCoord, 2, GL_FLOAT, GL_FALSE, 0, vtextures[gCount]);
-		
 		// texture mag/min filter
 		// TODO: texture mag/min filters are defined here
 
@@ -806,7 +802,7 @@ void renderScene(void)
 
 		// bind texture material group by group
 		// TODO: bind texture here
-
+	
 
 		// draw arrays
 		glDrawArrays(GL_TRIANGLES, 0, group->numtriangles*3);
@@ -1032,7 +1028,8 @@ void setShaders() {
 
 	iLocIsTextureMapping = glGetUniformLocation(p, "uiisTextureMapping");
 	iLocModelMatrix  = glGetUniformLocation(p, "um4modelMatrix");
-	
+	iLocUstexture =  glGetUniformLocation(p, "ustexture");
+
 	glUseProgram(p);
 }
 

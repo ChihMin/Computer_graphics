@@ -75,7 +75,6 @@ void main() {
 		Ispec = vec4(0,0,0,0);
 	}
 
-	//vv4color = ambient + Idiff + Ispec;
 	if(LightingMode == 1)
 		gl_FragColor = ambient + Idiff + Ispec;
 	else
@@ -88,5 +87,5 @@ void main() {
 	}
 	*/
 	vec4 texColor = texture2D(ustexture, v2texCoord);
-	gl_FragColor = gl_FragColor * texColor;
+	gl_FragColor =  gl_FragColor * texColor;
 }
