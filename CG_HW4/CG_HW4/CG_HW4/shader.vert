@@ -26,6 +26,7 @@ struct MaterialParameters {
 
 
 uniform mat4 mvp;
+uniform mat4 projMatrix;
 uniform mat4 um4rotateMatrix, um4modelMatrix;
 
 uniform MaterialParameters Material;
@@ -48,33 +49,5 @@ void main() {
 	vv4Position = mvp * av4position;
 	vv3normalOrigin = av3normal;
 	vv3normal = (transpose(inverse(um4modelMatrix)) * vec4(av3normal, 0.0)).xyz;
-
-	vec4 color= vec4(0.0, 0.0, 0.0, 0.0);
 	
-	/* Compute the ambient terms */
-	vec4 ambient = Material.ambient * LightSource.ambient;
-	
-	/* Compute the diffuse terms */
-	vec3 L = normalize(LightSource.position.xyz - vv4Position.xyz);   
-	vec3 N = normalize(vv3normal);
-	vec4 Idiff = LightSource.diffuse * Material.diffuse * max(dot(N,L), 0.0);  
-	Idiff = clamp(Idiff, 0.0, 1.0); 
-
-	
-	/* Compute the specular lighting */
-	vec3 E = normalize(-vv4Position.xyz); // we are in Eye Coordinates, so EyePos is (0,0,0) 
-	N = normalize(vv3normal);	
-	vec3 R = normalize(-reflect(L,N));  
-	vec4 Ispec = Material.specular * LightSource.specular * pow(max(dot(R,E),0.0), 5);
-	Ispec = clamp(Ispec, 0.0, 1.0); 
-	
-	vec3 s_d = normalize(LightSource.spotDirection);
-	vec3 s_v = normalize(-LightSource.position.xyz + vv4Position.xyz);
-	
-	if(max(dot(s_d, s_v), 0.0) < LightSource.spotCosCutoff){
-		Idiff = vec4(0,0,0,0);
-		Ispec = vec4(0,0,0,0);
-	}
-
-	vv4color = ambient + Idiff + Ispec;
 }

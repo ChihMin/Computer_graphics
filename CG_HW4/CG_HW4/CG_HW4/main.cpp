@@ -112,6 +112,7 @@ GLint iLocIsTextureMapping;
 GLint iLocPosition;
 GLint iLocColour;
 GLint iLocMVP;
+GLint iLocPROJ;
 
 GLint iLocNormal;
 GLint iLocMDiffuse;
@@ -683,9 +684,14 @@ void renderScene(void)
 
 
 	// V (lookat)
-	M = M * myLookAtMatrix(eyeVec[0],eyeVec[1],eyeVec[2],  eyeVec[0],eyeVec[1],eyeVec[2]-1.0f,  0,1,0);
-
+	Matrix4 projMatrix;
+	projMatrix.identity();
+	Matrix4 viewMatrix = myLookAtMatrix(eyeVec[0],eyeVec[1],eyeVec[2],  eyeVec[0],eyeVec[1],eyeVec[2]-1.0f,  0,1,0);
+	M = M * viewMatrix;
+	projMatrix = projMatrix * viewMatrix;
 	// P (project)
+	
+	
 	if(projectionMode == PROJECTION_PARA)
 	{
 		M = M * parallelProjectionMatrix;
@@ -710,6 +716,7 @@ void renderScene(void)
 
 	// Matrices
 	glUniformMatrix4fv(iLocMVP, 1, GL_FALSE, M.get());
+	glUniformMatrix4fv(iLocPROJ, 1, GL_FALSE, projMatrix.get());
 	glUniformMatrix4fv(iLocModelMatrix, 1, GL_FALSE, modelMatrix.get());
 
 
@@ -963,6 +970,7 @@ void setShaders() {
 	iLocTexCoord = glGetAttribLocation(p, "av2texCoord");
 	iLocNormal = glGetAttribLocation(p, "av3normal");
 	iLocMVP = glGetUniformLocation(p, "mvp");
+	iLocPROJ = glGetUniformLocation(p, "projMatrix");
 
 	iLocMAmbient = glGetUniformLocation(p, "Material.ambient");
 	iLocMDiffuse = glGetUniformLocation(p, "Material.diffuse");
