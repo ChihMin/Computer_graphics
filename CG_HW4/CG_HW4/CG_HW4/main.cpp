@@ -130,6 +130,7 @@ GLint iLocLSpotDir;
 GLint iLocLSpotCosCutOff;
 GLint iLocLSpotExp;
 
+GLint iLocLightingMode;
 /*******************************************/
 
 
@@ -158,10 +159,15 @@ GLfloat scale;
 
 
 /****** LIGHTING ARGUMENT ******/
-GLfloat p_x = 0, p_y = 0, p_z = 5;
+GLfloat p_x = 0, p_y = 0, p_z = 10;
 GLfloat s_x = 0, s_y = 0, s_z = -1;
 GLfloat s_cos = 0.5;
 /******************************/
+
+
+/********* LIGHT CONTROL ********/
+bool specular_open = true;
+int LightingMode = 1;
 
 // unpack bmp file
 void LoadTextures(char* filename, int index)
@@ -193,6 +199,14 @@ void initTextures(int index)
 
 	// Hint: texture width x height = IH[index].Width x IH[index].Height
 	//       image[index] means the texture image material used by which group
+	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
+	
+	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// When MINifying the image, use a LINEAR blend of two mipmaps, each filtered LINEARLY too
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	// Generate mipmaps, by the way.
+	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 void setTexture() 
@@ -714,6 +728,11 @@ void renderScene(void)
 
 	glUniform1i(iLocIsTextureMapping, isTextureMapping);
 
+
+	//lighting mode
+	glUniform1i(iLocLightingMode, LightingMode);
+
+
 	// Matrices
 	glUniformMatrix4fv(iLocMVP, 1, GL_FALSE, M.get());
 	glUniformMatrix4fv(iLocPROJ, 1, GL_FALSE, projMatrix.get());
@@ -725,11 +744,15 @@ void renderScene(void)
 	
 	glUniform3f(iLocLSpotDir, s_x, s_y, s_z);
 	glUniform1f(iLocLSpotCosCutOff, s_cos);  // here is spot light !!
-
+	
 
 	glUniform4f(iLocLAmbient, 0.5, 0.5, 0.5, 1);
 	glUniform4f (iLocLDiffuse, 0.8f, 0.8f, 0.8f, 0.8f);
-	glUniform4f (iLocLSpecular, 1.0f, 1.0f, 1.0f, 1);
+
+	if(specular_open)
+		glUniform4f (iLocLSpecular, 1.0f, 1.0f, 1.0f, 1);
+	else
+		glUniform4f (iLocLSpecular, 0.0f, 0.0f, 0.0f, 1);
 
 	GLMgroup* group = OBJ->groups;
 	int gCount = 0;
@@ -854,9 +877,18 @@ void processNormalKeys(unsigned char key, int x, int y) {
 
 	// normal keys
 	switch(key){
+		case 'l' : case 'L':
+			LightingMode = 1 - LightingMode;
+			break;
+
 		case 'r': case 'R': 
 			isAutoRotating = (isAutoRotating + 1 ) % 2;
 			break;
+
+		case 's':
+			specular_open = !specular_open;
+			break;
+		
 
 		case 'Z': case 'z':
 			currentModel = (currentModel + NUM_OF_MODEL - 1) % NUM_OF_MODEL;
@@ -987,6 +1019,7 @@ void setShaders() {
 	iLocLSpotCosCutOff = glGetUniformLocation(p, "LightSource.spotCosCutoff");
 	iLocLSpotExp = glGetUniformLocation(p, "LightSource.spotExponent");
 
+	iLocLightingMode = glGetUniformLocation(p, "LightingMode");
 
 	iLocIsTextureMapping = glGetUniformLocation(p, "uiisTextureMapping");
 	iLocModelMatrix  = glGetUniformLocation(p, "um4modelMatrix");
