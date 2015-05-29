@@ -1,8 +1,8 @@
-//uniform sampler2D ustexture;
+uniform sampler2D ustexture;
 
 //uniform int uiisTextureMapping;
 
-//varying vec2 v2texCoord;
+varying vec2 v2texCoord;
 
 struct LightSourceParameters {
 	vec4 ambient;
@@ -87,4 +87,6 @@ void main() {
 		gl_FragColor = gl_FragColor * texColor;
 	}
 	*/
+	vec4 texColor = texture2D(ustexture, v2texCoord);
+	gl_FragColor = gl_FragColor * texColor;
 }

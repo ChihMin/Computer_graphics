@@ -1,4 +1,4 @@
-//attribute vec2 av2texCoord;
+attribute vec2 av2texCoord;
 attribute vec4 av4position;
 attribute vec3 av3normal;
 
@@ -37,13 +37,13 @@ varying vec4 vv4ambient, vv4diffuse;
 varying vec4 vv4Position;
 varying vec3 vv3normal, vv3halfVector;
 
-//varying vec2 v2texCoord;
+varying vec2 v2texCoord;
 varying vec4 vv4vertice;
 
 void main() {
 	gl_Position = mvp * av4position;
 	
-	//v2texCoord = av2texCoord;
+	v2texCoord = av2texCoord;
 	vv4vertice = um4modelMatrix * av4position;
 
 	vv4Position = mvp * av4position;

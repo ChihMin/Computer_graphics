@@ -201,6 +201,10 @@ void initTextures(int index)
 	//       image[index] means the texture image material used by which group
 	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
 	
+
+	glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, IH[index].Width,IH[index].Height , 0, GL_BGR, GL_UNSIGNED_BYTE, image[index]);
+
+
 	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	// When MINifying the image, use a LINEAR blend of two mipmaps, each filtered LINEARLY too
@@ -352,12 +356,14 @@ void TextureModel()
 			int indt3 = OBJ->triangles[triangleID].tindices[2];
 			
 			// TODO: texture coordinates should be aligned by yourself
-			OBJ->texcoords[indt1*2];
-			OBJ->texcoords[indt1*2+1];
-			OBJ->texcoords[indt2*2];
-			OBJ->texcoords[indt2*2+1];
-			OBJ->texcoords[indt3*2];
-			OBJ->texcoords[indt3*2+1];
+			vtextures[gCount][i*6+0] = OBJ->texcoords[indt1*2];
+			vtextures[gCount][i*6+1] = OBJ->texcoords[indt1*2+1];
+
+			vtextures[gCount][i*6+2] = OBJ->texcoords[indt2*2];
+			vtextures[gCount][i*6+3] = OBJ->texcoords[indt2*2+1];
+			
+			vtextures[gCount][i*6+4] = OBJ->texcoords[indt3*2];
+			vtextures[gCount][i*6+5] = OBJ->texcoords[indt3*2+1];
 		}
 		group = group->next;
 		gCount++;
@@ -761,6 +767,7 @@ void renderScene(void)
 		glEnableVertexAttribArray(iLocPosition);
 		glEnableVertexAttribArray(iLocNormal);
 		// TODO: texture VertexAttribArray is enabled here
+		glEnableVertexAttribArray(iLocTexCoord);
 
 		// bind attributes array
 		glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, vertices[gCount]);
@@ -789,7 +796,8 @@ void renderScene(void)
 
 
 		// TODO: bind texture vertex attribute pointer here
-
+		glVertexAttribPointer(iLocTexCoord, 2, GL_FLOAT, GL_FALSE, 0, vtextures[gCount]);
+		
 		// texture mag/min filter
 		// TODO: texture mag/min filters are defined here
 
@@ -798,6 +806,7 @@ void renderScene(void)
 
 		// bind texture material group by group
 		// TODO: bind texture here
+
 
 		// draw arrays
 		glDrawArrays(GL_TRIANGLES, 0, group->numtriangles*3);
