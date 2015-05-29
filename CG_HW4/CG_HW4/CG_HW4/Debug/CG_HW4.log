@@ -1,4 +1,4 @@
-﻿已經開始建置於 2015/5/29 下午 11:09:26。
+﻿已經開始建置於 2015/5/29 下午 11:21:34。
      1>節點 2 (build 目標) 上的專案 "C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW4\CG_HW4\CG_HW4\CG_HW4.vcxproj"。
        專案檔包含 ToolsVersion="12.0"。這個工具組可能未知或遺漏，在此情況下，您可以安裝適當的 MSBuild 版本，否則由於原則的緣故，組建將會強制為特定的 ToolsVersion。專案將被視為包含 ToolsVersion="4.0"。詳細資訊請參閱 http://go.microsoft.com/fwlink/?LinkId=291333。
      1>InitializeBuildStatus:
@@ -6,17 +6,17 @@
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ChihMin\Desktop\Computer_graphics\CG_HW4\CG_HW4\\..\include\ /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
          main.cpp
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(908): warning C4800: 'int' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(911): warning C4800: 'int' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(915): warning C4800: 'int' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(919): warning C4800: 'int' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(971): warning C4305: '=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(975): warning C4305: '-=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(979): warning C4305: '+=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(1144): warning C4305: '-=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(1147): warning C4305: '+=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(1150): warning C4305: '+=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
-     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(1153): warning C4305: '-=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(929): warning C4800: 'int' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(932): warning C4800: 'int' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(936): warning C4800: 'int' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(940): warning C4800: 'int' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(992): warning C4305: '=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(996): warning C4305: '-=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(1000): warning C4305: '+=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(1165): warning C4305: '-=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(1168): warning C4305: '+=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(1171): warning C4305: '+=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
+     1>c:\users\chihmin\desktop\computer_graphics\cg_hw4\cg_hw4\cg_hw4\main.cpp(1174): warning C4305: '-=' : 從 'double' 轉換為 'GLfloat'，是由較大的型別轉換為較小的型別，可能導致資料遺失
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW4\CG_HW4\Debug\CG_HW4_framework.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW4\CG_HW4\\..\lib\ glew32.lib freeglut.lib /MANIFEST /ManifestFile:"Debug\CG_HW4_framework.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW4\CG_HW4\Debug\CG_HW4_framework.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ChihMin\Desktop\Computer_graphics\CG_HW4\CG_HW4\Debug\CG_HW4_framework.lib" /MACHINE:X86 Debug\glm.obj
          Debug\main.obj
@@ -32,4 +32,4 @@
 
 建置成功。
 
-經過時間 00:00:00.95
+經過時間 00:00:00.92

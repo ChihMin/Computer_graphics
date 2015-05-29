@@ -844,7 +844,14 @@ void showHelp()
 	printf("=============================\n");
 	printf("press H / h to show this menu\n");
 	printf("\n");
-	printf("PROJECTION:        press P / p to switch perspective / orthographic projection\n");
+
+	printf("AUTOROTATE:        press R / r to auto rotate\n");
+	printf("\n");
+
+	printf("LIGHTING:        press V / v to switch perpixel / vertex lighting\n");
+	printf("\n");
+
+	printf("PROJECTION:        press J / j to switch perspective / orthographic projection\n");
 	printf("\n");
 	printf("TRANSLATION:       press the left button and drag the mouse to translate\n");
 	printf("\n");
@@ -855,6 +862,20 @@ void showHelp()
 	printf("MODEL SWITCHING:   press Z / z to switch previous model.\n");
 	printf("                   press X / x to switch next model.\n");
 	printf("\n");
+	
+
+	printf("NEARST/LINEAR SWITCHING:   press 'm' to switch MIN_FILTER mode.\n");
+	printf("                   press 'M' to switch MAG_FILTER mode.\n");
+	printf("\n");
+
+	printf("CLAMP/REPEAT SWITCHING:   press 'w' to switch WRAP_S mode.\n");
+	printf("                   press 'W' to switch switch WRAP_T mode.\n");
+	printf("\n");
+
+	printf("-------Default is Directional Light mode ---\n\n");
+	printf("Press 'D'(BIG S) to Directional Light mode\n");
+	printf("Press 'P'(BIG P) to Point Light mode\n");
+	printf("Press 'S'(BIG S) to SpotLight mode\n");
 }
 	/*
 void processSpecialKeys(int key, int x, int y){
