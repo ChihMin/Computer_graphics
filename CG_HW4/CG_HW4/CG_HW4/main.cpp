@@ -927,11 +927,6 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			isAutoRotating = (isAutoRotating + 1 ) % 2;
 			break;
 
-		case 's':
-			specular_open = !specular_open;
-			break;
-		
-
 		case 'Z': case 'z':
 			currentModel = (currentModel + NUM_OF_MODEL - 1) % NUM_OF_MODEL;
 			loadModel(currentModel);
@@ -948,7 +943,7 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			showHelp();
 			break;
 
-		case 'P': case 'p':
+		case 'J': case 'j':
 			if(projectionMode != PROJECTION_PERS){
 				projectionMode = PROJECTION_PERS;
 				printf("perspective projection\n");
@@ -958,6 +953,24 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			}
 			break;
 		
+		case 'D': case 'd':
+			s_cos = 0.5;
+			p_x = p_y = 0;
+			p_z = 100000;
+			break;
+
+		case 'P': case  'p':
+			p_x = p_y = 0;
+			s_cos = 0;
+			p_z = 3;
+			break;
+
+		case 'S': case 's':
+			p_x = p_y = 0;
+			p_z = 3;
+			s_cos = 0.9;
+			break;
+
 		case '+':
 			s_cos -= 0.1;
 			break;

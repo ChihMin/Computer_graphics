@@ -69,7 +69,7 @@ void main() {
 	vec3 E = normalize(vec3(0,0,5) -vv4Position.xyz); // we are in Eye Coordinates, so EyePos is (0,0,0) 
 	N = normalize(vv3normal);	
 	vec3 R = normalize(-reflect(L,N));  
-	vec4 Ispec = Material.specular * LightSource.specular * pow(max(dot(R,E),0.0), 35);
+	vec4 Ispec = Material.specular * LightSource.specular * pow(max(dot(R,E),0.0), 20);
 	Ispec = clamp(Ispec, 0.0, 1.0); 
 	
 	vec3 s_d = normalize(LightSource.spotDirection);
