@@ -160,7 +160,7 @@ GLfloat scale;
 
 
 /****** LIGHTING ARGUMENT ******/
-GLfloat p_x = 0, p_y = 0, p_z = 10;
+GLfloat p_x = 0, p_y = 0, p_z = 100000;
 GLfloat s_x = 0, s_y = 0, s_z = -1;
 GLfloat s_cos = 0.5;
 /******************************/
@@ -169,6 +169,8 @@ GLfloat s_cos = 0.5;
 /********* LIGHT CONTROL ********/
 bool specular_open = true;
 int LightingMode = 1;
+bool MAG_FILTER_MODE = 1;
+bool MIN_FILTER_MODE = 1;
 
 // unpack bmp file
 void LoadTextures(char* filename, int index)
@@ -206,11 +208,7 @@ void initTextures(int index)
 	glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, IH[index].Width,IH[index].Height , 0, GL_RGB, GL_UNSIGNED_BYTE, image[index]);
 
 
-	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// When MINifying the image, use a LINEAR blend of two mipmaps, each filtered LINEARLY too
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	// Generate mipmaps, by the way.
+		// Generate mipmaps, by the way.
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
@@ -384,8 +382,8 @@ void loadOBJModel(int index)
 
 	// uncomment them only if there is no vertex normal info in your .obj file
 	// glm will calculate the vertex normals for you
-//	glmFacetNormals(OBJ); 
-//	glmVertexNormals(OBJ, 90.0);  
+	glmFacetNormals(OBJ); 
+	glmVertexNormals(OBJ, 90.0);  
 
 	// parse texture model and align the vertices
 	TextureModel();
@@ -796,13 +794,26 @@ void renderScene(void)
 		glVertexAttribPointer(iLocTexCoord, 2, GL_FLOAT, GL_FALSE, 0, vtextures[gCount]);
 		// texture mag/min filter
 		// TODO: texture mag/min filters are defined here
+		// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
+		if(MAG_FILTER_MODE)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		else
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		// When MINifying the image, use a LINEAR blend of two mipmaps, each filtered LINEARLY too
+		if(MIN_FILTER_MODE)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		else
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+
 
 		// texture wrap mode s/t
 		// TODO: texture wrap modes are defined here
-
+		// glTexParameteri(GL_TEXTURE_2D, GL_CLAMP, GL_LINEAR);
+		
 		// bind texture material group by group
 		// TODO: bind texture here
-	
+		glBindTexture(GL_TEXTURE_2D, texNum[gCount]);
 
 		// draw arrays
 		glDrawArrays(GL_TRIANGLES, 0, group->numtriangles*3);
@@ -882,7 +893,15 @@ void processNormalKeys(unsigned char key, int x, int y) {
 
 	// normal keys
 	switch(key){
-		case 'l' : case 'L':
+
+		case 'M':
+			MAG_FILTER_MODE = 1 - MAG_FILTER_MODE;
+			break;
+		case 'm':
+			MIN_FILTER_MODE = 1 - MIN_FILTER_MODE;
+			break;
+
+		case 'v' : case 'V':
 			LightingMode = 1 - LightingMode;
 			break;
 
