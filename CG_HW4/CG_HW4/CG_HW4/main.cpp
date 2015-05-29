@@ -171,6 +171,8 @@ bool specular_open = true;
 int LightingMode = 1;
 bool MAG_FILTER_MODE = 1;
 bool MIN_FILTER_MODE = 1;
+bool WRAP_T_MODE = 1;
+bool WRAP_S_MODE = 1;
 
 // unpack bmp file
 void LoadTextures(char* filename, int index)
@@ -809,8 +811,16 @@ void renderScene(void)
 
 		// texture wrap mode s/t
 		// TODO: texture wrap modes are defined here
-		// glTexParameteri(GL_TEXTURE_2D, GL_CLAMP, GL_LINEAR);
+		if(!WRAP_S_MODE) 
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		else
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		
+		if(!WRAP_T_MODE)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		else
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 		// bind texture material group by group
 		// TODO: bind texture here
 		glBindTexture(GL_TEXTURE_2D, texNum[gCount]);
@@ -899,6 +909,14 @@ void processNormalKeys(unsigned char key, int x, int y) {
 			break;
 		case 'm':
 			MIN_FILTER_MODE = 1 - MIN_FILTER_MODE;
+			break;
+		
+		case 'w':
+			WRAP_S_MODE = 1 - WRAP_S_MODE;
+			break;
+
+		case 'W':
+			WRAP_T_MODE = 1 - WRAP_T_MODE;
 			break;
 
 		case 'v' : case 'V':
